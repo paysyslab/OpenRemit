@@ -1,0 +1,185 @@
+openapi: 3.0.3
+
+info:
+  title: OpenRemit API
+  version: 1.0.0
+  description: OpenRemit Push API Specifications
+
+servers:
+  - url: http://{host}:{port}
+    variables:
+      host:
+        default: localhost
+      port:
+        default: "8080"
+
+paths:
+
+  /api/v1/authenticate:
+    post:
+      summary: Authenticate Partner
+      description: Generates an authentication token for subsequent API calls.
+      parameters:
+        - in: header
+          name: X-Auth-Username
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Auth-Password
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                  responseDescription:
+                    type: string
+                  expiry:
+                    type: integer
+                  token:
+                    type: string
+
+  /api/v1/paysyslabs/titlefetch:
+    post:
+      summary: Beneficiary Title Fetch
+      description: Validates beneficiary account details and returns beneficiary name.
+      parameters:
+        - in: header
+          name: X-Auth-Token
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Title fetch response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                  responseDescription:
+                    type: string
+
+  /api/v1/paysyslabs/posttransactions:
+    post:
+      summary: Post Transactions Bulk
+      description: Submits bulk remittance transactions for processing.
+      parameters:
+        - in: header
+          name: X-Auth-Token
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Transaction submission response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                  responseDescription:
+                    type: string
+
+  /api/v1/paysyslabs/transactionInquiry:
+    post:
+      summary: Transaction Inquiry
+      description: Retrieves the status of a previously submitted transaction.
+      parameters:
+        - in: header
+          name: X-Auth-Token
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Transaction inquiry response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                  responseDescription:
+                    type: string
+                  transactionStatus:
+                    type: string
+
+  /api/v1/paysyslabs/balanceInquiry:
+    post:
+      summary: Balance Inquiry
+      description: Returns the available settlement account balance of the partner.
+      parameters:
+        - in: header
+          name: X-Auth-Token
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Balance inquiry response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                  responseDescription:
+                    type: string
+                  availableBalance:
+                    type: number
+
+  /api/v1/paysyslabs/get/participant/imd:
+    get:
+      summary: Get Participant IMD List
+      description: Returns the list of participating banks with IMD and BIC information.
+      parameters:
+        - in: header
+          name: X-Auth-Token
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: IMD list response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responseCode:
+                    type: string
+                  responseDescription:
+                    type: string
