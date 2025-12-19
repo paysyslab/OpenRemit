@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkopenremit_api_specs=globalThis.webpackChunkopenremit_api_specs||[]).push([[235],{8552(e){e.exports=JSON.parse('{"name":"docusaurus-plugin-content-pages","id":"default"}')}}]);
