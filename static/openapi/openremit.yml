@@ -6,12 +6,12 @@ info:
   description: OpenRemit Push API Specifications
 
 servers:
-  - url: http://{host}:{port}
+  - url: https://sandbox.paysyslabs.com/openRemit
     variables:
       host:
-        default: localhost
+        default: https://sandbox.paysyslabs.com/openRemit
       port:
-        default: "8080"
+        default: 
 
 paths:
 
