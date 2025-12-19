@@ -12,10 +12,10 @@ const config = {
   },
 
   url: 'https://paysyslabs.github.io',  // Your GitHub Pages URL
-  baseUrl: '/openremit-api-specs/',  // Base path for deployment
+  baseUrl: '/OpenRemit/',  // Base path for deployment
 
   organizationName: 'paysyslabs',  // GitHub organization name
-  projectName: 'openremit-api-specs',  // GitHub repo name
+  projectName: 'OpenRemit',  // GitHub repo name
   deploymentBranch: 'gh-pages',  // Branch to deploy to GitHub Pages
   trailingSlash: false,  // Ensures the URL does not end with a slash
 
@@ -35,7 +35,7 @@ const config = {
         route: '/api-specifications',
         showNavLink: true,  // Show link to the API specs in the navbar
         configuration: {
-          url: '/openremit-api-specs/openapi/openremit.yml',  // Path to OpenAPI spec
+          url: '/OpenRemit/openapi/openremit.yml',  // Path to OpenAPI spec
         },
       },
     ],
@@ -86,7 +86,7 @@ const config = {
       links: [
         // {
         //   items: [
-        //     { label: 'GitHub', href: 'https://github.com/paysyslabs/openremit-api-specs' },  // Link to GitHub repository
+        //     { label: 'GitHub', href: 'https://github.com/paysyslabs/OpenRemit' },  // Link to GitHub repository
         //   ],
         // },
       ],
@@ -117,10 +117,10 @@ export default config;
 //   },
 
 //   url: 'https://paysyslabs.github.io',
-//   baseUrl: '/openremit-api-specs/',
+//   baseUrl: '/OpenRemit/',
 
 //   organizationName: 'paysyslabs',
-//   projectName: 'openremit-api-specs',
+//   projectName: 'OpenRemit',
 //   deploymentBranch: 'gh-pages',
 //   trailingSlash: false,
 
@@ -151,7 +151,7 @@ export default config;
 //         route: '/api-specifications',
 //         showNavLink: false,
 //         configuration: {
-//           url: '/openremit-api-specs/openapi/openremit.yml',
+//           url: '/OpenRemit/openapi/openremit.yml',
 //         },
 //       },
 //     ],
@@ -196,7 +196,7 @@ export default config;
 //           {to: '/docs/backoffice', label: 'Backoffice', position: 'left'},
 //           {to: '/api-specifications', label: 'API Specifications', position: 'left'},
 //           // {
-//           //   href: 'https://github.com/paysyslabs/openremit-api-specs',
+//           //   href: 'https://github.com/paysyslabs/OpenRemit',
 //           //   label: 'GitHub',
 //           //   position: 'right',
 //           // },
@@ -219,7 +219,7 @@ export default config;
 //             items: [
 //               // {
 //               //   label: 'GitHub',
-//               //   href: 'https://github.com/paysyslabs/openremit-api-specs',
+//               //   href: 'https://github.com/paysyslabs/OpenRemit',
 //               // },
 //             ],
 //           },
@@ -263,12 +263,12 @@ export default config;
 // //   url: 'https://paysyslabs.github.io',
 // //   // Set the /<baseUrl>/ pathname under which your site is served
 // //   // For GitHub pages deployment, it is often '/<projectName>/'
-// //   baseUrl: '/openremit-api-specs/',
+// //   baseUrl: '/OpenRemit/',
 
 // //   // GitHub pages deployment config.
 // //   // If you aren't using GitHub pages, you don't need these.
 // //   organizationName: 'paysyslabs', // Usually your GitHub org/user name.
-// //   projectName: 'openremit-api-specs', // Usually your repo name.
+// //   projectName: 'OpenRemit', // Usually your repo name.
 // //   deploymentBranch: 'gh-pages',
 // //   trailingSlash: false,
 
@@ -301,7 +301,7 @@ export default config;
 // //         route: '/api-specifications',
 // //         showNavLink: true,
 // //         configuration: {
-// //           url: '/openremit-api-specs/openapi/openremit.yml',
+// //           url: '/OpenRemit/openapi/openremit.yml',
 // //         },
 // //       },
 // //     ],
@@ -315,7 +315,7 @@ export default config;
 // //   //       route: '/api-specifications',
 // //   //       showNavLink: true,
 // //   //       configuration: {
-// //   //         url: '/openremit-api-specs/openapi/openremit.yml'
+// //   //         url: '/OpenRemit/openapi/openremit.yml'
 // //   //       }
 // //   //     }
 // //   //   ]
@@ -340,7 +340,7 @@ export default config;
 // //           // Please change this to your repo.
 // //           // Remove this to remove the "edit this page" links.
 // //           editUrl:
-// //             'https://github.com/paysyslabs/openremit-api-specs/tree/main/',
+// //             'https://github.com/paysyslabs/OpenRemit/tree/main/',
 // //           // Useful options to enforce blogging best practices
 // //           onInlineTags: 'warn',
 // //           onInlineAuthors: 'warn',
@@ -378,7 +378,7 @@ export default config;
 // //           // { to: '/api-specifications', label: 'API Specifications', position: 'left' },
 // //           { to: '/docs/backoffice', label: 'Backoffice', position: 'left' },
 // //           {
-// //             href: 'https://github.com/paysyslabs/openremit-api-specs',
+// //             href: 'https://github.com/paysyslabs/OpenRemit',
 // //             label: 'GitHub',
 // //             position: 'right',
 // //           },
@@ -393,7 +393,7 @@ export default config;
 // //         //   },
 // //         //   {to: '/blog', label: 'Blog', position: 'left'},
 // //         //   {
-// //         //     href: 'https://github.com/paysyslabs/openremit-api-specs',
+// //         //     href: 'https://github.com/paysyslabs/OpenRemit',
 // //         //     label: 'GitHub',
 // //         //     position: 'right',
 // //         //   },
@@ -437,7 +437,7 @@ export default config;
 // //               },
 // //               {
 // //                 label: 'GitHub',
-// //                 href: 'https://github.com/paysyslabs/openremit-api-specs',
+// //                 href: 'https://github.com/paysyslabs/OpenRemit',
 // //               },
 // //             ],
 // //           },
