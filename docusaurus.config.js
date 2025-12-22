@@ -12,9 +12,9 @@ const config = {
   },
 
   url: 'https://paysyslabs.github.io',  // Your GitHub Pages URL
-  baseUrl: '/openremit-api-specs/',  // Base path for deployment
+  baseUrl: '/',  // Base path for deployment
 
-  organizationName: 'paysyslabs',  // GitHub organization name
+  organizationName: 'paysyslab',  // GitHub organization name
   projectName: 'openremit-api-specs',  // GitHub repo name
   deploymentBranch: 'gh-pages',  // Branch to deploy to GitHub Pages
   trailingSlash: false,  // Ensures the URL does not end with a slash
@@ -35,7 +35,7 @@ const config = {
         route: '/api-specifications',
         showNavLink: true,  // Show link to the API specs in the navbar
         configuration: {
-          url: '/openremit-api-specs/openapi/openremit.yml',  // Path to OpenAPI spec
+          url: '/openapi/openremit.yml',  // Path to OpenAPI spec
         },
       },
     ],
