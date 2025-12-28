@@ -84,3 +84,10 @@
 .table-of-contents__item--level-4 {
   padding-left: 10px;
 }
+
+/* Increase navbar logo size */
+.navbar__logo img {
+  height: 40px;        /* default is ~32px */
+  width: auto;
+}
+
