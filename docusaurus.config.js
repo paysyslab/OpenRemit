@@ -1,6 +1,7 @@
 // @ts-check
 import {themes as prismThemes} from 'prism-react-renderer';
 
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'OpenRemit',
@@ -58,10 +59,17 @@ const config = {
   ],
 
   themeConfig: {
-    colorMode: {
-      respectPrefersColorScheme: true,  // Respect the user's system color scheme
-    },
-
+    prism: {
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
+      },
+      imageZoom: {
+        selector: '.theme-doc-markdown img',
+        options: {
+          margin:24,
+          background: '#000',
+        },
+      },
     tableOfContents: {
       minHeadingLevel: 2,  // Minimum heading level for table of contents
       maxHeadingLevel: 4,  // Maximum heading level for table of contents
@@ -91,11 +99,6 @@ const config = {
         // },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Paysys Labs.`,
-    },
-
-    prism: {
-      theme: prismThemes.github,  // Light theme for code blocks
-      darkTheme: prismThemes.dracula,  // Dark theme for code blocks
     },
   },
 };
