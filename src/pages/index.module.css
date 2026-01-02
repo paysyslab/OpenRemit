@@ -21,3 +21,77 @@
   align-items: center;
   justify-content: center;
 }
+
+/* Home.module.css */
+
+.mainContent {
+  padding: 6rem 4rem;
+  text-align: center;
+  background-color: #ffffff; /* light background */
+}
+
+.heroSection {
+  background-color: white; /* clean white background */
+  padding: 3rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+  margin-bottom: 3rem;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #000000; /* blue from Paysys logo */
+  margin-bottom: 1rem;
+  /* margin-top: 2rem; */
+}
+
+.description {
+  font-size: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #000000; /* black text for readability */
+}
+/* .h2 {
+  font-size: 1.5rem;         
+  font-weight: 600;          
+  color: #006F8E;           
+  margin-bottom: 1rem;       
+  line-height: 1.2;          
+  max-width: 600px;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+} */
+h2h {
+    font-size: var(--ifm-h1-font-size); /* Customizable font size */
+    font-family: var(--ifm-heading-font-family); /* Custom font family */
+    font-weight: var(--ifm-heading-font-weight); /* Font weight */
+    line-height: var(--ifm-heading-line-height); /* Line height */
+    color: var(--ifm-heading-color); /* Heading text color */
+    margin: var(--ifm-heading-margin-top) 0 var(--ifm-heading-margin-bottom) 0; /* Margin based on design */
+}
+
+h1,  h3, h4, h5, h6 {
+    font-family: var(--ifm-heading-font-family); /* Same font family for sub-headings */
+    font-weight: var(--ifm-heading-font-weight); /* Same font weight */
+    color: var(--ifm-heading-color); /* Same color for all headings */
+    line-height: var(--ifm-heading-line-height); /* Consistent line height */
+    margin: var(--ifm-heading-margin-top) 0 var(--ifm-heading-margin-bottom) 0; /* Consistent margin */
+}
+/* Styling for the image */
+.image {
+  width: 100%; /* Make the image responsive */
+  max-width: 600px; /* Set a max-width for larger images */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 10px; /* Optional: Adds rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
+  object-fit: cover; /* Ensures the image fills the area without stretching */
+  margin-top: 1rem; /* Optional: Adds some space above the image */
+}
+
+@media screen and (max-width: 996px) {
+  .image {
+    max-width: 100%; /* Make sure the image fits on smaller screens */
+  }
+}

@@ -1,6 +1,7 @@
 // @ts-check
 import {themes as prismThemes} from 'prism-react-renderer';
 
+
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'OpenRemit',
@@ -57,10 +58,17 @@ const config = {
   ],
 
   themeConfig: {
-    colorMode: {
-      respectPrefersColorScheme: true,  
-    },
-
+    prism: {
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
+      },
+      imageZoom: {
+        selector: '.theme-doc-markdown img',
+        options: {
+          margin:24,
+          background: '#000',
+        },
+      },
     tableOfContents: {
       minHeadingLevel: 2,  
       maxHeadingLevel: 4,  
@@ -82,11 +90,6 @@ const config = {
       links: [
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Paysys Labs.`,
-    },
-
-    prism: {
-      theme: prismThemes.github,  
-      darkTheme: prismThemes.dracula,  
     },
   },
 };
