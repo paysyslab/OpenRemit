@@ -85,12 +85,50 @@
   padding-left: 10px;
 }
 
-/* Increase navbar logo size */
-.navbar__logo img {
-  height: 40px;        /* default is ~32px */
-  width: auto;
+/* ---------------- NAVBAR: big logo + centered menu ---------------- */
+
+:root {
+  --ifm-navbar-height: 72px;
 }
 
+/* Equal top/bottom spacing */
+.navbar {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Default: center everything vertically */
+.navbar__inner {
+  align-items: center;
+}
+
+/* Ensure the right-side menu items are centered vertically */
+.navbar__items {
+  align-items: center;
+}
+
+/* Keep logo big, with equal spacing */
+.navbar__brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar__logo {
+  display: flex;
+  align-items: flex-start;
+}
+
+.navbar__logo img {
+  height: 52px;
+  width: auto;
+  display: block;
+}
+
+/* Remove the previous nudge that pushes links down */
+.navbar__item,
+.navbar__link {
+  padding-bottom: 0;
+}
 
 
 /* Modal for image display */

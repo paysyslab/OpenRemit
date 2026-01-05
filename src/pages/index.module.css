@@ -25,7 +25,7 @@
 /* Home.module.css */
 
 .mainContent {
-  padding: 6rem 4rem;
+  padding: 1rem 4rem;
   text-align: center;
   background-color: #ffffff; /* light background */
 }
@@ -39,50 +39,38 @@
   justify-content: space-between;
 }
 
-.title {
+.heroTitle {
   font-size: 3rem;
-  font-weight: bold;
-  color: #000000; /* blue from Paysys logo */
-  margin-bottom: 1rem;
-  /* margin-top: 2rem; */
+  font-weight: 700;
+  color: #000000;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
 }
 
-.description {
+.heroSubtitle {
+  font-size: 1.7rem;
+  font-weight: 490;
+  color: #1a1a1a;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.heroDescription {
+  max-width: 1800px;
+  margin: 0 auto;
   font-size: 1rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  color: #000000; /* black text for readability */
-}
-/* .h2 {
-  font-size: 1.5rem;         
-  font-weight: 600;          
-  color: #006F8E;           
-  margin-bottom: 1rem;       
-  line-height: 1.2;          
-  max-width: 600px;
-  margin: 0 auto;
-  margin-bottom: 1rem;
-} */
-h2h {
-    font-size: var(--ifm-h1-font-size); /* Customizable font size */
-    font-family: var(--ifm-heading-font-family); /* Custom font family */
-    font-weight: var(--ifm-heading-font-weight); /* Font weight */
-    line-height: var(--ifm-heading-line-height); /* Line height */
-    color: var(--ifm-heading-color); /* Heading text color */
-    margin: var(--ifm-heading-margin-top) 0 var(--ifm-heading-margin-bottom) 0; /* Margin based on design */
+  font-weight: 400;
+  color: #333333;
+  text-align: center;
+  line-height: 1.7;
 }
 
-h1,  h3, h4, h5, h6 {
-    font-family: var(--ifm-heading-font-family); /* Same font family for sub-headings */
-    font-weight: var(--ifm-heading-font-weight); /* Same font weight */
-    color: var(--ifm-heading-color); /* Same color for all headings */
-    line-height: var(--ifm-heading-line-height); /* Consistent line height */
-    margin: var(--ifm-heading-margin-top) 0 var(--ifm-heading-margin-bottom) 0; /* Consistent margin */
-}
 /* Styling for the image */
 .image {
   width: 100%; /* Make the image responsive */
-  max-width: 600px; /* Set a max-width for larger images */
+  max-width: 800px; /* Set a max-width for larger images */
   height: auto; /* Maintain aspect ratio */
   border-radius: 10px; /* Optional: Adds rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
