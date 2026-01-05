@@ -1,9 +1,8 @@
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
-const sidebars = {
-  mainSidebar: [
+module.exports = {
+  overviewSidebar: [
     {
-      type: 'doc',
-      id: 'overview/index',
+      type: 'category',
       label: 'Overview',
       collapsible: false,
       link: { type: 'doc', id: 'overview/index' }, // Correct path to the Overview category
@@ -164,5 +163,3 @@ const sidebars = {
     },
   ],
 };
-
-module.exports = sidebars;
