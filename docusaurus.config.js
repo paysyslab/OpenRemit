@@ -5,7 +5,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 const config = {
   title: 'OpenRemit',
   tagline: 'API Documentation for OpenRemit',
-  favicon: 'favicon.ico',
+  favicon: 'favicon.ico?v=2',
 
   future: {
     v4: true, // Ensure compatibility with the upcoming Docusaurus v4
