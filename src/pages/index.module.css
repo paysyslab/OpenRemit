@@ -2,7 +2,7 @@
  * CSS files with the .module.css suffix will be treated as CSS modules
  * and scoped locally.
  */
-
+ 
 .heroBanner {
   padding: 4rem 0;
   text-align: center;
@@ -22,16 +22,14 @@
   justify-content: center;
 }
 
-/* Home.module.css */
-
 .mainContent {
   padding: 1rem 4rem;
   text-align: center;
-  background-color: #ffffff; /* light background */
+  background-color: #ffffff; 
 }
 
 .heroSection {
-  background-color: white; /* clean white background */
+  background-color: white; 
   padding: 3rem 2rem;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
@@ -41,8 +39,8 @@
 
 .heroTitle {
   font-size: 3rem;
+  color: #1b679b;
   font-weight: 700;
-  color: #000000;
   text-align: center;
   margin-bottom: 0.5rem;
   line-height: 1.2;
@@ -50,8 +48,8 @@
 
 .heroSubtitle {
   font-size: 1.7rem;
-  font-weight: 490;
-  color: #1a1a1a;
+  color: #fcbd17;
+  font-weight: 500;
   text-align: center;
   margin-bottom: 1.5rem;
   margin-top: 1.5rem;
@@ -60,26 +58,60 @@
 .heroDescription {
   max-width: 1800px;
   margin: 0 auto;
-  font-size: 1rem;
   font-weight: 400;
   color: #333333;
   text-align: center;
-  line-height: 1.7;
+  .heroDescription {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
 }
 
-/* Styling for the image */
+
 .image {
-  width: 100%; /* Make the image responsive */
-  max-width: 800px; /* Set a max-width for larger images */
-  height: auto; /* Maintain aspect ratio */
-  border-radius: 10px; /* Optional: Adds rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
-  object-fit: cover; /* Ensures the image fills the area without stretching */
-  margin-top: 1rem; /* Optional: Adds some space above the image */
+  width: 100%; 
+  max-width: 800px; 
+  height: auto; 
+  border-radius: 10px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  object-fit: cover; 
+  margin-top: 1rem;
 }
 
 @media screen and (max-width: 996px) {
   .image {
-    max-width: 100%; /* Make sure the image fits on smaller screens */
+    max-width: 100%; 
+  }
+} 
+
+.glowingButton {
+  display: inline-block;
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #1b679b; /* Blue background */
+  border-radius: 30px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 10px #1b679b, 0 0 20px #1b679b, 0 0 30px #1b679b;
+  animation: glow 1.5s ease-in-out infinite;
+}
+
+.glowingButton:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #1b679b, 0 0 30px #1b679b, 0 0 40px #1b679b;
+}
+
+/* Glow animation */
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px #1b679b, 0 0 10px #1b679b, 0 0 15px #1b679b;
+  }
+  50% {
+    box-shadow: 0 0 10px #1b679b, 0 0 20px #1b679b, 0 0 30px #1b679b;
+  }
+  100% {
+    box-shadow: 0 0 5px #1b679b, 0 0 10px #1b679b, 0 0 15px #1b679b;
   }
 }

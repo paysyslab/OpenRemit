@@ -1,150 +1,118 @@
----
-title: Overview
----
+import '../custom.css'
 
-## Platform Overview
+# OpenRemit: Revolutionizing Outward Remittance Processing
 
-OpenRemit is a remittance processing platform that enables banks and financial institutions to receive, validate, process, and settle remittance transactions originating from external partners.
+OpenRemit is a powerful, flexible, and scalable outward remittance processing platform designed to address the complexities of cross-border payments. Engineered to simplify the remittance ecosystem for banks and financial institutions, OpenRemit offers an end-to-end solution that ensures secure, real-time processing, compliance, and settlement of transactions across multiple partners and systems.
 
-OpenRemit acts as a centralized processing layer. It takes inbound partner requests, applies validation and control checks, integrates with compliance and screening processes, applies routing decisions, and forwards transactions to downstream banking systems to complete settlement.
+At its core, OpenRemit acts as the centralized hub for transaction lifecycle management, handling validation, routing, compliance checks, and settlement functions. It is built with a high degree of modularity, ensuring that it can cater to diverse remittance partners with varying technical capabilities. Whether through APIs, pull-based integrations, or batch file processing, OpenRemit ensures seamless integration, regardless of the partner's infrastructure.
 
-OpenRemit supports a consistent processing approach across partners. This approach reduces integration variance and provides a controlled mechanism for banks to operationalize remittance processing through a single platform layer.
+The platform is powered by OpenConnect, which serves as the middleware layer responsible for orchestrating system-to-system communication, message transformations, and API exposure. By decoupling partner communication from the core processing logic, OpenRemit ensures enhanced security, scalability, and ease of integration.
 
-![Overview](/img/features.png)
+
+
+
+## Features
+
+<div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
+  {/* Row 1 */}
+  <div style={{ flex: '1 1 30%', maxWidth: '300px', padding: '20px', textAlign: 'center', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', border: '1px solid #ddd' }}>
+    <h3>Real-Time Transaction Processing</h3>
+    <p>Ensures high-speed, real-time processing of financial transactions with intelligent routing and RabbitMQ queue management.</p>
+  </div>
+
+  <div style={{ flex: '1 1 30%', maxWidth: '300px', padding: '20px', textAlign: 'center', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', border: '1px solid #ddd' }}>
+    <h3>Comprehensive Payment Network Integration</h3>
+    <p>Provides effortless connectivity with RAAST, 1LINK, RTGS, and national payment switches for interoperability.</p>
+  </div>
+
+  <div style={{ flex: '1 1 30%', maxWidth: '300px', padding: '20px', textAlign: 'center', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', border: '1px solid #ddd' }}>
+    <h3>Seamless Multi-Tenant Architecture</h3>
+    <p>Supports multiple financial institutions with independent operation and secure data segregation on the same platform.</p>
+  </div>
+
+  {/* Row 2 */}
+  <div style={{ flex: '1 1 45%', maxWidth: '300px', padding: '20px', textAlign: 'center', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', border: '1px solid #ddd' }}>
+    <h3>Secure, Scalable & Seamless API Access</h3>
+    <p>Enforces strong security with JWT 2.0 authentication and ISO 8583/ISO 20022-based secure messaging.</p>
+  </div>
+
+  <div style={{ flex: '1 1 45%', maxWidth: '300px', padding: '20px', textAlign: 'center', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', border: '1px solid #ddd' }}>
+    <h3>Advanced Transaction Monitoring</h3>
+    <p>Enables real-time transaction tracking, fraud detection, and compliance monitoring with a comprehensive dashboard.</p>
+  </div>
+</div>
+
 
 ## Solution Architecture
-
-OpenRemit operates as an integration and orchestration layer between external remittance partners and internal bank systems.
-
-OpenRemit receives partner-originated transaction requests through secure, API-driven interfaces. It then processes those requests through internal platform modules responsible for validation, compliance checks, routing decisions, and settlement forwarding.
-
-OpenRemit maintains transaction traceability through the full processing lifecycle. It creates identifiers and status progression to enable partners and operational teams to track and inquire on transaction outcomes through the platform.
-
-
-
-## Vision and Introduction
-
-The vision of OpenRemit is to provide a scalable, configurable, and compliant remittance processing solution that reduces integration complexity for banks while maintaining operational control and regulatory adherence.
-
-OpenRemit supports standardized partner onboarding through a consistent API and processing model. This model allows banks to maintain consistent validation, monitoring, and operational control for transactions even when transaction sources vary by partner.
-
-![Overview](/img/features.png)
-
-## Key Features
-
-### 1. Partner-Based Remittance Transaction Processing
-
-OpenRemit processes remittance transactions initiated by external partners through a standardized transaction intake mechanism.
-
-The platform receives partner requests and enforces a consistent validation and processing approach. This approach ensures that the bank applies common controls and processing rules across partners rather than implementing partner-specific logic in downstream systems.
-
-OpenRemit supports a processing model that enables banks to manage partner-originated transactions centrally. The platform maintains the transaction state as it moves from partner submission through internal checks and onward processing.
-
-
-
-### 2. Secure API-Driven Integrations
-
-OpenRemit exposes REST-based interfaces for partner integration.
-
-The platform secures these interfaces using authentication tokens and controlled access headers. This security model supports controlled partner access and reduces direct exposure of internal bank systems to external integration points.
-
-OpenRemit applies request-level checks as part of secure integration. It ensures that only authorized requests enter the processing pipeline and that inbound requests follow expected structure and constraints before processing continues.
-
-
-
-### 3. Beneficiary Validation and Title Fetch
-
-OpenRemit supports beneficiary validation through account or IBAN verification and title fetch.
-
-The platform performs these validations before processing remittance settlement instructions. This validation reduces failed credits and operational disputes by ensuring that beneficiary details align with the intended receiving account.
-
-OpenRemit uses title fetch as a verification step that improves transaction accuracy. It enables confirmation of beneficiary identity attributes through the banking validation mechanism prior to settlement.
-
-
-
-### 4. Compliance and Screening Integration
-
-OpenRemit integrates with compliance and screening systems to evaluate transactions against regulatory and policy requirements.
-
-The platform supports screening workflows and identifies transactions that require review. It flags transactions based on screening outcomes and enables controlled handling of those transactions through operational monitoring.
-
-OpenRemit uses compliance and screening integration to support AML and sanction screening alignment. It ensures that the platform evaluates transactions through risk control steps as part of the processing lifecycle.
-
-
-
-### 5. Multi-Rail Transaction Routing
-
-OpenRemit supports routing transactions across multiple payment rails based on transaction type, beneficiary details, and configured routing rules.
-
-The platform applies routing decisions during transaction processing. These routing decisions determine the appropriate settlement path for a given transaction based on configuration and eligibility.
-
-OpenRemit uses routing logic to support operational scalability. It enables banks to define routing behavior centrally and apply it consistently during transaction processing.
-
-
-
-### 6. End-to-End Transaction Traceability
-
-OpenRemit maintains end-to-end traceability across the transaction lifecycle.
-
-The platform assigns reference identifiers and updates transaction status as processing progresses through validation, compliance, routing, and settlement steps.
-
-OpenRemit provides traceability to support transaction inquiry and operational monitoring. It enables clear tracking of what stage the transaction reached and what outcome was produced by the processing workflow.
-
-
-
-## Core Modules
-
-### 1. Partner Integration Layer
-
-The Partner Integration Layer manages inbound communication with external remittance partners.
-
-This module handles authentication, request validation, schema compliance checks, and transaction intake. It ensures that only authorized requests enter the processing flow.
-
-The Partner Integration Layer supports standardized partner interaction. It provides consistent request handling and enables a uniform entry point into the platform processing pipeline.
-
-
-
-### 2. Transaction Processing Engine
-
-The Transaction Processing Engine orchestrates the end-to-end handling of remittance transactions.
-
-This module applies validation rules, identifies transaction type, and manages transaction state transitions.
-
-The Transaction Processing Engine coordinates the sequence of processing steps. It ensures that the platform performs required validations and checks before routing and settlement forwarding.
-
-
-
-### 3. Compliance and Screening Interface
-
-The Compliance and Screening Interface acts as the integration point between OpenRemit and compliance or screening systems.
-
-This module forwards transaction data for screening evaluation and receives screening outcomes.
-
-The Compliance and Screening Interface updates transaction state based on screening results. It supports controlled handling for transactions that pass screening and flags transactions requiring review.
-
-
-
-### 4. Routing and Settlement Layer
-
-The Routing and Settlement Layer determines the appropriate payment rail and settlement mechanism for each transaction.
-
-This module applies routing rules and forwards settlement instructions to downstream systems.
-
-The Routing and Settlement Layer tracks responses and acknowledgments from downstream settlement processes. It supports completion of transaction lifecycle processing based on settlement outcomes.
-
-
-
-### 5. Backoffice and Operational Monitoring
-
-The Backoffice and Operational Monitoring module provides operational visibility into transaction processing.
-
-This module supports transaction inquiry, exception handling, and review-driven operational handling. It enables operational users to track transaction progress through statuses and identify transactions requiring attention.
-
-The Backoffice and Operational Monitoring module also supports auditability by ensuring that transaction states and operational actions remain visible and traceable for internal accountability and regulatory oversight.
-
-
-
-
-
-
-
+OpenRemit provides a robust set of modules to enable seamless outward remittance transactions, including integrations with multiple partners and systems. The solution includes a transaction routing mechanism to support different remittance channels, an API gateway for connectivity with external systems (such as financial institutions), and a middleware layer to ensure real-time processing and monitoring of all remittance transactions. OpenRemit is designed to offer a unified platform for sending and receiving international remittances, handling diverse payment types, and enabling compliance with financial regulations.
+
+
+<div style={{ display: 'flex', alignItems: 'center', padding:'10px', marginBottom: '10px' }}>
+<div style={{ flex: 1 }}>
+ ![Overview](/img/overview/highLevel.png)
+ </div>
+ </div>
+
+
+## Transaction Mechanisms in OpenRemit
+
+OpenRemit supports three key transaction mechanisms, each tailored to the specific capabilities and needs of remittance partners:
+
+ ### 1. Push Mechanism
+    **How It Works**: In this mechanism, banks push transaction data to OpenRemit’s standardized APIs. This allows banks to send remittance data to OpenRemit for further validation and processing.  
+    **Key Benefit**: This model ensures that banks can directly engage with multiple partners, streamlining the process and reducing the overhead of managing various systems. It allows the bank to initiate transaction flows seamlessly without relying on external triggers.
+<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0px' }}>
+  <div style={{ flex: 1, paddingRight: '10px' }}>
+       
+        ### 2. Pull Mechanism
+    **How It Works**: OpenRemit pulls transaction data from various partner APIs. This gives banks the flexibility to receive transaction details from partners in real time, consolidating and processing them centrally.  
+    **Key Benefit**: By pulling data, banks can retain control over transaction flows while supporting numerous remittance services. This method reduces the burden of partner management by allowing banks to consume data as needed, enhancing flexibility and operational control.
+
+  </div>
+  <div style={{ flex: 1 }}>
+    ![Overview](/img/overview/pushPull-removebg-preview.png)
+  </div>
+</div>
+
+ ### 3. File Mechanism
+<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', padding: '0' }}>
+  <div style={{ flex: 1, paddingRight: '10px', margin: 0 }}>
+        **How It Works**: For smaller partners who do not have API capabilities, OpenRemit supports a file-based mechanism. Partners send transaction records at the end of the day in a batch file format, and OpenRemit converts these into individual transactions for processing.  
+**Key Benefit**: This ensures that even smaller remittance partners without robust API infrastructure can still participate in the remittance network. OpenRemit’s ability to convert bulk transaction data into actionable processing ensures that no partner is left out, regardless of technical capability.
+  </div>
+  <!-- <div style={{ flex: 1, padding: '0 10px', margin: 0 }}>
+    ![Overview](/img/overview/file.png)
+  </div> -->
+</div>
+
+## Why OpenRemit?
+
+<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0px' }}>
+    <div style={{ flex: 1 }}>
+    ![Overview](/img/overview/multiplePartners.png)
+  </div>
+  <div style={{ flex: 1, paddingRight: '5px' }}>
+    ### Unlock Seamless Integration with Multiple Partners
+    OpenRemit facilitates the integration of various remittance partners through a unified platform. By offering standardized APIs, banks can quickly integrate with numerous remittance providers, ensuring seamless cross-border transactions for their customers. This reduces complexity for banks, enabling them to access a wide network of remittance partners and offer more options to their users.
+  </div>
+</div>
+
+<div class="subagent-section">
+  <div style={{ flex: 1, paddingRight: '5px' }}>
+    ### Expand Reach with Subagents
+    One of the standout features of OpenRemit is its subagent model, which allows banks to extend remittance services to regions where they may not have a physical presence. Subagents can operate in underserved or remote areas, offering a significant opportunity for banks to grow their customer base by providing services in locations typically outside the reach of traditional banking infrastructure.
+  </div>
+  <div style={{ flex: 1 }}>
+    ![Overview](/img/overview/subagent.png)
+  </div>
+</div>
+
+<div class="subagent-section">
+    <div style={{ flex: 1 }}>
+    ![Overview](/img/overview/globe.png)
+  </div>
+  <div style={{ flex: 1, paddingRight: '10px' }}>
+    ### Operational Efficiency Through a Single Platform
+    OpenRemit simplifies the process of managing remittance transactions by reducing the need for different systems for each partner. With a single platform, OpenRemit helps streamline operations, reducing integration variance and providing a standardized, controlled approach for remittance processing.
+  </div>
+</div>

@@ -80,7 +80,8 @@ const config = {
       },
       items: [
         { to: '/docs/overview', label: 'Overview', position: 'left' },  
-        { to: '/docs/backoffice', label: 'Backoffice', position: 'left' },  
+        { to: '/docs/back-office/logging-in-and-changing-password', label: 'Backoffice', position: 'left' },  
+        { to: '/docs/developer-workflow', label: 'Developer Workflow', position: 'left'},
       ],
     },
 
