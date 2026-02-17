@@ -89,7 +89,7 @@
   padding: 15px 30px;
   font-size: 1.2rem;
   color: #fff;
-  background-color: #1b679b; /* Blue background */
+  background-color: #1b679b; 
   border-radius: 30px;
   text-transform: uppercase;
   text-decoration: none;
@@ -103,7 +103,7 @@
   box-shadow: 0 0 20px #1b679b, 0 0 30px #1b679b, 0 0 40px #1b679b;
 }
 
-/* Glow animation */
+
 @keyframes glow {
   0% {
     box-shadow: 0 0 5px #1b679b, 0 0 10px #1b679b, 0 0 15px #1b679b;
