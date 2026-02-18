@@ -28,15 +28,23 @@ module.exports = {
   backofficeSidebar: [
     {
       type: 'category',
-      label: 'Back Office',
+      label: 'Get Started',
       collapsible: true,
-      link: { type: 'doc', id: 'back-office/get-started' },
+      link: { type: 'doc', id: 'get-started' },
       items: [
         {
           type: 'doc',
-          id: 'back-office/get-started',
+          id: 'get-started',
           label: 'Get Started',
         },
+        ],
+    },
+    {  
+      type: 'category',
+      label: 'Back Office',
+      collapsible: true,
+      link: { type: 'doc', id: 'back-office/logging-in-and-changing-password' },
+      items: [
         {
           type: 'doc',
           id: 'back-office/logging-in-and-changing-password',

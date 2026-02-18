@@ -82,8 +82,9 @@ const config = {
         src: 'img/openremit-logo.png',  
       },
       items: [
-        { to: '/docs/overview', label: 'Overview', position: 'left' },  
-        { to: '/docs/back-office/get-started', label: 'Get Started', position: 'left' },  
+        { to: '/docs/overview', label: 'Overview', position: 'left' }, 
+        { to: '/docs/get-started', label: 'Get Started', position: 'left'}, 
+        // { to: '/docs/back-office/logging-in-and-changing-password', label: 'Get Started', position: 'left' },  
         { to: '/docs/developer-workflow', label: 'Developer Workflow', position: 'left'},
       ],
     },

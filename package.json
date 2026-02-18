@@ -32,7 +32,10 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.9.2",
-    "@docusaurus/types": "3.9.2"
+    "@docusaurus/types": "3.9.2",
+    "fs-extra": "^11.3.3",
+    "gray-matter": "^4.0.3",
+    "md-to-pdf": "^5.2.5"
   },
   "browserslist": {
     "production": [
