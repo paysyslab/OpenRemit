@@ -30,8 +30,13 @@ module.exports = {
       type: 'category',
       label: 'Back Office',
       collapsible: true,
-      link: { type: 'doc', id: 'back-office/logging-in-and-changing-password' },
+      link: { type: 'doc', id: 'back-office/get-started' },
       items: [
+        {
+          type: 'doc',
+          id: 'back-office/get-started',
+          label: 'Get Started',
+        },
         {
           type: 'doc',
           id: 'back-office/logging-in-and-changing-password',
