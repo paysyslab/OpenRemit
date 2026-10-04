@@ -18,3 +18,17 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Secrets - never commit keys or credentials
+aaa
+aaa.pub
+id_rsa*
+id_ed25519*
+id_ecdsa*
+*.pem
+*.key
+*.ppk
+.env
+
+# Local archives / snapshots
+*.zip
