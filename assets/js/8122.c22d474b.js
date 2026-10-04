@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkopenremit_api_specs=globalThis.webpackChunkopenremit_api_specs||[]).push([[8122],{8122(e,s,a){a.d(s,{createPacketServices:()=>p.$});var p=a(8484);a(184)}}]);

@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkopenremit_api_specs=globalThis.webpackChunkopenremit_api_specs||[]).push([[6236],{6236(e,s,i){i.d(s,{createCynefinServices:()=>p.t});var p=i(9760);i(184)}}]);

@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkopenremit_api_specs=globalThis.webpackChunkopenremit_api_specs||[]).push([[2194],{2194(e,p,s){s.d(p,{createTreemapServices:()=>a.d});var a=s(1048);s(184)}}]);

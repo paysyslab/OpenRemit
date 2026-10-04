@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkopenremit_api_specs=globalThis.webpackChunkopenremit_api_specs||[]).push([[6883],{6883(e,s,p){p.d(s,{createInfoServices:()=>a.v});var a=p(6744);p(184)}}]);

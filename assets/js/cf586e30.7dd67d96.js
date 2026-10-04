@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkopenremit_api_specs=globalThis.webpackChunkopenremit_api_specs||[]).push([[2009],{1942(s){s.exports=JSON.parse('{"name":"@scalar/docusaurus","id":"default"}')}}]);

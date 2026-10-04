@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkopenremit_api_specs=globalThis.webpackChunkopenremit_api_specs||[]).push([[2580],{2580(e,s,a){a.d(s,{createWardleyServices:()=>p.J});var p=a(120);a(184)}}]);

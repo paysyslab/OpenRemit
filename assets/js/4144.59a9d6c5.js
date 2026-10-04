@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkopenremit_api_specs=globalThis.webpackChunkopenremit_api_specs||[]).push([[4144],{4144(e,s,a){a.d(s,{createRailroadAbnfServices:()=>i.s});var i=a(4527);a(184)}}]);
