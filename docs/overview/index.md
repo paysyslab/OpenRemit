@@ -195,7 +195,7 @@ export const OpenRemitOverview = () => {
               <div>
                 <Tag>Compliance & Monitoring</Tag>
                 <h3 style={{ fontSize:'clamp(1.1rem,2.2vw,1.55rem)', fontWeight:800, color:'#0c1e35', lineHeight:1.25, letterSpacing:'-0.02em', margin:'0 0 14px' }}>Built-In Compliance Screening</h3>
-                <p style={{ fontSize:14.5, lineHeight:1.8, color:'#5a6a88', margin:0 }}>SafeWatch screening, AML checks, and OFAC/UNSC sanctions verification are baked into every transaction flow — ensuring your bank stays compliant without slowing down operations.</p>
+                <p style={{ fontSize:14.5, lineHeight:1.8, color:'#5a6a88', margin:0 }}>AML/CFT screening through the Bank's Screening System and OFAC/UNSC sanctions verification are baked into every transaction flow — ensuring your bank stays compliant without slowing down operations.</p>
               </div>
             </div>
           </Reveal>
@@ -221,7 +221,7 @@ export const OpenRemitOverview = () => {
               <Tag>Architecture</Tag>
               <SectionH2>Robust, Modular, and Scalable</SectionH2>
               <p style={{ fontSize:14.5, lineHeight:1.8, color:'#5a6a88', margin:'0 0 28px', maxWidth:700 }}>
-                A centralized API gateway via Nginx routes all partner traffic into the unified OpenConnect middleware layer — orchestrating real-time processing, compliance screening (SafeWatch, ESB, TLINK), core banking integration, and full Grafana observability.
+                A centralized API gateway via Nginx routes all partner traffic into the unified OpenConnect middleware layer — orchestrating real-time processing, compliance screening (Screening System, Bank Integration Layer, 1LINK), core banking integration, and full Grafana observability.
               </p>
               <Frame src={IMG.highLevel} alt="High-Level Architecture" />
             </div>

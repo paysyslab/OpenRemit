@@ -133,7 +133,7 @@ export const Subagents = () => {
                   'Contact Person',
                   'Contact Phone',
                   'Contact Email',
-                  'BIPL Settlement Account',
+                  'Settlement Account',
                   'Fetch Title',
                   'Account Title',
                 ]} />

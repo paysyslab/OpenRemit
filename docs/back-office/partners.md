@@ -139,12 +139,12 @@ export const Partners = () => {
               <span style={s.bullet} />
               <div>
                 Additional fields:
-                <Sub items={['Country', 'Address', 'Point of Contact', 'Email', 'Contact Number', 'BIPL Settlement Account', 'Fetch Title', 'Account Title']} />
+                <Sub items={['Country', 'Address', 'Point of Contact', 'Email', 'Contact Number', 'Partner Settlement Account (GL)', 'Fetch Title', 'Account Title']} />
               </div>
             </li>
           </ul>
         </div>
-        <ImgCard src="/img/BO/Partner/Addpartner.png" alt="Add Partner" label="Fig. 2" />
+        <ImgCard src="/img/BO/Partner/AddPartner.png" alt="Add Partner" label="Fig. 2" />
 
         {/* View Partner Details */}
         <div style={s.sectionHeading}>View Partner Details <div style={s.line} /></div>
