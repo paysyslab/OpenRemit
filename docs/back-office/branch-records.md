@@ -119,7 +119,7 @@ export const BranchRecords = () => {
                     'Full Name',
                     'Username (lowercase, letters, numbers, and dots only)',
                     'Email Address',
-                    'Mobile Number (starts with +92)',
+                    'Mobile Number (with country code)',
                     'Branch Code (optional)',
                     'Settlement Account (optional)',
                     'Designation (optional)',

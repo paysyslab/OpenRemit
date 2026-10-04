@@ -51,12 +51,12 @@ module.exports = {
             {
               type: 'doc',
               id: 'features/financial/ibft-rail-fallback',
-              label: 'IBFT / P2P with Rail Fallback',
+              label: 'Interbank Transfer with Rail Fallback',
             },
             {
               type: 'doc',
-              id: 'features/financial/move-to-rtgs',
-              label: 'Move to RTGS',
+              id: 'features/financial/move-to-high-value-rail',
+              label: 'Move to High-Value Rail',
             },
             {
               type: 'doc',
@@ -143,8 +143,8 @@ module.exports = {
             },
             {
               type: 'doc',
-              id: 'features/non-financial/eprc-receipts',
-              label: 'e-PRC, Bank Receipt & COC Slip',
+              id: 'features/non-financial/regulatory-certificate',
+              label: 'Regulatory Certificate & Receipts',
             },
             {
               type: 'doc',
@@ -164,7 +164,7 @@ module.exports = {
             {
               type: 'doc',
               id: 'features/non-financial/balance-imd-dashboards',
-              label: 'Partner Balance, IMD List & Dashboards',
+              label: 'Partner Balance, Bank Directory & Dashboards',
             },
             {
               type: 'doc',
@@ -229,7 +229,7 @@ module.exports = {
         {
           type: 'doc',
           id: 'back-office/e-prc',
-          label: 'E-PRC',
+          label: 'Certificate Generation',
         },
         {
           type: 'doc',

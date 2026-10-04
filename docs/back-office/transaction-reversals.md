@@ -112,12 +112,12 @@ export const TransactionReversals = () => {
 
   const columns = [
     { label: 'Original Txn Date', note: 'YYYY-MM-DD' },
-    { label: 'Txn Rail',          note: '1link, RAAST, RTGS' },
+    { label: 'Txn Rail',          note: 'Rail the transaction was paid on (e.g. 1LINK, RAAST, RTGS in Pakistan)' },
     { label: 'Partner',           note: 'MTO name' },
     { label: 'Txn Amount',        note: 'numeric' },
     { label: 'CBS Reference',     note: 'optional' },
-    { label: 'Txn Reference',     note: 'STAN for 1link, MessageId for RAAST, or uniqueId for RTGS' },
-    { label: 'Receiver IBAN',     note: 'PK + 22 digits' },
+    { label: 'Txn Reference',     note: 'Unique rail reference (e.g. STAN for 1LINK, MessageId for RAAST, uniqueId for RTGS in Pakistan)' },
+    { label: 'Receiver IBAN',     note: 'IBAN (e.g. PK + 22 characters in Pakistan)' },
     { label: 'Receiver Name',     note: null },
   ];
 

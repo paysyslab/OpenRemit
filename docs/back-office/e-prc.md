@@ -100,7 +100,7 @@ export const EPRCGeneration = () => {
         <div style={s.header}>
           <div style={s.glow1} />
           <div style={s.glow2} />
-          <h1 style={s.h1}>EPRC <em style={s.em}>Generation</em></h1>
+          <h1 style={s.h1}>Certificate <em style={s.em}>Generation</em></h1>
           </div>
 
         <div style={s.sectionHeading}>Overview <div style={s.line} /></div>
@@ -110,7 +110,7 @@ export const EPRCGeneration = () => {
             <ul style={s.stepList}>
               <li style={s.stepItem}>
                 <span style={s.bullet} />
-                View and download EPRC details for completed transactions (single and bulk files).
+                View and download regulatory remittance certificates (e.g. the SBP e-PRC in Pakistan) for completed transactions (single and bulk files).
               </li>
             </ul>
           </div>

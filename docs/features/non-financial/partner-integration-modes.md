@@ -63,7 +63,7 @@ When adding a partner, the Back Office Maker sets:
 | API Gateway (push) | Transaction Inquiry | POST | Check a pushed transaction's status |
 | API Gateway (push) | Title Fetch | POST | Verify a beneficiary account title before sending |
 | API Gateway (push) | Balance Inquiry | POST | Check the Partner Settlement Account (GL) balance |
-| API Gateway (push) | Bank List | GET | List Pakistani banks with BIC and IMD codes |
+| API Gateway (push) | Bank List | GET | List domestic banks with BIC and bank codes |
 | Partner system (pull) | Get outstanding transactions, Fetch by reference, Confirm Transaction, Unlock Transaction | — | Pull partner interface |
 
 ## Configuration
@@ -85,7 +85,7 @@ Each partner's scheduler has its own record:
 | Step | Applies to | Behaviour |
 |---|---|---|
 | SCREENING | OTC, LFT, IBFT | AML/CFT screening; runs PRE (before Title Fetch / Balance / Transfer) or POST (after Fund Transfer) per the partner's risk profile |
-| TITLE_FETCH | LFT, IBFT | Account validation on CBS (LFT) or 1LINK / RAAST (IBFT). Not applicable to OTC. May be omitted only for pre-validated partners |
+| TITLE_FETCH | LFT, IBFT | Account validation on CBS (LFT) or the domestic rail (IBFT). Not applicable to OTC. May be omitted only for pre-validated partners |
 | BALANCE_INQUIRY | OTC, LFT, IBFT | Partner balance check. Omitting it requires risk team approval |
 | FUND_TRANSFER | OTC, LFT, IBFT | Financial posting; IBFT follows the configured rail order. Must be the last financial step |
 | PARTNER_NOTIFY | OTC, LFT, IBFT | Confirm / unlock (pull) or status update (push). Mandatory for pull cash payouts; must follow FUND_TRANSFER |
@@ -159,5 +159,5 @@ The source specification describes a cron schedule per partner, but also notes t
 - [Partner Portal: File Upload](../../partner-portal/file-upload.md)
 - [COC / OTC Cash Payout](../financial/coc-otc-cash-payout.md)
 - [Local Funds Transfer (LFT)](../financial/local-funds-transfer.md)
-- [IBFT / P2P with Rail Fallback](../financial/ibft-rail-fallback.md)
+- [Interbank Transfer (IBFT) with Rail Fallback](../financial/ibft-rail-fallback.md)
 - [Partner Bulk File Upload](../financial/partner-bulk-file-upload.md)

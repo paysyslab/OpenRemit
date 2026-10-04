@@ -37,7 +37,7 @@ OpenRemit records an audit entry for every user action and every significant sys
 | Area | Captured details |
 |---|---|
 | Audit entry | Module / screen, activity, performed by (user or SYSTEM), method, previous value, new value, timestamp, comment |
-| Transaction timeline | Every stage with timestamp and status, API request / response codes from OpenConnect, the Bank Integration Layer, RAAST and 1LINK, fallbacks and reversals |
+| Transaction timeline | Every stage with timestamp and status, API request / response codes from OpenConnect, the Bank Integration Layer and the domestic rails, fallbacks and reversals |
 | Failure reasons | Latest failure code mapped to a readable label, e.g. *Duplicate Transaction* or *Balance Inquiry Failed* |
 | Scheduler runs | Partner, run time, transactions fetched, per-step outcomes, errors |
 
@@ -48,7 +48,7 @@ OpenRemit records an audit entry for every user action and every significant sys
 | Transaction reports | Filter by date range, transaction type, status or partner |
 | Partner reports | Partner-specific metrics, including beneficiaries whose SMS contact details were missing or invalid |
 | User reports | Partners, branches and sub-agents |
-| Regulatory reports | Pre-defined SBP bank-wise templates, using the stored beneficiary IBAN |
+| Regulatory reports | Pre-defined local regulatory templates (e.g. SBP bank-wise reports), using the stored beneficiary IBAN |
 
 ## Sequence Diagram
 

@@ -1,12 +1,12 @@
 ---
 hide_title: true
-title: Partner Balance, IMD List & Dashboards
-description: Real-time partner balance, the bank IMD / BIC reference list, and dashboards for the Back Office, branches and partners.
+title: Partner Balance, Bank Directory & Dashboards
+description: Real-time partner balance, the domestic bank code directory, and dashboards for the Back Office, branches and partners.
 ---
 
 import { Hero, Capabilities } from '@site/src/components/DocKit';
 
-<Hero title="Balance, IMD List &" accent="Dashboards" subtitle="Real-time partner balance, the bank code reference list, and an at-a-glance dashboard in each portal." />
+<Hero title="Balance, Bank Directory &" accent="Dashboards" subtitle="Real-time partner balance, a domestic bank code directory, and an at-a-glance dashboard in each portal." />
 
 <Capabilities tags={['Standard', 'Configurable']} />
 
@@ -15,13 +15,17 @@ import { Hero, Capabilities } from '@site/src/components/DocKit';
 Three operational views support day-to-day remittance operations:
 
 - **Partner Balance** shows a partner its available settlement balance in real time.
-- **IMD List** is a searchable reference of Pakistani banks with their BIC code and IMD number.
+- **Bank directory** (the *IMD List* screen) is a searchable reference of domestic banks with their BIC and domestic bank code.
 - **Dashboards** in the Back Office, Branch Portal and Partner Portal summarise transactions by status and type.
+
+:::info[Pakistan example]
+The domestic bank code is the 6-digit **IMD** used by the 1LINK switch.
+:::
 
 ## Significance
 
 - **Funding visibility**: partners can top up before their balance runs short and transactions fail.
-- **Fewer routing errors**: correct BIC / IMD codes for IBFT beneficiaries and transaction files.
+- **Fewer routing errors**: correct BIC and bank codes for interbank beneficiaries and transaction files.
 - **Operational awareness**: each user sees pending, completed and failed volumes for their scope.
 
 ## Usage
@@ -30,10 +34,10 @@ Three operational views support day-to-day remittance operations:
 
 | Role | Portal and menu | What they see |
 |---|---|---|
-| Partner | Partner Portal → **Partner Balance** | Current available balance (PKR), last updated time, Refresh Balance |
-| Partner | Partner Portal → **IMD List** | Participant name, BIC code and IMD, with copy buttons |
+| Partner | Partner Portal → **Partner Balance** | Current available balance (local currency), last updated time, Refresh Balance |
+| Partner | Partner Portal → **IMD List** | Participant name, BIC code and domestic bank code, with copy buttons |
 | Partner | Partner Portal → **Dashboard** | Real-time view (today) and Performance view (date range, MTD / YTD) |
-| Back Office user | Back Office → Dashboard | Pending, completed and failed totals for IBFT, LFT and cash payout, plus partner and branch activity |
+| Back Office user | Back Office → Dashboard | Pending, completed and failed totals for interbank, local transfer and cash payout, plus partner and branch activity |
 | Branch user | Branch Portal → Dashboard | Branch activity for cash payout (pending, completed, failed), filtered by date and partner |
 
 ### Dashboards
@@ -41,7 +45,7 @@ Three operational views support day-to-day remittance operations:
 | Portal | Content |
 |---|---|
 | Partner Portal | Remittance Statistics (Received, Processed, Pending, Reversed); Payout Breakdown (Cash, FT, IBFT); Transaction Status and Amount Distribution charts; in Performance view, trend lines and Monthly Trends |
-| Back Office | Transaction summary by status; widgets for IBFT, LFT and cash payout; partner and branch activity |
+| Back Office | Transaction summary by status; widgets for interbank, local transfer and cash payout; partner and branch activity |
 | Branch Portal | Cash payout activity by status; filters by date and partner |
 
 ### APIs involved
@@ -49,14 +53,14 @@ Three operational views support day-to-day remittance operations:
 | Interface | API | Used for |
 |---|---|---|
 | API Gateway | Balance Inquiry | Partners query their Partner Settlement Account (GL) balance by API |
-| API Gateway | Bank List | Partners fetch banks with BIC and IMD codes by API |
+| API Gateway | Bank List | Partners fetch domestic banks with BIC and bank codes by API |
 | Bank Integration Layer (ESB) | Balance Inquiry | Real-time balance from CBS |
 
 ## Configuration
 
 | Parameter | Description | Default |
 |---|---|---|
-| Low Balance Threshold | Below this, the Partner Portal balance turns red and an alert is sent (see [Alerts](./alerts.md)) | default: TBD |
+| Low Balance Threshold | Below this, the Partner Portal balance turns red and an alert is sent (see [Alerts](./alerts.md)) | default: TBD (local currency) |
 
 ## Sequence Diagram
 
@@ -80,8 +84,8 @@ sequenceDiagram
         OR-->>P: Balance shown with last-updated time
     end
 
-    P->>OR: IMD List search (name, code or IMD)
-    OR-->>P: Matching banks with BIC and IMD
+    P->>OR: Bank directory search (name, BIC or bank code)
+    OR-->>P: Matching banks with BIC and bank code
 ```
 
 ## Outcomes & Edge Cases
@@ -90,7 +94,7 @@ sequenceDiagram
 |---|---|---|
 | Balance | Refresh clicked | Latest balance fetched with its timestamp |
 | Balance | Below the threshold | Display turns red; one alert per breach cycle |
-| IMD List | Search | Filtered by name, BIC code or IMD; values copyable |
+| Bank directory | Search | Filtered by name, BIC or bank code; values copyable |
 | Dashboard | Performance view, date range selected | Cumulative totals, trends and monthly charts for the range |
 
 ## Related

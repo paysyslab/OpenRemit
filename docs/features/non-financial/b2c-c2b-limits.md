@@ -1,28 +1,32 @@
 ---
 hide_title: true
 title: B2C / C2B Limits & Keyword Block
-description: SBP monthly limits per beneficiary and commercial-entity keyword blocking for B2C and C2B home remittances.
+description: Regulatory monthly limits per beneficiary and commercial-entity keyword blocking for B2C and C2B inward remittances.
 ---
 
 import { Hero, Capabilities } from '@site/src/components/DocKit';
 
-<Hero title="B2C / C2B Limits &" accent="Keyword Block" subtitle="Enforce SBP monthly limits per beneficiary and block commercial entities on B2C and C2B home remittances, before any credit is posted." />
+<Hero title="B2C / C2B Limits &" accent="Keyword Block" subtitle="Enforce the regulator's monthly limits per beneficiary and block commercial entities on B2C and C2B inward remittances, before any credit is posted." />
 
 <Capabilities tags={['Configurable']} />
 
 ## Overview
 
-For **B2C and C2B** home remittances (SBP purpose codes 9186, 9249, 9477, 9478 and 9479), OpenRemit applies three checks at validation, strictly before any credit posting:
+Some regulators cap how much a beneficiary can receive each month under business-to-consumer (B2C) and consumer-to-business (C2B) remittance purpose codes. For transactions with those purpose codes, OpenRemit applies three checks at validation, strictly before any credit posting:
 
 1. **Partner eligibility**: is this partner allowed this remittance type?
 2. **Commercial keyword screening**: does the remitter or beneficiary title match the commercial stop-list?
 3. **Monthly limit**: would the beneficiary's cumulative inward total for the calendar month exceed the limit?
 
-Any breach is rejected outright with a machine-readable error code. P2P home remittances and outward remittances are out of scope.
+Any breach is rejected outright with a machine-readable error code. Person-to-person (P2P) remittances and outward remittances are out of scope.
+
+:::info[Pakistan example]
+SBP rules apply to purpose codes 9186, 9249, 9478 and 9479 (limit USD 25,000 per beneficiary per month) and 9477 (pension, limit PKR 250,000 per beneficiary per month).
+:::
 
 ## Significance
 
-- **SBP compliance**: enforces SBP's monthly caps for B2C / C2B home remittance purpose codes.
+- **Local regulatory compliance**: enforces the regulator's monthly caps for the configured purpose codes.
 - **Bank-wide view**: the limit is tracked per beneficiary across **all partners combined**, so it cannot be bypassed by splitting across MTOs.
 - **Stops misuse**: commercial entities cannot receive funds under personal remittance channels.
 - **Clear feedback**: rejections carry an error code and the remaining headroom.
@@ -44,7 +48,7 @@ Any breach is rejected outright with a machine-readable error code. P2P home rem
 |---|---|
 | Partner eligibility | A transaction of a type flagged *N* for the partner is rejected before any other validation |
 | Commercial keyword | The remitter or beneficiary title is checked against the stop-list; a match is rejected, independent of the limit |
-| Monthly limit | Cumulative USD-equivalent inward total per beneficiary (identified by title) per calendar month, across all partners |
+| Monthly limit | Cumulative inward total per beneficiary (identified by title) per calendar month, across all partners, in the limit's currency |
 
 ### APIs involved
 
@@ -55,8 +59,8 @@ Rejections are returned on the partner's transaction submission (Post Transactio
 | Parameter | Description | Default |
 |---|---|---|
 | B2C Allowed / C2B Allowed / B2B Allowed | Per-partner eligibility flags | default: N |
-| Monthly limit: purpose codes 9186, 9249, 9478, 9479 | Per beneficiary per calendar month | default: USD 25,000 |
-| Monthly limit: purpose code 9477 (Pension) | Per beneficiary per calendar month | default: PKR 250,000 |
+| Limited purpose codes | Which regulatory purpose codes the limit applies to | default: none (set to the regulator's codes, e.g. SBP 9186, 9249, 9477, 9478, 9479) |
+| Monthly limit per purpose code | Per beneficiary per calendar month, with its currency | default: none (e.g. SBP: USD 25,000; PKR 250,000 for pension) |
 | Commercial keyword stop-list | Words that mark a title as a commercial entity | default: admin-managed list |
 
 Limit changes apply without a deployment and are not retroactive to transactions already processed.

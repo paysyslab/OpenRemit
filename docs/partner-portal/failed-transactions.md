@@ -11,7 +11,7 @@ import { DocPage, Hero, SectionHeading, Card, List, Li, Sub, ImgCard } from '@si
 <Card title="Tabs and columns">
 <List>
   <Li>Three tabs with counts: <strong>ALL</strong>, <strong>CANCEL</strong> and <strong>AMEND</strong>.</Li>
-  <Li>Each row shows Transaction ID, MTO, Type (e.g. IBFT with rail 1LINK or RTGS), Amount PKR, Current Stage, Status (e.g. FAILED, REVERSED), Transaction Status, Lifecycle and <strong>Reason</strong>, the specific cause of failure.</Li>
+  <Li>Each row shows Transaction ID, MTO, Type (e.g. IBFT, with the rail used), Amount (local currency), Current Stage, Status (e.g. FAILED, REVERSED), Transaction Status, Lifecycle and <strong>Reason</strong>, the specific cause of failure.</Li>
 </List>
 </Card>
 <ImgCard src="/img/PP/failed-transactions.png" alt="Failed Transactions — List" label="Fig. 1" />

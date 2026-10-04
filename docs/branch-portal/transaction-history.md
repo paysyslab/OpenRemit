@@ -92,7 +92,7 @@ export const TransactionHistory = () => {
   }, []);
 
   const columns = [
-    'Transaction ID', 'Date', 'Amount FCY', 'Amount PKR', 'MTO',
+    'Transaction ID', 'Date', 'Amount FCY', 'Amount (local currency)', 'MTO',
     'Current Stage', 'Lifecycle', 'Transaction Status', 'Status',
     'Type', 'Branch Code', 'Agent Code', 'Created',
     'Payment Method', 'Legacy Status', 'Receipt', 'Actions',

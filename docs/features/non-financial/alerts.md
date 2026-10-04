@@ -19,7 +19,7 @@ OpenRemit sends alerts at key points in a transaction's lifecycle, and one centr
 - **Beneficiary confidence**: beneficiaries know when funds are ready, collected, credited or cancelled.
 - **Partner funding**: partners are warned before their balance runs out, avoiding failed transactions.
 - **Wider cash reach**: beneficiaries are told they can collect from sub-agent branches as well as the Bank's branches.
-- **Privacy**: account numbers and CNICs are masked in every outbound message.
+- **Privacy**: account numbers and national IDs are masked in every outbound message.
 - **Never blocks payment**: alerts are non-blocking and idempotent; financial flows never wait for delivery, and duplicates are suppressed.
 
 ## Usage
@@ -28,7 +28,7 @@ OpenRemit sends alerts at key points in a transaction's lifecycle, and one centr
 
 | Event | Trigger | Channel / recipient |
 |---|---|---|
-| Transaction status | Cash available for payout; cash collected; credited to account; sent to beneficiary bank (RTGS only); cancelled and refunded; under compliance check | Email to the beneficiary, if the partner provided an email |
+| Transaction status | Cash available for payout; cash collected; credited to account; sent to beneficiary bank (high-value rail only); cancelled and refunded; under compliance check | Email to the beneficiary, if the partner provided an email |
 | Final status (account-based) | Final credit to the beneficiary account, or cancellation | SMS to the account holder; contact details fetched through the Bank Integration Layer at send time |
 | Funding near consumption | Partner balance falls below the Low Balance Threshold | Email to the partner; the Partner Portal balance display turns from blue to red |
 | Sub-agent disbursement | A cash payout from a partner with configured sub-agents is available for payout but not yet paid | SMS to the beneficiary naming the Bank's branches and the sub-agent's branches |
@@ -105,12 +105,12 @@ sequenceDiagram
 | SMS | Contact missing or invalid | Flag not set; the beneficiary appears in the partner-level report so the partner can correct contact data |
 | Low balance | Balance falls below the threshold | One alert; no repeat until the balance recovers above the threshold and breaches again |
 | Sub-agent SMS | Global switch off | No sub-agent disbursement SMS is sent |
-| Content | Any message | Account numbers and CNICs masked |
+| Content | Any message | Account numbers and national IDs masked |
 
 ## Related
 
 - [Partner Portal: Partner Balance](../../partner-portal/partner-balance.md)
-- [Partner Balance, IMD List & Dashboards](./balance-imd-dashboards.md)
+- [Partner Balance, Bank Directory & Dashboards](./balance-imd-dashboards.md)
 - [Automated RFI](./automated-rfi.md)
-- [e-PRC, Bank Receipt & COC Slip](./eprc-receipts.md)
+- [Regulatory Certificate, Bank Receipt & COC Slip](./regulatory-certificate.md)
 - [COC / OTC Cash Payout](../financial/coc-otc-cash-payout.md)

@@ -1,22 +1,22 @@
 ---
 hide_title: true
 title: IBAN Fetch & Storage
-description: Fetch each beneficiary account's IBAN from CBS once and store it for SBP bank-wise reporting.
+description: Fetch each beneficiary account's IBAN from CBS once and store it for local regulatory reporting.
 ---
 
 import { Hero, Capabilities } from '@site/src/components/DocKit';
 
-<Hero title="IBAN Fetch &" accent="Storage" subtitle="Fetch each beneficiary account's IBAN from CBS once, store it, and use it in SBP bank-wise reports such as the e-PRC." />
+<Hero title="IBAN Fetch &" accent="Storage" subtitle="Fetch each beneficiary account's IBAN from CBS once, store it, and use it in local regulatory reports such as the regulatory remittance certificate." />
 
 <Capabilities tags={['Standard', 'Requires Bank Integration']} />
 
 ## Overview
 
-SBP bank-wise reporting, such as the e-PRC, needs the beneficiary's IBAN. When OpenRemit processes a transaction or beneficiary whose account has no IBAN stored, it calls a Title Fetch API on CBS to fetch the IBAN and stores it against the account. Reports read the stored value; no live call is made at report time.
+Local regulatory reporting (for example SBP bank-wise reports and the e-PRC in Pakistan) needs the beneficiary's IBAN. When OpenRemit processes a transaction or beneficiary whose account has no IBAN stored, it calls a Title Fetch API on CBS to fetch the IBAN and stores it against the account. Reports read the stored value; no live call is made at report time.
 
 ## Significance
 
-- **SBP reporting**: the beneficiary IBAN field in bank-wise reports is populated.
+- **Regulatory reporting**: the beneficiary IBAN field in bank-wise reports is populated.
 - **Efficiency**: each account's IBAN is fetched only once.
 - **Fast reports**: report generation never waits on CBS.
 - **Non-blocking**: a missing IBAN never stops a transaction or a report.
@@ -28,7 +28,7 @@ SBP bank-wise reporting, such as the e-PRC, needs the beneficiary's IBAN. When O
 | Role | Portal and menu | What they do |
 |---|---|---|
 | (system) | — | Fetches and stores IBANs during processing |
-| Back Office user | Back Office → **e-PRC Generation** / reports | Sees the stored IBAN in reports |
+| Back Office user | Back Office → certificate generation / reports | Sees the stored IBAN in reports |
 
 ### APIs involved
 
@@ -75,6 +75,6 @@ sequenceDiagram
 
 ## Related
 
-- [e-PRC, Bank Receipt & COC Slip](./eprc-receipts.md)
+- [Regulatory Certificate, Bank Receipt & COC Slip](./regulatory-certificate.md)
 - [Audit Logs & Reports](./audit-logs-reports.md)
-- [Back Office: e-PRC](../../back-office/e-prc.md)
+- [Back Office: Certificate Generation (e-PRC)](../../back-office/e-prc.md)

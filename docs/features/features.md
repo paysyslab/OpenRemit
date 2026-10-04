@@ -11,7 +11,7 @@ import { Hero, Capabilities } from '@site/src/components/DocKit';
 
 | Category | Rule |
 |---|---|
-| [**Financial Features**](./financial/financial.md) | The feature creates or alters a ledger posting on CBS, 1LINK, RAAST or RTGS, or changes whether, or to whom, funds are paid out. |
+| [**Financial Features**](./financial/financial.md) | The feature creates or alters a ledger posting on CBS or a domestic payment rail, or changes whether, or to whom, funds are paid out. |
 | [**Non-Financial Features**](./non-financial/non-financial.md) | Everything else, including integration, controls, notifications and administration. |
 
 ## Capability tags
@@ -49,11 +49,11 @@ Each feature page follows the same structure:
 | Partner | Remittance partner / MTO that originates the transaction |
 | API Gateway | Interface through which all partner API calls reach OpenRemit |
 | OpenRemit (OR) | Core remittance system; all remittance data is stored here |
-| OpenConnect (OC) | Middleware between OpenRemit, the Bank and 1LINK |
-| Bank Integration Layer (ESB) | The Bank's middleware, connecting to CBS, RAAST and the Screening System |
+| OpenConnect (OC) | Middleware between OpenRemit, the Bank and the domestic payment switches |
+| Bank Integration Layer (ESB) | The Bank's middleware, connecting to CBS, domestic payment rails and the Screening System |
 | CBS | The Bank's core banking system |
 | Screening System | AML/CFT and sanctions screening |
-| 1LINK / RAAST / RTGS | Pakistani interbank payment rails |
+| Primary / Secondary / High-Value Rail | Domestic interbank payment rails, in fallback order (Pakistan example: 1LINK, RAAST, RTGS) |
 | Branch Maker / Branch Checker | Branch or sub-agent users who capture and approve cash payouts |
 | Back Office Maker / Back Office Checker | Bank operations users who act on transactions and approve changes |
 | Compliance Officer | Reviews transactions held by screening |

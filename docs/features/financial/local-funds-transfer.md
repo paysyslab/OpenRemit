@@ -53,7 +53,7 @@ An LFT credits a beneficiary account held at the Bank. OpenRemit receives the tr
 | API Gateway (push) | Title Fetch | Partner verifies the beneficiary account title before sending |
 | API Gateway (push) | Balance Inquiry | Partner checks its settlement balance |
 | API Gateway (push) | Transaction Inquiry | Partner polls the transaction's status |
-| API Gateway (push) | Bank List | Partner retrieves banks with their BIC and IMD codes |
+| API Gateway (push) | Bank List | Partner retrieves domestic banks with their BIC and bank codes |
 | Bank Integration Layer (ESB) | Screening | AML/CFT and sanctions screening |
 | Bank Integration Layer (ESB) | Internal Title Fetch | Beneficiary account validation on CBS |
 | Bank Integration Layer (ESB) | Balance Inquiry | Partner Settlement Account (GL) balance |

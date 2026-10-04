@@ -1,12 +1,12 @@
 ---
 hide_title: true
 title: Reversal File Upload
-description: Bulk reversal of transactions that a payment scheme (1LINK, RAAST or RTGS) has reversed, by uploading a file in the Back Office.
+description: Bulk reversal of transactions that a domestic payment rail has reversed, by uploading a file in the Back Office.
 ---
 
 import { Hero, Capabilities } from '@site/src/components/DocKit';
 
-<Hero title="Reversal" accent="File Upload" subtitle="Bring scheme reversals from 1LINK, RAAST and RTGS into OpenRemit in bulk, by uploading a file, with a full upload history." />
+<Hero title="Reversal" accent="File Upload" subtitle="Bring payment-rail reversals into OpenRemit in bulk, by uploading a file, with a full upload history." />
 
 <Capabilities tags={['Standard', 'Configurable']} />
 
@@ -18,7 +18,7 @@ Payment schemes sometimes reverse transactions that OpenRemit had already marked
 
 - **Accurate status**: transactions reversed by a scheme no longer show as successful in OpenRemit.
 - **Reconciliation**: OpenRemit stays in line with scheme settlement reports and CBS.
-- **Prevents double action**: a reversed transaction cannot be re-pushed or moved to RTGS afterwards.
+- **Prevents double action**: a reversed transaction cannot be re-pushed or moved to the high-value rail afterwards.
 - **Auditability**: each upload records who uploaded it, when, and how many rows were valid and invalid.
 
 ## Usage
@@ -43,9 +43,9 @@ Payment schemes sometimes reverse transactions that OpenRemit had already marked
 | Column | Required | Description |
 |---|---|---|
 | Original Txn Date | Yes | Date of the original transaction (YYYY-MM-DD) |
-| Txn Rail | Yes | 1LINK, RAAST or RTGS |
+| Txn Rail | Yes | The rail the transaction was paid on (Pakistan example: 1LINK, RAAST or RTGS) |
 | Txn Amount | Yes | Transaction amount |
-| Txn Reference | Yes | STAN for 1LINK, MessageId for RAAST, unique ID for RTGS |
+| Txn Reference | Yes | The rail's unique reference (Pakistan example: STAN for 1LINK, MessageId for RAAST, unique ID for RTGS) |
 | Partner | No | Partner / MTO name |
 | CBS Reference | No | CBS posting reference |
 | Receiver IBAN | No | Receiver IBAN |
@@ -55,7 +55,7 @@ Payment schemes sometimes reverse transactions that OpenRemit had already marked
 
 | Parameter | Description | Default |
 |---|---|---|
-| Reversal type per rail | For 1LINK, RAAST and RTGS separately: status reversal only, or status reversal plus financial posting | default: TBD |
+| Reversal type per rail | For each rail separately: status reversal only, or status reversal plus financial posting | default: TBD |
 
 ## Sequence Diagram
 
@@ -99,7 +99,7 @@ sequenceDiagram
 | File validation | File fails validation | Error shown; nothing processed |
 | Row matching | Transaction not found | Row marked *Not Found* with a message |
 | Row matching | Mandatory field missing | Row marked *Invalid* with the missing field named |
-| Row matching | Transaction found at the payment stage, in any status | Marked reversed; it can no longer be re-pushed or moved to RTGS |
+| Row matching | Transaction found at the payment stage, in any status | Marked reversed; it can no longer be re-pushed or moved to the high-value rail |
 | History | Any upload | Listed in Reversal Upload History with Total / Valid / Invalid counts |
 
 :::caution[TBD]
@@ -111,5 +111,5 @@ The source documents do not state the default reversal type per rail, or which a
 - [Back Office: Transaction Reversals](../../back-office/transaction-reversals.md)
 - [Back Office: Failed Transactions](../../back-office/failed-transactions.md)
 - [Automatic FT Reversal](./automatic-ft-reversal.md)
-- [Move to RTGS](./move-to-rtgs.md)
+- [Move to High-Value Rail](./move-to-high-value-rail.md)
 - [Retry / Re-push](./retry-repush.md)

@@ -147,7 +147,7 @@ export const GettingStarted = () => {
   ];
 
   const userFields = [
-    'User ID and CNIC-based identity details',
+    'User ID and national-ID-based identity details',
     'Contact information (mobile, email)',
     'Department and designation',
     'Assigned role(s)',

@@ -14,7 +14,7 @@ import { DocPage, Hero, SectionHeading, Card, List, Li, DocTable, ImgCard } from
   rows={[
     ['Transaction ID / MTO', 'Partner reference and the remitting institution'],
     ['Type', 'Payout type: Cash (OTC), FT or IBFT'],
-    ['Amount PKR', 'Payout amount in PKR'],
+    ['Amount (local currency)', 'Payout amount in local currency'],
     ['Beneficiary Bank / Account', 'Destination bank and account number'],
     ['Current Stage', 'The processing step the transaction is at, e.g. Title Fetch, Payment, Success'],
     ['Status / Transaction Status', 'Stage outcome and overall state, e.g. SUCCESS, FAILED, FUNDS TRANSFERRED'],

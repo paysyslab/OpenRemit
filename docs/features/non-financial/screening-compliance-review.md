@@ -35,7 +35,7 @@ OpenRemit sends each transaction's remitter and beneficiary to the Screening Sys
 
 ### Steps
 
-1. Open **Compliance Review**. The list shows Transaction ID, Remitting Institute, Type, Beneficiary Name, CNIC, Account, Amount and Agent Code.
+1. Open **Compliance Review**. The list shows Transaction ID, Remitting Institute, Type, Beneficiary Name, national ID, Account, Amount and Agent Code.
 2. Open **Action → View Details** to see the Screening Summary, Parties, Amounts & Purpose and Timeline (showing the failed screening step).
 3. For an FT transaction, click **Fetch Beneficiary Details from CBS** for additional customer information. For IBFT, the Bank arranges the information from the other bank.
 4. Click **Manually Release** to continue processing (e.g. to Title Fetch), or **Mark as Failed** to stop it.
@@ -45,7 +45,7 @@ OpenRemit sends each transaction's remitter and beneficiary to the Screening Sys
 | Interface | API | Used for |
 |---|---|---|
 | Bank Integration Layer (ESB) | Screening | Screen remitter and beneficiary (AML/CFT, sanctions, fraud) |
-| Bank Integration Layer (ESB) | Customer Information by CNIC | Fetch beneficiary details from CBS for review (FT) |
+| Bank Integration Layer (ESB) | Customer Information by national ID | Fetch beneficiary details from CBS for review (FT) |
 
 ## Configuration
 
@@ -81,7 +81,7 @@ sequenceDiagram
         OR->>OR: Park in Compliance Review (IN_REVIEW)
         opt FT transaction
             CO->>OR: Fetch Beneficiary Details from CBS
-            OR->>ESB: Customer Information by CNIC (via OC)
+            OR->>ESB: Customer Information by national ID (via OC)
             ESB->>CBS: Customer details
             CBS-->>CO: Beneficiary details (via ESB, OC, OR)
         end

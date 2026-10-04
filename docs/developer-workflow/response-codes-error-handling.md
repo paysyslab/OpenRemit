@@ -103,7 +103,7 @@ export const ResponseCodesErrorHandling = () => {
     { code: '14', meaning: 'Transaction not found', appliesTo: 'Transaction Inquiry' },
     { code: '20', meaning: 'Timeout occurred', appliesTo: 'Any synchronous API' },
     { code: '30', meaning: 'Invalid transaction state', appliesTo: 'Transaction Inquiry' },
-    { code: '41', meaning: 'External service failure', appliesTo: 'Bank / IMD dependent APIs' },
+    { code: '41', meaning: 'External service failure', appliesTo: 'Bank / bank-directory dependent APIs' },
     { code: '96', meaning: 'System malfunction / Invalid request', appliesTo: 'Bulk Push' },
   ];
 
@@ -119,7 +119,7 @@ export const ResponseCodesErrorHandling = () => {
     { scenario: 'Duplicate requestId', symptom: 'Duplicate request error', resolution: 'Generate new requestId' },
     { scenario: 'Invalid transaction state', symptom: 'State validation error', resolution: 'Follow correct lifecycle' },
     { scenario: 'Missing mandatory field', symptom: 'Validation error (05)', resolution: 'Fix request payload' },
-    { scenario: 'Bank / IMD unavailable', symptom: 'External service failure (41)', resolution: 'Retry after delay' },
+    { scenario: 'Bank / bank directory unavailable', symptom: 'External service failure (41)', resolution: 'Retry after delay' },
   ];
 
   return (

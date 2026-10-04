@@ -6,20 +6,20 @@ title: IMD List
 import { DocPage, Hero, SectionHeading, Card, List, Li, DocTable, ImgCard } from '@site/src/components/DocKit';
 
 <DocPage>
-<Hero title="IMD" accent="List" subtitle="Reference data for Pakistani banks: participant name, BIC code and IMD, used when entering beneficiary bank details." />
+<Hero title="IMD" accent="List" subtitle="Reference data for domestic banks: participant name, BIC code and domestic bank code (IMD in Pakistan), used when entering beneficiary bank details." />
 <SectionHeading>Columns</SectionHeading>
 <DocTable
   columns={['Column', 'Description']}
   rows={[
     ['Participant Name', 'Name of the bank'],
     ['Bic Code', 'SWIFT / BIC code identifying the institution'],
-    ['IMD', 'Institution / Member Identification number used for transaction routing'],
+    ['IMD', 'Domestic bank / member code used for transaction routing (the 1LINK IMD in Pakistan)'],
   ]}
 />
 <Card title="Using the list">
 <List>
-  <Li>Search by Name, by Code or by IMD.</Li>
-  <Li>Each value has a copy icon, so you can quickly copy a BIC code or IMD when entering beneficiary bank details for a transaction.</Li>
+  <Li>Search by name, BIC code or bank code (IMD).</Li>
+  <Li>Each value has a copy icon, so you can quickly copy a BIC or bank code when entering beneficiary bank details for a transaction.</Li>
 </List>
 </Card>
 <ImgCard src="/img/PP/imd-list.png" alt="IMD List" label="Fig. 1" />

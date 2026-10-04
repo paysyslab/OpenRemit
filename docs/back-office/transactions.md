@@ -136,7 +136,7 @@ export const Transactions = () => {
     'MTO',
     'Type',
     'Amount FCY',
-    'Amount PKR',
+    'Amount (local currency)',
     'Current State',
     'Status',
     'Created',
@@ -159,7 +159,7 @@ export const Transactions = () => {
     },
     {
       title: 'Amounts & FX',
-      items: ['Foreign currency amount', 'PKR amount', 'Purpose'],
+      items: ['Foreign currency amount', 'Local currency amount', 'Purpose'],
     },
     {
       title: 'Screening Summary',

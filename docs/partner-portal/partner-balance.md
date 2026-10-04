@@ -10,7 +10,7 @@ import { DocPage, Hero, SectionHeading, Card, List, Li, ImgCard } from '@site/sr
 <SectionHeading>Balance View</SectionHeading>
 <Card title="What the screen shows">
 <List>
-  <Li><strong>Current Available Balance</strong>: the total available amount, with its currency (PKR).</Li>
+  <Li><strong>Current Available Balance</strong>: the total available amount, with its currency (local currency).</Li>
   <Li><strong>Last Updated</strong>: when the balance was last refreshed.</Li>
   <Li><strong>Refresh Balance</strong>: fetches the latest balance from the system.</Li>
 </List>

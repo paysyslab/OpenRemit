@@ -29,7 +29,7 @@ A beneficiary visits a branch or sub-agent with a transaction reference. A Branc
 
 | Role | Portal and menu | What they do |
 |---|---|---|
-| Branch Maker (branch or sub-agent) | Branch Portal → **Transaction Lookup** | Finds the transaction, verifies the beneficiary's CNIC and captures their details |
+| Branch Maker (branch or sub-agent) | Branch Portal → **Transaction Lookup** | Finds the transaction, verifies the beneficiary's national ID and captures their details |
 | Branch Checker (branch or sub-agent) | Branch Portal → **Transaction Checker Inbox** | Approves or rejects the payout |
 | Compliance Officer | Back Office → **Compliance** | Manually releases or fails a transaction held by screening |
 | Partner | Partner APIs, or Partner Portal → **Transactions** | Supplies the transaction (pull or push) and receives its final status |
@@ -40,11 +40,11 @@ A beneficiary visits a branch or sub-agent with a transaction reference. A Branc
 2. OpenRemit checks the reference has not already been paid and identifies the partner from the reference prefix.
    - **Pull partner**: OpenRemit fetches the transaction from the partner's system through OpenConnect and locks it there.
    - **Push partner**: the partner pushed the transaction earlier, so it is read from OpenRemit.
-3. The Branch Maker checks the beneficiary's physical CNIC, enters the beneficiary's details (name, date of birth, CNIC expiry, address) and initiates the payout.
+3. The Branch Maker checks the beneficiary's physical national ID (e.g. CNIC in Pakistan), enters the beneficiary's details (name, date of birth, ID expiry, address) and initiates the payout.
 4. The **Branch Checker** reviews it in the *Transaction Checker Inbox* and approves or rejects it. Rejected payouts return to the *Transaction Maker Inbox*.
 5. OpenRemit screens the transaction, runs a balance inquiry on the Partner Settlement Account (GL), and posts the fund transfer on CBS.
 6. For pull partners, OpenRemit calls the partner's *Confirm Transaction* API. Cash is handed over **only after** confirmation succeeds.
-7. The completed payout appears in *Transaction History*, where the e-PRC and Bank Receipt can be generated.
+7. The completed payout appears in *Transaction History*, where the regulatory remittance certificate (e.g. SBP e-PRC) and Bank Receipt can be generated.
 
 ### Branch vs sub-agent payout
 
@@ -118,7 +118,7 @@ sequenceDiagram
     end
     OR-->>BM: Sender, receiver and transaction details
 
-    BM->>OR: Beneficiary CNIC details, initiate payout
+    BM->>OR: Beneficiary national ID details, initiate payout
     OR->>OR: Store as INITIATED
     OR->>BC: Transaction Checker Inbox (Pending)
     alt Branch Checker rejects

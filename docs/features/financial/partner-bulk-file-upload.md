@@ -41,7 +41,7 @@ Instead of sending transactions one by one, a partner user (maker) uploads a tra
 
 ### APIs involved
 
-No partner API is called; the upload happens in the Partner Portal. Accepted rows follow the standard flows and their Bank Integration Layer, 1LINK and RAAST calls.
+No partner API is called; the upload happens in the Partner Portal. Accepted rows follow the standard flows and their Bank Integration Layer and domestic rail calls.
 
 ## Sequence Diagram
 
@@ -95,4 +95,4 @@ sequenceDiagram
 - [Partner Integration Modes](../non-financial/partner-integration-modes.md)
 - [COC / OTC Cash Payout](./coc-otc-cash-payout.md)
 - [Local Funds Transfer (LFT)](./local-funds-transfer.md)
-- [IBFT / P2P with Rail Fallback](./ibft-rail-fallback.md)
+- [Interbank Transfer (IBFT) with Rail Fallback](./ibft-rail-fallback.md)

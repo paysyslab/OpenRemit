@@ -12,7 +12,7 @@ import { Hero, Capabilities } from '@site/src/components/DocKit';
 
 ## Overview
 
-When an FT, IBFT or RAAST transaction fails at **Title Fetch** because the beneficiary account is wrong, it can be amended with a corrected account number and title. The request can come from the Back Office Maker, the Partner Portal or the Partner API. Every request goes directly to the **Back Office Checker**. OpenRemit re-runs Title Fetch on the corrected account so the checker can see the fetched title before deciding. On approval, the transaction re-enters standard processing.
+When a local (FT) or interbank (IBFT) transaction fails at **Title Fetch** because the beneficiary account is wrong, it can be amended with a corrected account number and title. The request can come from the Back Office Maker, the Partner Portal or the Partner API. Every request goes directly to the **Back Office Checker**. OpenRemit re-runs Title Fetch on the corrected account so the checker can see the fetched title before deciding. On approval, the transaction re-enters standard processing.
 
 ## Significance
 
@@ -47,7 +47,7 @@ When an FT, IBFT or RAAST transaction fails at **Title Fetch** because the benef
 | Interface | API | Used for |
 |---|---|---|
 | API Gateway | Amendment API (`POST /api/v1/amendment`): Transaction Reference Number, Original Date, Amended Account Number | Partner raises an amendment; the API validates eligibility and returns an error if ineligible or if Title Fetch fails |
-| Bank Integration Layer (ESB) / 1LINK / RAAST | Title Fetch | Validate the corrected account |
+| Bank Integration Layer (ESB) / domestic rails | Title Fetch | Validate the corrected account |
 
 ## Sequence Diagram
 
@@ -71,7 +71,7 @@ sequenceDiagram
         P->>GW: Amendment API
         GW->>OR: Forward
     end
-    OR->>OR: Check failed at Title Fetch (FT / IBFT / RAAST)
+    OR->>OR: Check failed at Title Fetch (FT / IBFT)
     alt Not eligible
         OR-->>P: Error (ineligible)
         Note over OR: Flow ends
@@ -97,7 +97,7 @@ sequenceDiagram
 
 | Stage | Condition | Outcome |
 |---|---|---|
-| Eligibility | FT / IBFT / RAAST transaction failed at Title Fetch | Amendment can be raised |
+| Eligibility | FT / IBFT transaction failed at Title Fetch | Amendment can be raised |
 | Eligibility | Any other stage or type | Rejected; API returns an ineligibility error |
 | Review | Title Fetch on the corrected account | Fetched title shown to the checker |
 | Checker | Approves | Re-enters processing; if Title Fetch fails again, it stays at the failed Title Fetch stage |
@@ -110,6 +110,6 @@ sequenceDiagram
 - [Partner Portal: Failed Transactions](../../partner-portal/failed-transactions.md)
 - [Back Office: Failed Transactions](../../back-office/failed-transactions.md)
 - [Local Funds Transfer (LFT)](../financial/local-funds-transfer.md)
-- [IBFT / P2P with Rail Fallback](../financial/ibft-rail-fallback.md)
+- [Interbank Transfer (IBFT) with Rail Fallback](../financial/ibft-rail-fallback.md)
 - [COC Amendment](../financial/coc-amendment.md)
 - [Cancellation](../financial/cancellation.md)

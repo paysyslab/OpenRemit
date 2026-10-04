@@ -41,13 +41,13 @@ Every processing step is retried automatically on a timeout or transient failure
 | Situation | Why |
 |---|---|
 | Transaction failed at screening | Screening holds are resolved in [Compliance Review](../non-financial/screening-compliance-review.md), not by retry |
-| IBFT failed on both 1LINK and RAAST | Only [Move to RTGS](./move-to-rtgs.md) or [cancellation](./cancellation.md) remain |
-| Transaction marked reversed by a reversal file | Reversed transactions cannot be re-pushed or moved to RTGS |
+| IBFT failed on both the primary and secondary rail | Only [Move to High-Value Rail](./move-to-high-value-rail.md) or [cancellation](./cancellation.md) remain |
+| Transaction marked reversed by a reversal file | Reversed transactions cannot be re-pushed or moved to the high-value rail |
 | A rail reversal failed | Only the reversal step can be retried, with no fallback |
 
 ### APIs involved
 
-Retry calls the same API as the original failed step: Title Fetch, Balance Inquiry, Internal Fund Transfer, 1LINK or RAAST payment, transaction inquiry, or Fund Transfer Reversal.
+Retry calls the same API as the original failed step: Title Fetch, Balance Inquiry, Internal Fund Transfer, primary- or secondary-rail payment, transaction inquiry, or Fund Transfer Reversal.
 
 ## Configuration
 
@@ -100,7 +100,7 @@ sequenceDiagram
 | Retry | Fund transfer returns a duplicate-transaction error | Treated as success; flow continues |
 | Retry | Step fails again | Back in Failed Transactions with the new failure reason |
 | Bulk Retry | Selection includes screening failures | Screening failures are excluded from bulk retry |
-| Retry | IBFT failed on both rails | Not allowed; Move to RTGS or cancel instead |
+| Retry | IBFT failed on both automatic rails | Not allowed; move to the high-value rail or cancel instead |
 | Retry | Transaction marked reversed | Not allowed |
 | Partner notification | Store-and-forward delivery failed | Re-pushed from the Back Office store-and-forward screen |
 
@@ -109,6 +109,6 @@ sequenceDiagram
 - [Back Office: Failed Transactions](../../back-office/failed-transactions.md)
 - [Partner Portal: Failed Transactions](../../partner-portal/failed-transactions.md)
 - [Local Funds Transfer (LFT)](./local-funds-transfer.md)
-- [IBFT / P2P with Rail Fallback](./ibft-rail-fallback.md)
-- [Move to RTGS](./move-to-rtgs.md)
+- [Interbank Transfer (IBFT) with Rail Fallback](./ibft-rail-fallback.md)
+- [Move to High-Value Rail](./move-to-high-value-rail.md)
 - [Cancellation](./cancellation.md)

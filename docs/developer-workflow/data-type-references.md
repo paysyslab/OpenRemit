@@ -90,9 +90,9 @@ export const DataTypeReferences = () => {
   ];
 
   const idTypes = [
-    { value: 'CNIC', desc: 'Pakistan National ID' },
+    { value: 'CNIC', desc: 'National identity card (Pakistan example of a national ID type)' },
     { value: 'Passport', desc: 'Passport number' },
-    { value: 'NTN', desc: 'Business tax number' },
+    { value: 'NTN', desc: 'Business tax number (Pakistan example)' },
   ];
 
   const namingConventions = [
@@ -104,7 +104,7 @@ export const DataTypeReferences = () => {
   const validationRules = [
     { type: 'Mandatory Fields', desc: 'Must be provided in every request', appliesTo: 'requestId; partnerReference (as applicable)' },
     { type: 'Length Validation', desc: 'Must not exceed the defined limit', appliesTo: 'IDs; references; codes' },
-    { type: 'Pattern Validation', desc: 'Format-based validation', appliesTo: 'CNIC typically 13 digits (where used)' },
+    { type: 'Pattern Validation', desc: 'Format-based validation', appliesTo: 'National ID formats per market (e.g. 13-digit CNIC in Pakistan)' },
     { type: 'Enum Validation', desc: 'Only predefined values allowed', appliesTo: 'payoutMethod; status' },
     { type: 'Data Type Check', desc: 'Reject if type mismatch', appliesTo: 'All fields' },
   ];

@@ -1,18 +1,18 @@
 ---
 hide_title: true
 title: Offline Transaction Mechanism
-description: Keep IBFT processing running during a CBS outage against a shadow balance, and post to CBS once it recovers.
+description: Keep interbank processing running during a CBS outage against a shadow balance, and post to CBS once it recovers.
 ---
 
 import { Hero, Capabilities } from '@site/src/components/DocKit';
 
-<Hero title="Offline Transaction" accent="Mechanism" subtitle="Keep IBFT credits flowing during a CBS outage: process against a shadow balance, park postings in store-and-forward, and reconcile when CBS returns." />
+<Hero title="Offline Transaction" accent="Mechanism" subtitle="Keep interbank credits flowing during a CBS outage: process against a shadow balance, park postings in store-and-forward, and reconcile when CBS returns." />
 
 <Capabilities tags={['Configurable', 'Requires Bank Integration']} />
 
 ## Overview
 
-When CBS or the Bank Integration Layer is down or slow, OpenRemit can switch a partner into **Offline Mode**. It locks the partner's PKR balance, creates a **Shadow Balance** from the current available balance, and keeps processing incoming IBFT credits against it, parking each posting in the store-and-forward (SAF) table. At a regular interval OpenRemit probes CBS. When CBS is back, it posts every parked transaction and compares the shadow balance with the real CBS balance before returning to normal processing.
+When CBS or the Bank Integration Layer is down or slow, OpenRemit can switch a partner into **Offline Mode**. It locks the partner's local-currency balance, creates a **Shadow Balance** from the current available balance, and keeps processing incoming interbank credits against it, parking each posting in the store-and-forward (SAF) table. At a regular interval OpenRemit probes CBS. When CBS is back, it posts every parked transaction and compares the shadow balance with the real CBS balance before returning to normal processing.
 
 ## Significance
 
@@ -32,14 +32,14 @@ When CBS or the Bank Integration Layer is down or slow, OpenRemit can switch a p
 ### Activation sequence
 
 1. Activate Offline Mode, either automatically when the Fund Transfer API returns a configured failure code (e.g. a socket timeout), or manually by the Operations team.
-2. Lock the partner's PKR balance.
+2. Lock the partner's local-currency balance.
 3. Create the Shadow Balance from the current available balance.
 4. Disable IBFT for push-API partners.
 5. Start offline processing.
 
 ### While offline
 
-- Each incoming IBFT credit is deducted from the Shadow Balance, parked in the SAF table, and acknowledged to 1LINK as successful.
+- Each incoming interbank credit is deducted from the Shadow Balance, parked in the SAF table, and acknowledged to the primary rail as successful.
 - Every Nth transaction, OpenRemit probes CBS.
   - **CBS still down**: Offline Mode continues.
   - **CBS available**: all parked SAF transactions are posted. Then the Shadow Balance is compared with the real-time CBS balance. If they are equal, Offline Mode ends, the partner balance is unlocked and normal processing resumes. If not, the partner stays offline and reconciliation continues at the next probe.
@@ -51,7 +51,7 @@ When CBS or the Bank Integration Layer is down or slow, OpenRemit can switch a p
 |---|---|---|
 | Bank Integration Layer (ESB) | Internal Fund Transfer | Detects the failure code; later posts parked transactions |
 | Bank Integration Layer (ESB) | Balance Inquiry | Probes CBS and reads the real balance for reconciliation |
-| 1LINK | IBFT response | Receives the success acknowledgement for each offline credit |
+| Primary rail | Interbank response | Receives the success acknowledgement for each offline credit |
 
 ## Configuration
 
@@ -60,14 +60,14 @@ When CBS or the Bank Integration Layer is down or slow, OpenRemit can switch a p
 | Activation trigger | CBS / Bank Integration Layer failure codes that switch on Offline Mode automatically | default: socket timeout error |
 | Manual activation | Operations team can activate Offline Mode | default: enabled |
 | Probe frequency | Probe CBS after every N offline transactions | default: every 10th transaction |
-| Offline cap | Shadow-balance threshold at which offline processing stops | default: PKR 2,000,000 |
+| Offline cap | Shadow-balance threshold at which offline processing stops | default: 2,000,000 (local currency) |
 
 ## Sequence Diagram
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant L1 as 1LINK
+    participant L1 as Primary Rail
     participant OR as OpenRemit (OR)
     participant OC as OpenConnect (OC)
     participant ESB as Bank Integration Layer (ESB)
@@ -76,11 +76,11 @@ sequenceDiagram
     OR->>OC: Fund Transfer
     OC->>ESB: Fund Transfer
     ESB-->>OR: Configured failure code, e.g. socket timeout (via OC)
-    OR->>OR: Activate Offline Mode, lock partner PKR balance
+    OR->>OR: Activate Offline Mode, lock partner balance
     OR->>OR: Create Shadow Balance, disable IBFT for push partners
 
-    loop Each incoming IBFT credit while offline
-        L1->>OR: IBFT credit (via OC)
+    loop Each incoming interbank credit while offline
+        L1->>OR: Interbank credit (via OC)
         alt Shadow Balance at offline cap
             OR->>OR: Stop offline processing
             Note over OR: Until partner is reconciled
@@ -118,7 +118,7 @@ sequenceDiagram
 |---|---|---|
 | Activation | Fund Transfer returns a configured failure code | Offline Mode activated automatically |
 | Activation | Operations team triggers it | Offline Mode activated manually |
-| Offline credit | Within the offline cap | Deducted from the Shadow Balance, parked in SAF, success returned to 1LINK |
+| Offline credit | Within the offline cap | Deducted from the Shadow Balance, parked in SAF, success returned to the primary rail |
 | Offline credit | Offline cap reached | Offline processing stops until the partner is reconciled |
 | Probe | CBS still unavailable | Offline Mode continues |
 | Probe | CBS available, balances equal after posting | Offline Mode ends; partner balance unlocked; normal processing resumes |
@@ -133,7 +133,7 @@ The source specification does not define:
 
 ## Related
 
-- [IBFT / P2P with Rail Fallback](./ibft-rail-fallback.md)
-- [Partner Balance, IMD List & Dashboards](../non-financial/balance-imd-dashboards.md)
+- [Interbank Transfer (IBFT) with Rail Fallback](./ibft-rail-fallback.md)
+- [Partner Balance, Bank Directory & Dashboards](../non-financial/balance-imd-dashboards.md)
 - [Alerts](../non-financial/alerts.md)
 - [Back Office: Transactions](../../back-office/transactions.md)
