@@ -43,6 +43,61 @@ module.exports = {
               id: 'features/financial/coc-otc-cash-payout',
               label: 'COC / OTC Cash Payout',
             },
+            {
+              type: 'doc',
+              id: 'features/financial/local-funds-transfer',
+              label: 'Local Funds Transfer (LFT)',
+            },
+            {
+              type: 'doc',
+              id: 'features/financial/ibft-rail-fallback',
+              label: 'IBFT / P2P with Rail Fallback',
+            },
+            {
+              type: 'doc',
+              id: 'features/financial/move-to-rtgs',
+              label: 'Move to RTGS',
+            },
+            {
+              type: 'doc',
+              id: 'features/financial/retry-repush',
+              label: 'Retry / Re-push',
+            },
+            {
+              type: 'doc',
+              id: 'features/financial/automatic-ft-reversal',
+              label: 'Automatic FT Reversal',
+            },
+            {
+              type: 'doc',
+              id: 'features/financial/reversal-file-upload',
+              label: 'Reversal File Upload',
+            },
+            {
+              type: 'doc',
+              id: 'features/financial/branch-otc-reversal',
+              label: 'Branch OTC Full Reversal',
+            },
+            {
+              type: 'doc',
+              id: 'features/financial/partner-bulk-file-upload',
+              label: 'Partner Bulk File Upload',
+            },
+            {
+              type: 'doc',
+              id: 'features/financial/offline-transaction-mechanism',
+              label: 'Offline Transaction Mechanism',
+            },
+            {
+              type: 'doc',
+              id: 'features/financial/coc-amendment',
+              label: 'COC Amendment',
+            },
+            {
+              type: 'doc',
+              id: 'features/financial/cancellation',
+              label: 'Cancellation',
+            },
           ],
         },
         {
@@ -50,7 +105,83 @@ module.exports = {
           label: 'Non-Financial Features',
           collapsible: true,
           link: { type: 'doc', id: 'features/non-financial/non-financial' },
-          items: [],
+          items: [
+            {
+              type: 'doc',
+              id: 'features/non-financial/partner-integration-modes',
+              label: 'Partner Integration Modes',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/screening-compliance-review',
+              label: 'Screening & Compliance Review',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/suspicious-activity-controls',
+              label: 'Suspicious Activity Controls',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/automated-rfi',
+              label: 'Automated RFI',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/system-restriction',
+              label: 'System Restriction',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/b2c-c2b-limits',
+              label: 'B2C / C2B Limits & Keyword Block',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/account-credit-amendment',
+              label: 'Account Credit Amendment',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/eprc-receipts',
+              label: 'e-PRC, Bank Receipt & COC Slip',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/alerts',
+              label: 'Alerts',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/remittance-tracker-api',
+              label: 'Remittance Tracker Inquiry API',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/iban-fetch',
+              label: 'IBAN Fetch & Storage',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/balance-imd-dashboards',
+              label: 'Partner Balance, IMD List & Dashboards',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/roles-user-management',
+              label: 'Role & User Management',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/authentication',
+              label: 'Authentication',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/audit-logs-reports',
+              label: 'Audit Logs & Reports',
+            },
+          ],
         },
       ],
     },
