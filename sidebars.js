@@ -25,6 +25,36 @@ module.exports = {
       ],
     },
   ],
+  specificationsSidebar: [
+    {
+      type: 'category',
+      label: 'Specifications',
+      collapsible: false,
+      link: { type: 'doc', id: 'specifications/specifications' },
+      items: [
+        {
+          type: 'category',
+          label: 'Financial Features',
+          collapsible: true,
+          link: { type: 'doc', id: 'specifications/financial/financial' },
+          items: [
+            {
+              type: 'doc',
+              id: 'specifications/financial/coc-otc-cash-payout',
+              label: 'COC / OTC Cash Payout',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Non-Financial Features',
+          collapsible: true,
+          link: { type: 'doc', id: 'specifications/non-financial/non-financial' },
+          items: [],
+        },
+      ],
+    },
+  ],
   backofficeSidebar: [
     {
       type: 'category',

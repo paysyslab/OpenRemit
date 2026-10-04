@@ -107,6 +107,7 @@ const config = {
         { to: '/docs/get-started', label: 'Get Started', position: 'left'}, 
         // { to: '/docs/back-office/logging-in-and-changing-password', label: 'Get Started', position: 'left' },  
         { to: '/docs/developer-workflow', label: 'Developer Workflow', position: 'left'},
+        { to: '/docs/specifications', label: 'Specifications', position: 'left'},
       ],
     },
 
