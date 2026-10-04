@@ -11,7 +11,7 @@ import { DocPage, Hero, SectionHeading, Card, List, Li, Sub, ImgCard } from '@si
 <Card title="Today's activity">
 <List>
   <Li><strong>Remittance Statistics</strong>: today's live counts and values for Received, Processed, Pending and Reversed remittances. Click <strong>Refresh</strong> to update.</Li>
-  <Li><strong>Payout Breakdown</strong>: processed transactions split by payout type.<Sub items={['Cash (OTC / COC)', 'FT (BankIslami account credit)', 'IBFT (other-bank credit)']} /></Li>
+  <Li><strong>Payout Breakdown</strong>: processed transactions split by payout type.<Sub items={['Cash (OTC / COC)', 'FT (account credit within the Bank)', 'IBFT (other-bank credit)']} /></Li>
   <Li>Two charts summarise the day: <strong>Transaction Status (Today)</strong> and <strong>Today's Amount Distribution</strong>.</Li>
 </List>
 </Card>
