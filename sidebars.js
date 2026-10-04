@@ -120,5 +120,58 @@ module.exports = {
         },
       ],
     },
+    {
+      type: 'category',
+      label: 'Partner Portal',
+      collapsible: true,
+      link: { type: 'doc', id: 'partner-portal/logging-in-and-changing-password' },
+      items: [
+        {
+          type: 'doc',
+          id: 'partner-portal/logging-in-and-changing-password',
+          label: 'Logging in and Changing Password',
+        },
+        {
+          type: 'doc',
+          id: 'partner-portal/dashboard',
+          label: 'Dashboard',
+        },
+        {
+          type: 'doc',
+          id: 'partner-portal/transactions',
+          label: 'Transactions',
+        },
+        {
+          type: 'doc',
+          id: 'partner-portal/failed-transactions',
+          label: 'Failed Transactions',
+        },
+        {
+          type: 'doc',
+          id: 'partner-portal/checker-inbox',
+          label: 'Checker Inbox',
+        },
+        {
+          type: 'doc',
+          id: 'partner-portal/file-upload',
+          label: 'File Upload',
+        },
+        {
+          type: 'doc',
+          id: 'partner-portal/imd-list',
+          label: 'IMD List',
+        },
+        {
+          type: 'doc',
+          id: 'partner-portal/partner-balance',
+          label: 'Partner Balance',
+        },
+        {
+          type: 'doc',
+          id: 'partner-portal/audit-logs',
+          label: 'Audit Logs',
+        },
+      ],
+    },
   ],
 };
