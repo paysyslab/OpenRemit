@@ -1,32 +1,40 @@
 ---
+title: Overview
 hide_title: true
+hide_table_of_contents: true
 ---
 
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import Link from '@docusaurus/Link';
+import s from '@site/src/components/overview/overview.module.css';
 
 export const OpenRemitOverview = () => {
 
   /* ── image paths ── */
   const IMG = {
-    hero:       useBaseUrl('/img/overview/overview-hero.png'),   // watercolor world map + dashboard
-    features:   useBaseUrl('/img/overview/features.png'),        // OpenRemit hub diagram
-    file:       useBaseUrl('/img/overview/file.png'),            // batch → individual txns
-    globe:      useBaseUrl('/img/overview/globe.png'),           // global remittance globe
-    highLevel:  useBaseUrl('/img/overview/highLevel.png'),       // architecture diagram
-    partners:   useBaseUrl('/img/overview/multiplePartners.png'),// puzzle-piece people
-    multiRail:  useBaseUrl('/img/overview/multi-rail.png'),      // train on rails
-    pushPull:   useBaseUrl('/img/overview/pushPull.png'),        // pull vs push (large)
-    singlePlat: useBaseUrl('/img/overview/singlePlatform.png'),  // AML/screening monitor
-    subagent:   useBaseUrl('/img/overview/subagent.png'),        // family at counter
+    hero:       useBaseUrl('/img/overview/overview-hero.png'),
+    features:   useBaseUrl('/img/overview/features.png'),
+    file:       useBaseUrl('/img/overview/file.png'),
+    globe:      useBaseUrl('/img/overview/globe.png'),
+    highLevel:  useBaseUrl('/img/overview/highLevel.png'),
+    partners:   useBaseUrl('/img/overview/multiplePartners.png'),
+    pushPull:   useBaseUrl('/img/overview/pushPull.png'),
+    singlePlat: useBaseUrl('/img/overview/singlePlatform.png'),
+    subagent:   useBaseUrl('/img/overview/subagent.png'),
   };
 
+  /* ── reduced motion ── */
+  const prefersReducedMotion = () =>
+    typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   /* ── scroll reveal ── */
-  const useReveal = (threshold = 0.1) => {
+  const useReveal = (threshold = 0.12) => {
     const ref = useRef(null);
     const [v, setV] = useState(false);
     useEffect(() => {
       const el = ref.current; if (!el) return;
+      if (prefersReducedMotion() || typeof IntersectionObserver === 'undefined') { setV(true); return; }
       const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); obs.disconnect(); } }, { threshold });
       obs.observe(el);
       return () => obs.disconnect();
@@ -34,10 +42,10 @@ export const OpenRemitOverview = () => {
     return [ref, v];
   };
 
-  const Reveal = ({ children, delay = 0, style = {} }) => {
+  const Reveal = ({ children, delay = 0, className = '' }) => {
     const [ref, v] = useReveal();
     return (
-      <div ref={ref} style={{ opacity: v?1:0, transform: v?'translateY(0)':'translateY(28px)', transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`, ...style }}>
+      <div ref={ref} className={`${s.reveal} ${v ? s.revealOn : ''} ${className}`} style={{ transitionDelay: `${delay}ms` }}>
         {children}
       </div>
     );
@@ -45,387 +53,415 @@ export const OpenRemitOverview = () => {
 
   /* ── hero mount ── */
   const [hv, setHv] = useState(false);
-  useEffect(() => { const t = setTimeout(() => setHv(true), 100); return () => clearTimeout(t); }, []);
+  useEffect(() => { const t = setTimeout(() => setHv(true), 80); return () => clearTimeout(t); }, []);
 
-  /* ── reusable components ── */
-  const Tag = ({ children, gold = false }) => (
-    <div style={{ display:'inline-flex', alignItems:'center', gap:7, background: gold?'rgba(245,166,35,0.12)':'#e8f2fa', border: gold?'1px solid rgba(245,166,35,0.25)':'none', borderRadius:30, padding:'5px 14px', marginBottom:16 }}>
-      <span style={{ width:6, height:6, borderRadius:'50%', background: gold?'#F5A623':'#1E6FA8', display:'inline-block' }} />
-      <span style={{ fontSize:11, fontWeight:700, letterSpacing:'0.13em', textTransform:'uppercase', color: gold?'#F5A623':'#1E6FA8' }}>{children}</span>
+  /* ── reusable pieces ── */
+  const Tag = ({ children, gold = false, onDark = false }) => (
+    <div className={`${s.tag} ${gold ? s.tagGold : ''} ${onDark ? s.tagOnDark : ''}`}>
+      <span className={s.tagDot} />
+      <span className={s.tagText}>{children}</span>
     </div>
   );
 
-  const SectionH2 = ({ children }) => (
-    <h2 style={{ fontSize:'clamp(1.5rem,3vw,2.1rem)', fontWeight:800, color:'#0c1e35', lineHeight:1.2, letterSpacing:'-0.025em', margin:'0 0 32px', maxWidth:600 }}>{children}</h2>
+  const SectionH2 = ({ children }) => <h2 className={s.h2}>{children}</h2>;
+
+  const Dots = () => (
+    <div className={s.frameDots} aria-hidden="true">
+      {['#fc5f57', '#fdbc2c', '#33c748'].map(c => <span key={c} style={{ background: c }} />)}
+    </div>
   );
 
   /* image in macOS-style frame */
-  const Frame = ({ src, alt, bg = '#f8fafc' }) => (
-    <div style={{ background:'#fff', border:'1.5px solid #e2e8f0', borderRadius:18, overflow:'hidden', boxShadow:'0 6px 28px rgba(30,111,168,0.08)' }}>
-      <div style={{ background: bg, borderBottom:'1px solid #e2e8f0', padding:'9px 15px', display:'flex', alignItems:'center', gap:9 }}>
-        <div style={{ display:'flex', gap:5 }}>
-          {['#fc5f57','#fdbc2c','#33c748'].map(c => <span key={c} style={{ width:9,height:9,borderRadius:'50%',background:c,display:'block' }} />)}
-        </div>
-        <span style={{ fontSize:11, fontWeight:600, color:'#8896b0', flex:1, textAlign:'center', marginRight:46 }}>{alt}</span>
+  const Frame = ({ src, alt, title }) => (
+    <div className={s.frame}>
+      <div className={s.frameBar}>
+        <Dots />
+        <span className={s.frameTitle}>{title}</span>
       </div>
-      <div style={{ padding:14 }}>
-        <img src={src} alt={alt} style={{ width:'100%', borderRadius:10, display:'block', objectFit:'contain' }} />
+      <div className={s.frameBody}>
+        <img src={src} alt={alt} loading="lazy" />
       </div>
     </div>
   );
 
-  /* dark frame (for multi-rail image with black bg) */
-  const DarkFrame = ({ src, alt }) => (
-    <div style={{ background:'#111', border:'1.5px solid #222', borderRadius:18, overflow:'hidden', boxShadow:'0 6px 28px rgba(0,0,0,0.3)' }}>
-      <div style={{ background:'#1a1a1a', borderBottom:'1px solid #333', padding:'9px 15px', display:'flex', alignItems:'center', gap:9 }}>
-        <div style={{ display:'flex', gap:5 }}>
-          {['#fc5f57','#fdbc2c','#33c748'].map(c => <span key={c} style={{ width:9,height:9,borderRadius:'50%',background:c,display:'block' }} />)}
-        </div>
-        <span style={{ fontSize:11, fontWeight:600, color:'#555', flex:1, textAlign:'center', marginRight:46 }}>{alt}</span>
+  /* dark frame variant, kept for dark-background images */
+  const DarkFrame = ({ src, alt, title }) => (
+    <div className={s.darkFrame}>
+      <div className={s.frameBar}>
+        <Dots />
+        <span className={s.frameTitle}>{title}</span>
       </div>
-      <div style={{ padding:14 }}>
-        <img src={src} alt={alt} style={{ width:'100%', borderRadius:10, display:'block' }} />
+      <div className={s.frameBody}>
+        <img src={src} alt={alt} loading="lazy" />
       </div>
     </div>
   );
 
-  const P = 'clamp(24px,6vw,80px)';
+  const Icon = ({ children, size = 22 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {children}
+    </svg>
+  );
 
-  return (
-    <>
-      <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-      <div style={{ fontFamily:"'Plus Jakarta Sans','Segoe UI',sans-serif", color:'#1a2540', overflowX:'hidden' }}>
+  /* ── journey stepper ── */
+  const JOURNEY = [
+    { title: 'Received.', text: 'The remittance arrives from a partner by API, scheduled pull, or file.',
+      icon: <><polyline points="22 12 16 12 14 15 10 15 8 12 2 12" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></> },
+    { title: 'Screened.', text: "It's checked against AML/CFT rules and your bank's restriction lists.",
+      icon: <><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="m9 12 2 2 4-4" /></> },
+    { title: 'Verified.', text: "The beneficiary's account is confirmed and the partner's balance is checked.",
+      icon: <><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" /></> },
+    { title: 'Paid.', text: 'The account is credited, the funds go out over a domestic rail, or a teller hands over cash.',
+      icon: <><rect x="2" y="6" width="20" height="12" rx="2" /><circle cx="12" cy="12" r="2.5" /><path d="M6 12h.01M18 12h.01" /></> },
+    { title: 'Confirmed.', text: 'The partner gets the final status, the beneficiary gets an alert, and the regulatory certificate is generated.',
+      icon: <><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></> },
+  ];
 
-
-        {/* ━━━━━━━━━━━━━━━━━━━ HERO ━━━━━━━━━━━━━━━━━━━ */}
-        <div style={{ background:'linear-gradient(148deg,#061422 0%,#0a3356 42%,#1E6FA8 100%)', padding:`clamp(56px,10vw,108px) ${P} clamp(44px,7vw,80px)`, position:'relative', overflow:'hidden' }}>
-          {/* bg orbs */}
-          <div style={{ position:'absolute',top:-90,right:-90,width:420,height:420,background:'rgba(245,166,35,0.07)',borderRadius:'50%',pointerEvents:'none' }} />
-          <div style={{ position:'absolute',bottom:-110,left:-70,width:320,height:320,background:'rgba(30,111,168,0.18)',borderRadius:'50%',pointerEvents:'none' }} />
-
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:52, alignItems:'center', maxWidth:1100, margin:'0 auto' }}>
-            {/* left */}
-            <div style={{ opacity:hv?1:0, transform:hv?'translateY(0)':'translateY(32px)', transition:'opacity 0.7s ease, transform 0.7s ease' }}>
-              <Tag gold>Outward Remittance Platform</Tag>
-              <h1 style={{ fontSize:'clamp(2.6rem,5.5vw,4.4rem)', fontWeight:900, color:'#fff', lineHeight:1.05, letterSpacing:'-0.03em', margin:'0 0 10px' }}>
-                Open<span style={{ color:'#F5A623' }}>Remit</span>
-              </h1>
-              <p style={{ fontSize:'clamp(0.9rem,1.4vw,1rem)', fontWeight:500, color:'rgba(255,255,255,0.5)', lineHeight:1.5, margin:'0 0 18px', letterSpacing:'-0.01em' }}>
-                Outward Remittance Processing Solution for Banks
-              </p>
-              <p style={{ fontSize:'clamp(0.88rem,1.3vw,0.97rem)', color:'rgba(255,255,255,0.48)', lineHeight:1.8, margin:'0 0 30px', maxWidth:460 }}>
-                A comprehensive, API-driven outward remittance solution for banks — enabling secure integration for beneficiary validation, transaction processing, compliance screening, and settlement routing while ensuring scalability, security, and regulatory compliance.
-              </p>
-              <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
-                {['Multi-Partner','Compliance Ready','Real-Time','Scalable','Multi-Rail'].map(t => (
-                  <span key={t} style={{ fontSize:12, fontWeight:600, background:'rgba(255,255,255,0.07)', border:'1px solid rgba(255,255,255,0.14)', color:'rgba(255,255,255,0.6)', padding:'6px 14px', borderRadius:20 }}>{t}</span>
-                ))}
-              </div>
+  const Journey = () => {
+    const [ref, on] = useReveal(0.25);
+    return (
+      <div ref={ref} role="list" className={`${s.journey} ${on ? s.journeyOn : ''}`}>
+        <div className={s.journeyTrack} aria-hidden="true" />
+        <div className={s.journeyFill} aria-hidden="true" />
+        {JOURNEY.map((st, i) => (
+          <div role="listitem" key={st.title} className={s.step} style={{ transitionDelay: `${250 + i * 220}ms` }}>
+            <div className={s.stepCircle}>
+              <Icon>{st.icon}</Icon>
+              <span className={s.stepNum}>{i + 1}</span>
             </div>
-            {/* right – overview hero image */}
-            <div style={{ opacity:hv?1:0, transform:hv?'translateY(0)':'translateY(32px)', transition:'opacity 0.7s ease 0.2s, transform 0.7s ease 0.2s' }}>
-              <img src={IMG.hero} alt="OpenRemit Overview" style={{ width:'100%', display:'block', borderRadius:16, filter:'drop-shadow(0 20px 60px rgba(0,0,0,0.35))' }} />
+            <div>
+              <div className={s.stepTitle}>{st.title}</div>
+              <div className={s.stepText}>{st.text}</div>
             </div>
           </div>
-        </div>
-
-
-        {/* ━━━━━━━━━━━━━━━━━━━ ABOUT ━━━━━━━━━━━━━━━━━━━ */}
-        <div style={{ background:'#fafbfd', padding:`clamp(52px,7vw,88px) ${P}` }}>
-          <Reveal>
-            <div style={{ maxWidth:1100, margin:'0 auto' }}>
-              <Tag>About</Tag>
-              <SectionH2>Revolutionizing Outward Remittance Processing</SectionH2>
-              <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(270px,1fr))', gap:18, marginBottom:32 }}>
-                {[
-                  { title:'Centralized Hub', desc:'OpenRemit acts as the centralized hub for transaction lifecycle management — validation, routing, compliance checks, and settlement across multiple partners, built with high modularity.' },
-                  { title:'Powered by OpenConnect', desc:'OpenConnect is the middleware layer orchestrating system-to-system communication, message transformations, and API exposure — decoupling partner communication from core processing logic.' },
-                  { title:'Any Integration Model', desc:'Whether through APIs, pull-based integrations, or batch file processing, OpenRemit ensures seamless integration regardless of a partner\'s infrastructure or technical capability.' },
-                ].map((c,i) => (
-                  <div key={i} style={{ background:'#fff', border:'1.5px solid #e2e8f0', borderRadius:14, padding:'22px 24px 26px' }}>
-                    <div style={{ width:8, height:8, borderRadius:'50%', background: i===2?'#F5A623':'#1E6FA8', marginBottom:14 }} />
-                    <div style={{ fontSize:15, fontWeight:700, color:'#1a2540', marginBottom:8 }}>{c.title}</div>
-                    <div style={{ fontSize:13.5, lineHeight:1.75, color:'#6b7a99' }}>{c.desc}</div>
-                  </div>
-                ))}
-              </div>
-              <Frame src={IMG.features} alt="OpenRemit Feature Hub" />
-            </div>
-          </Reveal>
-        </div>
-
-
-        {/* ━━━━━━━━━━━━━━━━━━━ WHY — row 1: partners ━━━━━━━━━━━━━━━━━━━ */}
-        <div style={{ padding:`clamp(52px,7vw,88px) ${P}` }}>
-          <Reveal>
-            <div style={{ maxWidth:1100, margin:'0 auto 70px' }}>
-              <Tag>Why OpenRemit?</Tag>
-              <SectionH2>Designed to Scale With You</SectionH2>
-            </div>
-          </Reveal>
-
-          {/* multiple partners */}
-          <Reveal style={{ maxWidth:1100, margin:'0 auto 64px' }}>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:52, alignItems:'center' }}>
-              <Frame src={IMG.partners} alt="Multi-Partner Integration" />
-              <div>
-                <Tag>Multi-Partner</Tag>
-                <h3 style={{ fontSize:'clamp(1.1rem,2.2vw,1.55rem)', fontWeight:800, color:'#0c1e35', lineHeight:1.25, letterSpacing:'-0.02em', margin:'0 0 14px' }}>Unlock Seamless Integration with Multiple Partners</h3>
-                <p style={{ fontSize:14.5, lineHeight:1.8, color:'#5a6a88', margin:0 }}>OpenRemit facilitates integration with various remittance partners through a unified platform. Standardized APIs let banks quickly onboard numerous providers, ensuring seamless cross-border transactions with less complexity and overhead.</p>
-              </div>
-            </div>
-          </Reveal>
-
-          {/* subagent */}
-          <Reveal delay={60} style={{ maxWidth:1100, margin:'0 auto 64px' }}>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:52, alignItems:'center' }}>
-              <div>
-                <Tag gold>Subagent Network</Tag>
-                <h3 style={{ fontSize:'clamp(1.1rem,2.2vw,1.55rem)', fontWeight:800, color:'#0c1e35', lineHeight:1.25, letterSpacing:'-0.02em', margin:'0 0 14px' }}>Expand Reach with Subagents</h3>
-                <p style={{ fontSize:14.5, lineHeight:1.8, color:'#5a6a88', margin:0 }}>OpenRemit's subagent model allows banks to extend remittance services to regions without a physical presence. Subagents operate in underserved areas, growing the customer base beyond traditional banking infrastructure.</p>
-              </div>
-              <Frame src={IMG.subagent} alt="Subagent Network" />
-            </div>
-          </Reveal>
-
-          {/* single platform / AML */}
-          <Reveal delay={0} style={{ maxWidth:1100, margin:'0 auto 64px' }}>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:52, alignItems:'center' }}>
-              <Frame src={IMG.singlePlat} alt="Compliance & Monitoring" />
-              <div>
-                <Tag>Compliance & Monitoring</Tag>
-                <h3 style={{ fontSize:'clamp(1.1rem,2.2vw,1.55rem)', fontWeight:800, color:'#0c1e35', lineHeight:1.25, letterSpacing:'-0.02em', margin:'0 0 14px' }}>Built-In Compliance Screening</h3>
-                <p style={{ fontSize:14.5, lineHeight:1.8, color:'#5a6a88', margin:0 }}>AML/CFT screening through the Bank's Screening System and OFAC/UNSC sanctions verification are baked into every transaction flow — ensuring your bank stays compliant without slowing down operations.</p>
-              </div>
-            </div>
-          </Reveal>
-
-          {/* multi-rail */}
-          <Reveal delay={60} style={{ maxWidth:1100, margin:'0 auto 0' }}>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:52, alignItems:'center' }}>
-              <div>
-                <Tag gold>Multi-Rail Support</Tag>
-                <h3 style={{ fontSize:'clamp(1.1rem,2.2vw,1.55rem)', fontWeight:800, color:'#0c1e35', lineHeight:1.25, letterSpacing:'-0.02em', margin:'0 0 14px' }}>Multiple Payment Rails — One System</h3>
-                <p style={{ fontSize:14.5, lineHeight:1.8, color:'#5a6a88', margin:0 }}>Support RAAST, 1LINK, RTGS, FT, IBFT and COC transactions from a unified interface. OpenRemit intelligently routes each transaction to the appropriate rail based on type, amount, and availability.</p>
-              </div>
-              <DarkFrame src={IMG.multiRail} alt="Multi-Rail Support" />
-            </div>
-          </Reveal>
-        </div>
-
-
-        {/* ━━━━━━━━━━━━━━━━━━━ ARCHITECTURE ━━━━━━━━━━━━━━━━━━━ */}
-        <div style={{ background:'#fafbfd', padding:`clamp(52px,7vw,88px) ${P}` }}>
-          <Reveal>
-            <div style={{ maxWidth:1100, margin:'0 auto' }}>
-              <Tag>Architecture</Tag>
-              <SectionH2>Robust, Modular, and Scalable</SectionH2>
-              <p style={{ fontSize:14.5, lineHeight:1.8, color:'#5a6a88', margin:'0 0 28px', maxWidth:700 }}>
-                A centralized API gateway via Nginx routes all partner traffic into the unified OpenConnect middleware layer — orchestrating real-time processing, compliance screening (Screening System, Bank Integration Layer, 1LINK), core banking integration, and full Grafana observability.
-              </p>
-              <Frame src={IMG.highLevel} alt="High-Level Architecture" />
-            </div>
-          </Reveal>
-        </div>
-
-
-        {/* ━━━━━━━━━━━━━━━━━━━ MECHANISMS ━━━━━━━━━━━━━━━━━━━ */}
-        <div style={{ padding:`clamp(52px,7vw,88px) ${P}` }}>
-          <Reveal>
-            <div style={{ maxWidth:1100, margin:'0 auto' }}>
-              <Tag>Transaction Mechanisms</Tag>
-              <SectionH2>Three Ways to Integrate</SectionH2>
-              <p style={{ fontSize:14.5, lineHeight:1.8, color:'#5a6a88', margin:'0 0 44px', maxWidth:640 }}>
-                OpenRemit supports three key transaction mechanisms, each tailored to the specific capabilities and needs of remittance partners — from full API integration to batch file processing.
-              </p>
-
-              {/* Push & Pull */}
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:48, alignItems:'center', marginBottom:60 }}>
-                <Frame src={IMG.pushPull} alt="Push vs Pull Mechanism" />
-                <div style={{ display:'flex', flexDirection:'column', gap:18 }}>
-                  {[
-                    { num:'01', title:'Push Mechanism', color:'#1E6FA8', bg:'#e8f2fa', how:'Banks push transaction data directly to OpenRemit\'s standardized APIs for immediate validation and processing.', benefit:'Direct multi-partner engagement without managing disparate systems. No reliance on external triggers.' },
-                    { num:'02', title:'Pull Mechanism', color:'#1E6FA8', bg:'#e8f2fa', how:'OpenRemit pulls transaction data from partner APIs in real time, consolidating and processing centrally.', benefit:'Banks retain full control over transaction flows while supporting numerous remittance services seamlessly.' },
-                  ].map((m,i) => (
-                    <div key={i} style={{ background:'#fff', border:'1.5px solid #e2e8f0', borderRadius:14, padding:'20px 22px' }}>
-                      <div style={{ display:'grid', gridTemplateColumns:'44px 1fr', gap:14, alignItems:'flex-start' }}>
-                        <div style={{ width:44,height:44,borderRadius:12,background:m.bg,color:m.color,display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,fontWeight:900,flexShrink:0 }}>{m.num}</div>
-                        <div>
-                          <div style={{ fontSize:14.5,fontWeight:700,color:'#1a2540',marginBottom:8 }}>{m.title}</div>
-                          <div style={{ fontSize:13,lineHeight:1.7,color:'#5a6a88',marginBottom:6 }}><strong style={{ color:'#1a2540',fontWeight:600 }}>How: </strong>{m.how}</div>
-                          <div style={{ fontSize:13,lineHeight:1.7,color:'#5a6a88' }}><strong style={{ color:'#F5A623',fontWeight:600 }}>Benefit: </strong>{m.benefit}</div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* divider */}
-              <div style={{ display:'flex', alignItems:'center', gap:14, margin:'0 0 40px', color:'#b0bac9', fontSize:11, fontWeight:700, letterSpacing:'0.18em', textTransform:'uppercase' }}>
-                <div style={{ flex:1, height:1, background:'#e2e8f0' }} />File-Based Integration<div style={{ flex:1, height:1, background:'#e2e8f0' }} />
-              </div>
-
-              {/* File mechanism */}
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:48, alignItems:'center' }}>
-                <div style={{ background:'#fff', border:'1.5px solid #e2e8f0', borderRadius:14, padding:'26px 28px' }}>
-                  <div style={{ width:44,height:44,borderRadius:12,background:'#fff8ec',color:'#F5A623',display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,fontWeight:900,marginBottom:16 }}>03</div>
-                  <div style={{ fontSize:15,fontWeight:700,color:'#1a2540',marginBottom:12 }}>File Mechanism</div>
-                  <p style={{ fontSize:13.5,lineHeight:1.75,color:'#5a6a88',margin:'0 0 10px' }}><strong style={{ color:'#1a2540',fontWeight:600 }}>How it works: </strong>Partners without API capabilities send day-end batch transaction files. OpenRemit converts them into individual transactions for processing.</p>
-                  <p style={{ fontSize:13.5,lineHeight:1.75,color:'#5a6a88',margin:0 }}><strong style={{ color:'#F5A623',fontWeight:600 }}>Key benefit: </strong>No partner is excluded regardless of technical capability. Even smaller remittance partners can fully participate in the network.</p>
-                </div>
-                <Frame src={IMG.file} alt="File Mechanism — Batch to Individual" />
-              </div>
-
-            </div>
-          </Reveal>
-        </div>
-
-
-        {/* ━━━━━━━━━━━━━━━━━━━ GLOBAL REACH ━━━━━━━━━━━━━━━━━━━ */}
-        <div style={{ background:'#fafbfd', padding:`clamp(52px,7vw,88px) ${P}` }}>
-          <Reveal>
-            <div style={{ maxWidth:1100, margin:'0 auto', display:'grid', gridTemplateColumns:'1fr 1fr', gap:52, alignItems:'center' }}>
-              <div>
-                <Tag gold>Global Reach</Tag>
-                <SectionH2>Connecting the World, One Transaction at a Time</SectionH2>
-                <p style={{ fontSize:14.5, lineHeight:1.8, color:'#5a6a88', margin:0 }}>
-                  OpenRemit's partner network spans multiple countries and payment corridors. Unified transaction routing, real-time FX handling, and compliance-ready architecture means your bank can serve customers wherever they need to send money.
-                </p>
-              </div>
-              <Frame src={IMG.globe} alt="Global Remittance Network" bg="#fff" />
-            </div>
-          </Reveal>
-        </div>
-
-
-        {/* ━━━━━━━━━━━━━━━━━━━ FOOTER ━━━━━━━━━━━━━━━━━━━ */}
-        <div style={{ background:'linear-gradient(130deg,#071828,#0c3f66)', padding:`clamp(44px,6vw,68px) ${P}`, textAlign:'center' }}>
-          <p style={{ fontSize:12,fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'rgba(255,255,255,0.28)',marginBottom:10 }}>Explore the documentation</p>
-          <h2 style={{ fontSize:'clamp(1.3rem,2.5vw,2rem)',fontWeight:800,color:'#fff',margin:'0 auto 10px',maxWidth:520,lineHeight:1.3,letterSpacing:'-0.02em' }}>Everything you need to get started</h2>
-          <p style={{ fontSize:14,color:'rgba(255,255,255,0.38)',margin:'0 auto',maxWidth:420,lineHeight:1.75 }}>Back Office guides, Branch Portal workflows, API references, and integration documentation.</p>
-        </div>
-
-
+        ))}
       </div>
-    </>
+    );
+  };
+
+  /* ── rail fallback visual ── */
+  const RailFallback = () => {
+    const [pk, setPk] = useState(false);
+    const names = pk ? ['1LINK', 'RAAST', 'RTGS'] : ['Primary Rail', 'Secondary Rail', 'High-Value Rail'];
+    const notes = ['first try', 'automatic fallback', 'manual'];
+    const Arrow = () => (
+      <span className={s.railArrow}>
+        <Icon size={20}><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></Icon>
+      </span>
+    );
+    return (
+      <div className={s.rail} role="group" aria-label="Rail fallback chain">
+        <div className={s.railHead}>
+          <span className={s.railCaption}>Fallback chain</span>
+          <button type="button" className={s.railToggle} aria-pressed={pk} onClick={() => setPk(v => !v)}>
+            Show Pakistan example
+          </button>
+        </div>
+        <div className={s.railTrack}>
+          <span className={s.railDot} aria-hidden="true" />
+          {names.map((n, i) => (
+            <React.Fragment key={i}>
+              {i > 0 && <Arrow />}
+              <div className={`${s.railNode} ${i === 2 ? s.railNodeManual : ''}`}>
+                <div className={s.railNodeName}>{n}</div>
+                <div className={s.railNodeNote}>{notes[i]}</div>
+              </div>
+            </React.Fragment>
+          ))}
+        </div>
+        <div className={s.railLegend} aria-hidden="true">
+          <span><i style={{ background: '#1e6fa8' }} />in flight</span>
+          <span><i style={{ background: '#f5a623' }} />rail failed</span>
+          <span><i style={{ background: '#1a9d63' }} />paid</span>
+        </div>
+      </div>
+    );
+  };
+
+  /* ── operational control status card ── */
+  const StatusCard = () => (
+    <div className={s.status} role="img" aria-label="Illustration of a failed transaction on the Failed Transactions screen, showing the stage, a plain-language reason and the available actions">
+      <div className={s.statusHead}>
+        <span className={s.statusTitle}>Failed Transactions</span>
+        <span className={s.statusPill}>FAILED</span>
+      </div>
+      <div className={s.statusBody}>
+        <div className={s.statusRow}><span className={s.statusKey}>Transaction</span><span className={s.statusVal}>Sample interbank transfer</span></div>
+        <div className={s.statusRow}><span className={s.statusKey}>Stopped at</span><span className={s.statusVal}>Title Fetch</span></div>
+        <div className={s.statusRow}><span className={s.statusKey}>Reason</span><span className={s.statusVal}>Beneficiary account not found</span></div>
+        <div className={s.statusActions}>
+          <span className={s.statusActionPrimary}>Retry step</span>
+          <span className={s.statusAction}>Move to high-value rail</span>
+          <span className={s.statusAction}>Fix account</span>
+          <span className={s.statusAction}>Cancel</span>
+        </div>
+        <div className={s.statusNote}>Sensitive actions go to a checker for approval.</div>
+      </div>
+    </div>
+  );
+
+  /* ── portal cards ── */
+  const PORTALS = [
+    { title: 'Back Office', who: 'for operations, compliance and admin teams.',
+      text: 'Monitor every transaction, handle failures and screening holds, and manage partners, branches and users.',
+      icon: <><rect x="3" y="3" width="7" height="9" rx="1" /><rect x="14" y="3" width="7" height="5" rx="1" /><rect x="14" y="12" width="7" height="9" rx="1" /><rect x="3" y="16" width="7" height="5" rx="1" /></> },
+    { title: 'Branch Portal', who: 'for tellers and branch managers.',
+      text: "Look up a cash remittance, verify the beneficiary's identity, and pay out after a branch checker approves.",
+      icon: <><path d="M3 21h18" /><path d="M5 21V10l7-5 7 5v11" /><path d="M9 21v-6h6v6" /></> },
+    { title: 'Partner Portal', who: 'for your remittance partners.',
+      text: 'Follow transactions in real time, fix and resubmit failed ones, upload files, and keep an eye on the settlement balance.',
+      icon: <><circle cx="9" cy="8" r="3.2" /><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6" /><circle cx="17" cy="8.5" r="2.6" /><path d="M15 14.2c2.7.5 4.5 2.6 4.5 5.8" /></> },
+  ];
+
+  return (
+    <div className={s.root}>
+
+      {/* ━━━━━━━━━━━━━━━━━━━ 1. HERO ━━━━━━━━━━━━━━━━━━━ */}
+      <div className={s.hero}>
+        <div className={s.heroOrbA} />
+        <div className={s.heroOrbB} />
+        <div className={s.heroGrid}>
+          <div className={`${s.reveal} ${hv ? s.revealOn : ''}`}>
+            <Tag onDark>Inward Remittance Platform</Tag>
+            <h1 className={s.heroTitle}>Open<span>Remit</span></h1>
+            <p className={s.heroSub}>Inward remittance processing for banks</p>
+            <p className={s.heroBody}>
+              When someone abroad sends money home, their family is waiting for it, sometimes at a branch counter, sometimes refreshing a banking app. OpenRemit connects your bank to its remittance partners, checks every transaction, and delivers it over the right local rail, while your operations team stays in control at every step.
+            </p>
+            <div className={s.chips}>
+              {['Multi-Partner', 'Account & Cash Payout', 'Multi-Rail Fallback', 'Maker-Checker', 'Regulator-Ready', 'Configurable per Market'].map(t => (
+                <span key={t} className={s.chip}>{t}</span>
+              ))}
+            </div>
+          </div>
+          <div className={`${s.media} ${s.reveal} ${hv ? s.revealOn : ''}`} style={{ transitionDelay: '200ms' }}>
+            <img className={s.heroImg} src={IMG.hero} alt="Illustration of the OpenRemit dashboard in front of a world map, with families receiving money sent from abroad" />
+          </div>
+        </div>
+      </div>
+
+
+      {/* ━━━━━━━━━━━━━━━━━━━ 2. ABOUT ━━━━━━━━━━━━━━━━━━━ */}
+      <div className={s.sectionAlt}>
+        <Reveal className={s.inner}>
+          <Tag>About</Tag>
+          <SectionH2>One platform between your partners and your core banking</SectionH2>
+          <div className={s.cards3} style={{ marginBottom: 24 }}>
+            {[
+              { title: 'Takes in every partner.', text: 'Exchange companies and MTOs connect however suits them: through our APIs, by letting OpenRemit fetch from their systems, or by uploading a file. Every transaction lands in one place, in one format.' },
+              { title: 'Checks before it pays.', text: "Each transaction is screened for AML/CFT, the beneficiary account is verified, and the partner's settlement balance is confirmed before any money moves." },
+              { title: 'Delivers and closes the loop.', text: "Funds are credited within the bank, sent to another bank over your country's domestic payment rails, or paid as cash over the counter. Then the partner is told the outcome and the regulatory certificate is ready." },
+            ].map((c, i) => (
+              <div key={c.title} className={s.card}>
+                <div className={s.cardDot} style={{ background: i === 2 ? '#F5A623' : '#1E6FA8' }} />
+                <div className={s.cardTitle}>{c.title}</div>
+                <div className={s.cardText}>{c.text}</div>
+              </div>
+            ))}
+          </div>
+          <p className={s.lead}>
+            Behind the scenes, OpenConnect, Paysys' middleware, handles every conversation with your core banking system, screening system and local payment switches. That leaves OpenRemit free to focus on one thing: getting each remittance home correctly.
+          </p>
+          <Frame src={IMG.features} title="OpenRemit at a glance" alt="Diagram of OpenRemit at the centre of its capabilities: inward remittances, FT, IBFT and cash transactions, AML/CFT screening and payment gateway connectivity" />
+        </Reveal>
+      </div>
+
+
+      {/* ━━━━━━━━━━━━━━━━━━━ 3. JOURNEY ━━━━━━━━━━━━━━━━━━━ */}
+      <div className={s.section}>
+        <div className={s.inner}>
+          <Reveal>
+            <Tag>The Journey</Tag>
+            <SectionH2>From partner to family, in five steps</SectionH2>
+          </Reveal>
+          <Journey />
+        </div>
+      </div>
+
+
+      {/* ━━━━━━━━━━━━━━━━━━━ 4. WHY OPENREMIT ━━━━━━━━━━━━━━━━━━━ */}
+      <div className={s.sectionAlt}>
+        <Reveal className={s.inner} >
+          <Tag>Why OpenRemit?</Tag>
+          <SectionH2>Built for the people who run remittances every day</SectionH2>
+        </Reveal>
+
+        {/* a. multi-partner */}
+        <Reveal className={s.row}>
+          <div className={s.media}>
+            <Frame src={IMG.partners} title="Multi-Partner" alt="Illustration of four people each holding up a puzzle piece that joins into one row, representing many partners connected to one platform" />
+          </div>
+          <div>
+            <Tag>Multi-Partner</Tag>
+            <h3 className={s.h3}>Add partners without adding projects</h3>
+            <p className={s.body}>Every new exchange company shouldn't mean another integration project. In OpenRemit, onboarding a partner is mostly configuration: how they connect, which transaction types they can send, how strictly they're screened, and how often they're polled. Each partner runs on its own schedule, so a slow partner never holds up a fast one.</p>
+          </div>
+        </Reveal>
+
+        {/* b. sub-agent network */}
+        <Reveal className={s.row}>
+          <div>
+            <Tag gold>Sub-agent Network</Tag>
+            <h3 className={s.h3}>Reach families beyond your branch network</h3>
+            <p className={s.body}>Not every beneficiary lives near one of your branches. Sub-agents, whether other banks or exchange companies, can pay out cash on your behalf through the same Branch Portal. They get their own users, their own settlement account and the same maker-checker controls. Reconciliation comes straight from OpenRemit's reports.</p>
+          </div>
+          <div className={s.media}>
+            <Frame src={IMG.subagent} title="Sub-agent Network" alt="Illustration of a family collecting a cash remittance from a sub-agent teller at a counter" />
+          </div>
+        </Reveal>
+
+        {/* c. compliance */}
+        <Reveal className={s.row}>
+          <div className={s.media}>
+            <Frame src={IMG.singlePlat} title="Compliance" alt="Illustration of a magnifying glass over a transaction list, highlighting AML and sanctions checks" />
+          </div>
+          <div>
+            <Tag>Compliance</Tag>
+            <h3 className={s.h3}>Compliance built in, not bolted on</h3>
+            <p className={s.body}>Every transaction passes through your bank's screening system, before funds move or after, depending on the partner's risk profile. Anything flagged waits in a compliance queue where an officer can review it, release it, or reject it, and every decision is logged. Nationality and purpose-of-payment blocks, per-beneficiary limits, and local regulatory reporting are configured to match your regulator's rules.</p>
+          </div>
+        </Reveal>
+
+        {/* d. multi-rail */}
+        <Reveal className={s.row}>
+          <div>
+            <Tag gold>Multi-Rail Fallback</Tag>
+            <h3 className={s.h3}>If one rail fails, the money still moves</h3>
+            <p className={s.body}>Interbank payments follow a fallback chain you define. They try your primary rail first. If it can't complete the payment, OpenRemit retries on the secondary rail automatically. If both fail, your operations team can push the payment to a high-value rail in one click. In Pakistan, for example, that chain is 1LINK, then RAAST, then RTGS. Every hop is recorded.</p>
+          </div>
+          <div className={s.media}>
+            <RailFallback />
+          </div>
+        </Reveal>
+
+        {/* e. operational control */}
+        <Reveal className={s.row}>
+          <div className={s.media}>
+            <StatusCard />
+          </div>
+          <div>
+            <Tag>Operational Control</Tag>
+            <h3 className={s.h3}>Nothing gets stuck where no one can see it</h3>
+            <p className={s.body}>When a transaction fails, it doesn't disappear into a log file. It lands on the Failed Transactions screen with the reason in plain language. From there your team can retry it from exactly where it stopped, move it to a high-value rail, fix the account details, or cancel it. Sensitive actions always need a second pair of eyes.</p>
+          </div>
+        </Reveal>
+      </div>
+
+
+      {/* ━━━━━━━━━━━━━━━━━━━ 5. ARCHITECTURE ━━━━━━━━━━━━━━━━━━━ */}
+      <div className={s.section}>
+        <Reveal className={s.inner}>
+          <Tag>Architecture</Tag>
+          <SectionH2>Built in layers, so each part does one job</SectionH2>
+          <p className={s.lead}>
+            Partners talk to a single API Gateway. OpenRemit owns the remittance logic: partners, rules, screening decisions and transaction state. OpenConnect handles integration with your bank's middleware, core banking, screening system and domestic payment switches. On top sit three portals: Back Office for operations and compliance, Branch Portal for cash payout, and Partner Portal for partners to track and manage their own transactions.
+          </p>
+          <Frame src={IMG.highLevel} title="High-level architecture" alt="Architecture diagram: partner systems and Partner Portals connect through a centralized API gateway and unified layer to OpenConnect, which integrates with core banking, payment switches, screening and SMS, with monitoring, logging and reporting alongside" />
+        </Reveal>
+      </div>
+
+
+      {/* ━━━━━━━━━━━━━━━━━━━ 6. PORTALS ━━━━━━━━━━━━━━━━━━━ */}
+      <div className={s.sectionAlt}>
+        <div className={s.inner}>
+          <Reveal>
+            <Tag>Portals</Tag>
+            <SectionH2>One system, a screen for everyone who touches it</SectionH2>
+          </Reveal>
+          <div className={s.portals}>
+            {PORTALS.map((p, i) => (
+              <Reveal key={p.title} delay={i * 120}>
+                <div className={s.portal}>
+                  <div className={s.portalIcon}><Icon>{p.icon}</Icon></div>
+                  <div className={s.portalTitle}>{p.title}</div>
+                  <div className={s.portalFor}>{p.who}</div>
+                  <div className={s.cardText}>{p.text}</div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </div>
+
+
+      {/* ━━━━━━━━━━━━━━━━━━━ 7. INTEGRATION ━━━━━━━━━━━━━━━━━━━ */}
+      <div className={s.section}>
+        <Reveal className={s.inner}>
+          <Tag>Integration</Tag>
+          <SectionH2>Three ways to integrate</SectionH2>
+          <p className={s.lead}>Partners differ in what they can build. OpenRemit meets each one where they are.</p>
+
+          <div className={s.split}>
+            <div className={s.media}>
+              <Frame src={IMG.pushPull} title="Push and Pull" alt="Illustration contrasting pull and push: one person pulls a box with a rope while another pushes a block" />
+            </div>
+            <div className={s.mechList}>
+              {[
+                { num: '01', title: 'Push', how: "The partner sends each remittance to OpenRemit's APIs the moment it's booked, then checks its status through the inquiry API.", why: 'The fastest path from sender to beneficiary, with real-time status for the partner.' },
+                { num: '02', title: 'Pull', how: "OpenRemit fetches outstanding transactions from the partner's own APIs on a schedule. For cash payouts it locks each transaction so it can't be paid twice.", why: "Partners that already expose APIs don't need to build anything new." },
+              ].map(m => (
+                <div key={m.num} className={s.mech}>
+                  <div className={s.mechNum}>{m.num}</div>
+                  <div>
+                    <div className={s.mechTitle}>{m.title}</div>
+                    <p className={s.mechLine}><strong>How: </strong>{m.how}</p>
+                    <p className={`${s.mechLine} ${s.mechLineWhy}`}><strong>Why it matters: </strong>{m.why}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className={s.divider} aria-hidden="true" />
+
+          <div className={s.split}>
+            <div className={s.mech}>
+              <div className={s.mechNumGold}>03</div>
+              <div>
+                <div className={s.mechTitle}>File</div>
+                <p className={s.mechLine}><strong>How: </strong>The partner uploads a transaction file through the Partner Portal. Each row is validated, problem rows are returned for correction, and the rest go to a checker for approval.</p>
+                <p className={`${s.mechLine} ${s.mechLineWhy}`}><strong>Why it matters: </strong>Smaller partners without API capability can still be part of your network.</p>
+              </div>
+            </div>
+            <div className={s.media}>
+              <Frame src={IMG.file} title="File upload" alt="Illustration of one uploaded file being split into many individual transactions" />
+            </div>
+          </div>
+        </Reveal>
+      </div>
+
+
+      {/* ━━━━━━━━━━━━━━━━━━━ 8. GLOBAL REACH ━━━━━━━━━━━━━━━━━━━ */}
+      <div className={s.sectionAlt}>
+        <Reveal className={`${s.inner} ${s.split}`}>
+          <div>
+            <Tag gold>Global Reach</Tag>
+            <SectionH2>Money from every corridor, paid out at every branch</SectionH2>
+            <p className={s.body}>Remittances reach your bank from partners in many sending countries, in many currencies. OpenRemit brings them into one queue, applies the same checks to each, and pays them out locally, whether to an account at your bank, another bank, or cash at the counter. Adding a new corridor means adding a partner, not rebuilding the system.</p>
+          </div>
+          <div className={s.media}>
+            <Frame src={IMG.globe} title="Global Reach" alt="Illustration of a globe circled by arrows and money location pins, representing remittances arriving from many countries" />
+          </div>
+        </Reveal>
+      </div>
+
+
+      {/* ━━━━━━━━━━━━━━━━━━━ 9. FOOTER ━━━━━━━━━━━━━━━━━━━ */}
+      <div className={s.footer}>
+        <p className={s.footerEyebrow}>Explore the documentation</p>
+        <h2 className={s.footerTitle}>Where to next</h2>
+        <nav className={s.pills} aria-label="Documentation sections">
+          <Link className={s.pill} to="/docs/get-started">Get Started</Link>
+          <Link className={s.pill} to="/docs/back-office/logging-in-and-changing-password">Back Office Guide</Link>
+          <Link className={s.pill} to="/docs/branch-portal/logging-in-and-changing-password">Branch Portal Guide</Link>
+          <Link className={s.pill} to="/docs/partner-portal/logging-in-and-changing-password">Partner Portal Guide</Link>
+          <Link className={s.pill} to="/api-specifications">API Specifications</Link>
+          {/* TODO link: Features */}
+        </nav>
+      </div>
+
+    </div>
   );
 };
 
 <OpenRemitOverview />
-
-<!-- import '../custom.css'
-
-# OpenRemit: Revolutionizing Outward Remittance Processing
-
-OpenRemit is a powerful, flexible, and scalable outward remittance processing platform designed to address the complexities of cross-border payments. Engineered to simplify the remittance ecosystem for banks and financial institutions, OpenRemit offers an end-to-end solution that ensures secure, real-time processing, compliance, and settlement of transactions across multiple partners and systems.
-
-At its core, OpenRemit acts as the centralized hub for transaction lifecycle management, handling validation, routing, compliance checks, and settlement functions. It is built with a high degree of modularity, ensuring that it can cater to diverse remittance partners with varying technical capabilities. Whether through APIs, pull-based integrations, or batch file processing, OpenRemit ensures seamless integration, regardless of the partner's infrastructure.
-
-The platform is powered by OpenConnect, which serves as the middleware layer responsible for orchestrating system-to-system communication, message transformations, and API exposure. By decoupling partner communication from the core processing logic, OpenRemit ensures enhanced security, scalability, and ease of integration.
-
-
-
-
-## Features
-
-<div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
-  {/* Row 1 */}
-  <div style={{ flex: '1 1 30%', maxWidth: '300px', padding: '20px', textAlign: 'center', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', border: '1px solid #ddd' }}>
-    <h3>Real-Time Transaction Processing</h3>
-    <p>Ensures high-speed, real-time processing of financial transactions with intelligent routing and RabbitMQ queue management.</p>
-  </div>
-
-  <div style={{ flex: '1 1 30%', maxWidth: '300px', padding: '20px', textAlign: 'center', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', border: '1px solid #ddd' }}>
-    <h3>Comprehensive Payment Network Integration</h3>
-    <p>Provides effortless connectivity with RAAST, 1LINK, RTGS, and national payment switches for interoperability.</p>
-  </div>
-
-  <div style={{ flex: '1 1 30%', maxWidth: '300px', padding: '20px', textAlign: 'center', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', border: '1px solid #ddd' }}>
-    <h3>Seamless Multi-Tenant Architecture</h3>
-    <p>Supports multiple financial institutions with independent operation and secure data segregation on the same platform.</p>
-  </div>
-
-  {/* Row 2 */}
-  <div style={{ flex: '1 1 45%', maxWidth: '300px', padding: '20px', textAlign: 'center', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', border: '1px solid #ddd' }}>
-    <h3>Secure, Scalable & Seamless API Access</h3>
-    <p>Enforces strong security with JWT 2.0 authentication and ISO 8583/ISO 20022-based secure messaging.</p>
-  </div>
-
-  <div style={{ flex: '1 1 45%', maxWidth: '300px', padding: '20px', textAlign: 'center', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', border: '1px solid #ddd' }}>
-    <h3>Advanced Transaction Monitoring</h3>
-    <p>Enables real-time transaction tracking, fraud detection, and compliance monitoring with a comprehensive dashboard.</p>
-  </div>
-</div>
-
-
-## Solution Architecture
-OpenRemit provides a robust set of modules to enable seamless outward remittance transactions, including integrations with multiple partners and systems. The solution includes a transaction routing mechanism to support different remittance channels, an API gateway for connectivity with external systems (such as financial institutions), and a middleware layer to ensure real-time processing and monitoring of all remittance transactions. OpenRemit is designed to offer a unified platform for sending and receiving international remittances, handling diverse payment types, and enabling compliance with financial regulations.
-
-
-<div style={{ display: 'flex', alignItems: 'center', padding:'10px', marginBottom: '10px' }}>
-<div style={{ flex: 1 }}>
- ![Overview](/img/overview/highLevel.png)
- </div>
- </div>
-
-
-## Transaction Mechanisms in OpenRemit
-
-OpenRemit supports three key transaction mechanisms, each tailored to the specific capabilities and needs of remittance partners:
-
- ### 1. Push Mechanism
-    **How It Works**: In this mechanism, banks push transaction data to OpenRemit’s standardized APIs. This allows banks to send remittance data to OpenRemit for further validation and processing.  
-    **Key Benefit**: This model ensures that banks can directly engage with multiple partners, streamlining the process and reducing the overhead of managing various systems. It allows the bank to initiate transaction flows seamlessly without relying on external triggers.
-<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0px' }}>
-  <div style={{ flex: 1, paddingRight: '10px' }}>
-       
-        ### 2. Pull Mechanism
-    **How It Works**: OpenRemit pulls transaction data from various partner APIs. This gives banks the flexibility to receive transaction details from partners in real time, consolidating and processing them centrally.  
-    **Key Benefit**: By pulling data, banks can retain control over transaction flows while supporting numerous remittance services. This method reduces the burden of partner management by allowing banks to consume data as needed, enhancing flexibility and operational control.
-
-  </div>
-  <div style={{ flex: 1 }}>
-    ![Overview](/img/overview/pushPull-removebg-preview.png)
-  </div>
-</div>
-
- ### 3. File Mechanism
-<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', padding: '0' }}>
-  <div style={{ flex: 1, paddingRight: '10px', margin: 0 }}>
-        **How It Works**: For smaller partners who do not have API capabilities, OpenRemit supports a file-based mechanism. Partners send transaction records at the end of the day in a batch file format, and OpenRemit converts these into individual transactions for processing.  
-**Key Benefit**: This ensures that even smaller remittance partners without robust API infrastructure can still participate in the remittance network. OpenRemit’s ability to convert bulk transaction data into actionable processing ensures that no partner is left out, regardless of technical capability.
-  </div>
-</div>
-
-## Why OpenRemit?
-
-<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0px' }}>
-    <div style={{ flex: 1 }}>
-    ![Overview](/img/overview/multiplePartners.png)
-  </div>
-  <div style={{ flex: 1, paddingRight: '5px' }}>
-    ### Unlock Seamless Integration with Multiple Partners
-    OpenRemit facilitates the integration of various remittance partners through a unified platform. By offering standardized APIs, banks can quickly integrate with numerous remittance providers, ensuring seamless cross-border transactions for their customers. This reduces complexity for banks, enabling them to access a wide network of remittance partners and offer more options to their users.
-  </div>
-</div>
-
-<div class="subagent-section">
-  <div style={{ flex: 1, paddingRight: '5px' }}>
-    ### Expand Reach with Subagents
-    One of the standout features of OpenRemit is its subagent model, which allows banks to extend remittance services to regions where they may not have a physical presence. Subagents can operate in underserved or remote areas, offering a significant opportunity for banks to grow their customer base by providing services in locations typically outside the reach of traditional banking infrastructure.
-  </div>
-  <div style={{ flex: 1 }}>
-    ![Overview](/img/overview/subagent.png)
-  </div>
-</div>
-
-<div class="subagent-section">
-    <div style={{ flex: 1 }}>
-    ![Overview](/img/overview/globe.png)
-  </div>
-  <div style={{ flex: 1, paddingRight: '10px' }}>
-    ### Operational Efficiency Through a Single Platform
-    OpenRemit simplifies the process of managing remittance transactions by reducing the need for different systems for each partner. With a single platform, OpenRemit helps streamline operations, reducing integration variance and providing a standardized, controlled approach for remittance processing.
-  </div>
-</div> -->

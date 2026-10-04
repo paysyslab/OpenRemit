@@ -1,0 +1,891 @@
+/* Overview page styles. Colours are variables so the page follows the
+   Docusaurus light / dark theme. The hero and footer stay navy in both. */
+
+.root {
+  --or-blue: #1e6fa8;
+  --or-gold: #f5a623;
+  --or-gold-text: #9a5b00;
+  --or-heading: #0c1e35;
+  --or-text: #1a2540;
+  --or-muted: #5a6a88;
+  --or-bg: #ffffff;
+  --or-bg-alt: #fafbfd;
+  --or-surface: #ffffff;
+  --or-border: #e2e8f0;
+  --or-frame-bar: #f8fafc;
+  --or-frame-title: #5a6a88;
+  --or-tag-bg: #e8f2fa;
+  --or-tag-text: #1e6fa8;
+  --or-gold-tag-bg: #fff3dc;
+  --or-shadow: 0 6px 28px rgba(30, 111, 168, 0.08);
+  --or-success: #1a9d63;
+
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+  color: var(--or-text);
+  background: var(--or-bg);
+  overflow-x: hidden;
+}
+
+:global([data-theme='dark']) .root {
+  --or-blue: #5aa9e6;
+  --or-gold-text: #f5a623;
+  --or-heading: #eef3fa;
+  --or-text: #dbe4f0;
+  --or-muted: #a9b8cc;
+  --or-bg: #0f1724;
+  --or-bg-alt: #131e2f;
+  --or-surface: #182539;
+  --or-border: #2a3a54;
+  --or-frame-bar: #1d2c44;
+  --or-frame-title: #a9b8cc;
+  --or-tag-bg: rgba(90, 169, 230, 0.16);
+  --or-tag-text: #8cc4f0;
+  --or-gold-tag-bg: rgba(245, 166, 35, 0.14);
+  --or-shadow: 0 6px 28px rgba(0, 0, 0, 0.35);
+  --or-success: #3ccf8e;
+}
+
+/* ── layout ───────────────────────────────────────────── */
+
+.section {
+  padding: clamp(52px, 7vw, 88px) clamp(16px, 6vw, 80px);
+}
+.sectionAlt {
+  composes: section;
+  background: var(--or-bg-alt);
+}
+.inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 52px;
+  align-items: center;
+}
+.row {
+  composes: split;
+  margin: 0 auto 72px;
+  max-width: 1100px;
+}
+.row:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 860px) {
+  .split,
+  .row {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  /* When rows stack, the visual always comes first */
+  .media {
+    order: -1;
+  }
+}
+
+/* ── typography ───────────────────────────────────────── */
+
+.h2 {
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 800;
+  color: var(--or-heading);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  margin: 0 0 32px;
+  max-width: 640px;
+}
+.h3 {
+  font-size: clamp(1.1rem, 2.2vw, 1.55rem);
+  font-weight: 800;
+  color: var(--or-heading);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+}
+.body {
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: var(--or-muted);
+  margin: 0;
+}
+.lead {
+  composes: body;
+  max-width: 700px;
+  margin: 0 0 28px;
+}
+
+/* ── tag ──────────────────────────────────────────────── */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--or-tag-bg);
+  border-radius: 30px;
+  padding: 5px 14px;
+  margin-bottom: 16px;
+}
+.tagDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--or-tag-text);
+}
+.tagText {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--or-tag-text);
+}
+.tagGold {
+  background: var(--or-gold-tag-bg);
+  border: 1px solid rgba(245, 166, 35, 0.3);
+}
+.tagGold .tagDot {
+  background: var(--or-gold);
+}
+.tagGold .tagText {
+  color: var(--or-gold-text);
+}
+/* gold tag on the navy hero */
+.tagOnDark {
+  background: rgba(245, 166, 35, 0.12);
+  border: 1px solid rgba(245, 166, 35, 0.3);
+}
+.tagOnDark .tagDot {
+  background: #f5a623;
+}
+.tagOnDark .tagText {
+  color: #f5a623;
+}
+
+/* ── frames ───────────────────────────────────────────── */
+
+.frame {
+  background: var(--or-surface);
+  border: 1.5px solid var(--or-border);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--or-shadow);
+}
+.frameBar {
+  background: var(--or-frame-bar);
+  border-bottom: 1px solid var(--or-border);
+  padding: 9px 15px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.frameDots {
+  display: flex;
+  gap: 5px;
+}
+.frameDots span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: block;
+}
+.frameTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--or-frame-title);
+  flex: 1;
+  text-align: center;
+  margin-right: 46px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Illustrations have white backgrounds, so the image well stays light. */
+.frameBody {
+  padding: 14px;
+  background: #ffffff;
+}
+.frameBody img {
+  width: 100%;
+  border-radius: 10px;
+  display: block;
+  object-fit: contain;
+}
+.darkFrame {
+  composes: frame;
+  background: #111;
+  border-color: #222;
+}
+.darkFrame .frameBar {
+  background: #1a1a1a;
+  border-color: #333;
+}
+.darkFrame .frameBody {
+  background: #111;
+}
+
+/* ── cards ────────────────────────────────────────────── */
+
+.cards3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+.card {
+  background: var(--or-surface);
+  border: 1.5px solid var(--or-border);
+  border-radius: 14px;
+  padding: 22px 24px 26px;
+}
+.cardDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-bottom: 14px;
+}
+.cardTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--or-text);
+  margin-bottom: 8px;
+}
+.cardText {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--or-muted);
+}
+
+/* ── reveal ───────────────────────────────────────────── */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.revealOn {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── hero ─────────────────────────────────────────────── */
+
+.hero {
+  background: linear-gradient(148deg, #061422 0%, #0a3356 42%, #1e6fa8 100%);
+  padding: clamp(56px, 10vw, 108px) clamp(16px, 6vw, 80px) clamp(44px, 7vw, 80px);
+  position: relative;
+  overflow: hidden;
+}
+.heroOrbA,
+.heroOrbB {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.heroOrbA {
+  top: -90px;
+  right: -90px;
+  width: 420px;
+  height: 420px;
+  background: rgba(245, 166, 35, 0.07);
+}
+.heroOrbB {
+  bottom: -110px;
+  left: -70px;
+  width: 320px;
+  height: 320px;
+  background: rgba(30, 111, 168, 0.18);
+}
+.heroGrid {
+  composes: split;
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+}
+.heroTitle {
+  font-size: clamp(2.6rem, 5.5vw, 4.4rem);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin: 0 0 10px;
+}
+.heroTitle span {
+  color: #f5a623;
+}
+/* White text opacities chosen for at least 4.5:1 contrast on the navy gradient */
+.heroSub {
+  font-size: clamp(0.95rem, 1.5vw, 1.08rem);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.96);
+  line-height: 1.5;
+  margin: 0 0 18px;
+}
+.heroBody {
+  font-size: clamp(0.88rem, 1.3vw, 0.97rem);
+  color: rgba(255, 255, 255, 0.93);
+  line-height: 1.8;
+  margin: 0 0 30px;
+  max-width: 500px;
+}
+.chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.chip {
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.95);
+  padding: 6px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.heroImg {
+  width: 100%;
+  display: block;
+  border-radius: 16px;
+  filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.35));
+}
+
+/* ── journey stepper ──────────────────────────────────── */
+
+.journey {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+  margin-top: 8px;
+}
+.journeyTrack,
+.journeyFill {
+  position: absolute;
+  top: 27px;
+  left: 10%;
+  right: 10%;
+  height: 3px;
+  border-radius: 3px;
+}
+.journeyTrack {
+  background: var(--or-border);
+}
+.journeyFill {
+  background: linear-gradient(90deg, var(--or-blue), var(--or-gold));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 1.4s ease;
+}
+.journeyOn .journeyFill {
+  transform: scaleX(1);
+}
+.step {
+  position: relative;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.journeyOn .step {
+  opacity: 1;
+  transform: none;
+}
+.stepCircle {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: var(--or-surface);
+  border: 2px solid var(--or-blue);
+  color: var(--or-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--or-shadow);
+}
+.stepNum {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--or-gold);
+  color: #1a2540;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stepTitle {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--or-heading);
+  margin-bottom: 6px;
+}
+.stepText {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--or-muted);
+}
+
+@media (max-width: 860px) {
+  .journey {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .journeyTrack,
+  .journeyFill {
+    top: 28px;
+    bottom: 28px;
+    left: 27px;
+    right: auto;
+    width: 3px;
+    height: auto;
+  }
+  .journeyFill {
+    background: linear-gradient(180deg, var(--or-blue), var(--or-gold));
+    transform: scaleY(0);
+    transform-origin: center top;
+  }
+  .journeyOn .journeyFill {
+    transform: scaleY(1);
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 16px;
+    text-align: left;
+    align-items: start;
+  }
+  .stepCircle {
+    margin: 0;
+  }
+}
+
+/* ── rail fallback visual ─────────────────────────────── */
+
+.rail {
+  background: var(--or-surface);
+  border: 1.5px solid var(--or-border);
+  border-radius: 18px;
+  box-shadow: var(--or-shadow);
+  padding: 22px 22px 26px;
+}
+.railHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.railCaption {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--or-muted);
+}
+.railToggle {
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 6px 14px;
+  border: 1.5px solid var(--or-blue);
+  background: transparent;
+  color: var(--or-blue);
+}
+.railToggle[aria-pressed='true'] {
+  background: var(--or-blue);
+  color: #fff;
+}
+.railToggle:focus-visible {
+  outline: 3px solid var(--or-gold);
+  outline-offset: 2px;
+}
+.railTrack {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.railNode {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  border-radius: 14px;
+  border: 2px solid var(--or-blue);
+  background: var(--or-surface);
+  padding: 14px 8px 12px;
+}
+.railNodeManual {
+  border-style: dashed;
+  border-color: var(--or-muted);
+}
+.railNodeName {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--or-heading);
+  line-height: 1.3;
+}
+.railNodeNote {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--or-muted);
+  margin-top: 4px;
+}
+.railArrow {
+  flex: 0 0 auto;
+  color: var(--or-muted);
+  z-index: 1;
+}
+.railLegend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+  font-size: 12px;
+  color: var(--or-muted);
+}
+.railLegend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.railLegend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Travelling dot: leaves the primary rail, fails (gold), continues to the
+   secondary rail and succeeds (green). Positions are % of the track width. */
+.railDot {
+  position: absolute;
+  top: -10px;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border-radius: 50%;
+  background: var(--or-blue);
+  box-shadow: 0 0 0 4px rgba(30, 111, 168, 0.18);
+  z-index: 2;
+  animation: railDotH 7s ease-in-out infinite;
+}
+@keyframes railDotH {
+  0% { left: 4%; background: #1e6fa8; opacity: 0; }
+  6% { opacity: 1; }
+  24% { left: 16.5%; background: #1e6fa8; }
+  32% { left: 16.5%; background: #f5a623; }
+  58% { left: 50%; background: #f5a623; }
+  66% { left: 50%; background: #1a9d63; }
+  90% { left: 50%; background: #1a9d63; opacity: 1; }
+  100% { left: 50%; background: #1a9d63; opacity: 0; }
+}
+
+@media (max-width: 560px) {
+  .railTrack {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .railArrow {
+    align-self: center;
+    transform: rotate(90deg);
+  }
+  .railDot {
+    display: none;
+  }
+}
+
+/* ── status card (operational control) ───────────────── */
+
+.status {
+  background: var(--or-surface);
+  border: 1.5px solid var(--or-border);
+  border-radius: 18px;
+  box-shadow: var(--or-shadow);
+  overflow: hidden;
+}
+.statusHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--or-border);
+  background: var(--or-frame-bar);
+}
+.statusTitle {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--or-heading);
+}
+.statusPill {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #b42318;
+  background: rgba(180, 35, 24, 0.1);
+  border-radius: 20px;
+  padding: 3px 10px;
+}
+:global([data-theme='dark']) .statusPill {
+  color: #ff8b80;
+  background: rgba(255, 139, 128, 0.14);
+}
+.statusBody {
+  padding: 18px 20px 20px;
+}
+.statusRow {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 10px;
+  font-size: 13.5px;
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--or-border);
+}
+.statusRow:last-of-type {
+  border-bottom: 0;
+}
+.statusKey {
+  color: var(--or-muted);
+}
+.statusVal {
+  color: var(--or-text);
+  font-weight: 600;
+}
+.statusActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.statusAction {
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 20px;
+  padding: 6px 12px;
+  border: 1.5px solid var(--or-border);
+  color: var(--or-text);
+  background: var(--or-bg-alt);
+}
+.statusActionPrimary {
+  composes: statusAction;
+  border-color: var(--or-blue);
+  color: var(--or-blue);
+}
+.statusNote {
+  font-size: 12px;
+  color: var(--or-muted);
+  margin-top: 12px;
+}
+
+/* ── portal cards ─────────────────────────────────────── */
+
+.portals {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 860px) {
+  .portals {
+    grid-template-columns: 1fr;
+  }
+}
+.portal {
+  background: var(--or-surface);
+  border: 1.5px solid var(--or-border);
+  border-radius: 16px;
+  padding: 26px 24px 28px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.portal:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--or-shadow);
+  border-color: var(--or-blue);
+}
+.portalIcon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--or-tag-bg);
+  color: var(--or-blue);
+  margin-bottom: 16px;
+}
+.portalTitle {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--or-heading);
+  margin-bottom: 4px;
+}
+.portalFor {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--or-gold-text);
+  margin-bottom: 10px;
+}
+
+/* ── integration cards ────────────────────────────────── */
+
+.mechList {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.mech {
+  background: var(--or-surface);
+  border: 1.5px solid var(--or-border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 14px;
+  align-items: flex-start;
+}
+.mechNum {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--or-tag-bg);
+  color: var(--or-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 900;
+}
+.mechNumGold {
+  composes: mechNum;
+  background: var(--or-gold-tag-bg);
+  color: var(--or-gold-text);
+}
+.mechTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--or-text);
+  margin-bottom: 8px;
+}
+.mechLine {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--or-muted);
+  margin: 0 0 6px;
+}
+.mechLine strong {
+  color: var(--or-text);
+  font-weight: 700;
+}
+.mechLineWhy strong {
+  color: var(--or-gold-text);
+}
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 52px 0 40px;
+  color: var(--or-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--or-border);
+}
+
+/* ── footer ───────────────────────────────────────────── */
+
+.footer {
+  background: linear-gradient(130deg, #071828, #0c3f66);
+  padding: clamp(44px, 6vw, 68px) clamp(16px, 6vw, 80px);
+  text-align: center;
+}
+.footerEyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 10px;
+}
+.footerTitle {
+  font-size: clamp(1.3rem, 2.5vw, 2rem);
+  font-weight: 800;
+  color: #fff;
+  margin: 0 auto 26px;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.pill {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 30px;
+  padding: 10px 20px;
+  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.pill:hover {
+  color: #fff;
+  text-decoration: none;
+  background: rgba(245, 166, 35, 0.18);
+  border-color: #f5a623;
+}
+.pill:focus-visible {
+  outline: 3px solid #f5a623;
+  outline-offset: 2px;
+}
+
+/* ── reduced motion ───────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .step {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .journeyFill {
+    transform: none !important;
+    transition: none !important;
+  }
+  .railDot {
+    animation: none !important;
+    display: none !important;
+  }
+  .portal,
+  .pill {
+    transition: none !important;
+  }
+  .portal:hover {
+    transform: none;
+  }
+}
