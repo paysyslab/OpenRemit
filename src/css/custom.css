@@ -194,3 +194,13 @@
   background-color: rgba(255, 255, 255, 1);
 }
 
+
+/* Wide sequence diagrams scroll horizontally rather than shrinking */
+.docusaurus-mermaid-container {
+  overflow-x: auto;
+  margin-bottom: var(--ifm-leading);
+}
+
+.docusaurus-mermaid-container > svg {
+  max-width: none !important;
+}

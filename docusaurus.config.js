@@ -21,6 +21,11 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',  
 
+  markdown: {
+    mermaid: true,
+  },
+  themes: ['@docusaurus/theme-mermaid'],
+
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],
@@ -58,7 +63,23 @@ const config = {
 
   
   themeConfig: {
-    
+    mermaid: {
+      theme: { light: 'neutral', dark: 'dark' },
+      options: {
+        // Keep sequence diagrams at their natural size (the container scrolls
+        // horizontally) instead of shrinking wide flows to unreadable text.
+        sequence: {
+          useMaxWidth: false,
+          wrap: true,
+          width: 130,
+          actorMargin: 36,
+          messageFontSize: 14,
+          noteFontSize: 13,
+          actorFontSize: 14,
+        },
+      },
+    },
+
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
