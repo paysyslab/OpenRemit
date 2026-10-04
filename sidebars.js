@@ -25,22 +25,22 @@ module.exports = {
       ],
     },
   ],
-  specificationsSidebar: [
+  featuresSidebar: [
     {
       type: 'category',
-      label: 'Specifications',
+      label: 'Features',
       collapsible: false,
-      link: { type: 'doc', id: 'specifications/specifications' },
+      link: { type: 'doc', id: 'features/features' },
       items: [
         {
           type: 'category',
           label: 'Financial Features',
           collapsible: true,
-          link: { type: 'doc', id: 'specifications/financial/financial' },
+          link: { type: 'doc', id: 'features/financial/financial' },
           items: [
             {
               type: 'doc',
-              id: 'specifications/financial/coc-otc-cash-payout',
+              id: 'features/financial/coc-otc-cash-payout',
               label: 'COC / OTC Cash Payout',
             },
           ],
@@ -49,7 +49,7 @@ module.exports = {
           type: 'category',
           label: 'Non-Financial Features',
           collapsible: true,
-          link: { type: 'doc', id: 'specifications/non-financial/non-financial' },
+          link: { type: 'doc', id: 'features/non-financial/non-financial' },
           items: [],
         },
       ],

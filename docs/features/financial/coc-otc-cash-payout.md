@@ -1,50 +1,48 @@
 ---
 hide_title: true
 title: COC / OTC Cash Payout
-description: Cash-over-counter payout of a partner remittance at a BankIslami branch or sub-agent, for pull- and push-integrated partners.
+description: Cash-over-counter payout of a partner remittance at a branch or sub-agent of the Bank, for pull- and push-integrated partners.
 ---
 
-import { Hero } from '@site/src/components/DocKit';
+import { Hero, Capabilities } from '@site/src/components/DocKit';
 
-<Hero title="COC / OTC" accent="Cash Payout" subtitle="The beneficiary collects a partner remittance in cash at a BankIslami branch or sub-agent. Pull and push partners, branch and sub-agent payout." />
+<Hero title="COC / OTC" accent="Cash Payout" subtitle="The beneficiary collects a partner remittance in cash at a branch or sub-agent of the Bank. Pull and push partners, branch and sub-agent payout." />
 
-:::tip[Live]
-Available today in the Branch Portal (Transaction Lookup, Checker Inbox, Transaction History) and the Back Office (Compliance).
-:::
+<Capabilities tags={['Standard', 'Configurable', 'Requires Bank Integration']} />
 
 ## Overview
 
-A beneficiary walks into a branch with a transaction reference. A teller (maker) looks the transaction up, captures the beneficiary's identity details, and a branch checker approves it. OpenRemit then screens the transaction, checks the partner's balance, debits the partner's settlement account and credits the branch's (or sub-agent's) settlement account on CBS. Cash is handed over only after the partner has confirmed the transaction.
+A beneficiary visits a branch or sub-agent with a transaction reference. A Branch Maker looks the transaction up and captures the beneficiary's identity details, and a Branch Checker approves it. OpenRemit then screens the transaction, checks the partner's balance, debits the Partner Settlement Account (GL) and credits the branch's or sub-agent's settlement account on CBS. For pull partners, cash is handed over only after the partner has confirmed the transaction.
 
 ## Significance
 
-- **AML/CFT compliance**: screening through SafeWatch is mandatory for every transaction. A screening hit stops the payout until a compliance officer releases or fails it.
-- **No duplicate payout**: for pull partners, OpenRemit locks the transaction on the partner's system while it is being paid. A reference that is already paid or in progress cannot be looked up again.
-- **Four-eyes control**: the teller who captures the payout cannot approve it. A branch checker (BM or CSM) must approve every payout before any money moves.
-- **Partner funding control**: a balance inquiry on the partner's settlement account is made before posting, so a partner cannot be overdrawn.
-- **Reconciliation**: every payout carries branch code, username and agent details for reporting. Sub-agent payouts are reconciled with the bank offline using OpenRemit reports.
+- **AML/CFT compliance**: every payout is screened by the Screening System before funds move. A screening hit stops the payout until a Compliance Officer releases or fails it.
+- **No duplicate payout**: for pull partners, OpenRemit locks the transaction on the partner's system while it is being paid. A reference that is already paid or in progress cannot be paid again.
+- **Four-eyes control**: the Branch Maker who captures a payout cannot approve it. A Branch Checker must approve every payout before any money moves.
+- **Partner funding control**: a balance inquiry on the Partner Settlement Account (GL) runs before posting, so a partner cannot be overdrawn.
+- **Reconciliation**: every payout records the branch code, user and agent for reporting. Sub-agent payouts are reconciled with the Bank offline using OpenRemit reports.
 - **Auditability**: every step, retry and reversal is logged against the transaction.
 
 ## Usage
 
 ### Who uses it
 
-| Actor | Portal | Role |
+| Role | Portal and menu | What they do |
 |---|---|---|
-| Teller / Maker (CSO, or sub-agent maker) | Branch Portal → **Transaction Lookup** | Finds the transaction and captures beneficiary details |
-| Checker (BM / CSM, or sub-agent checker) | Branch Portal → **Transaction Checker Inbox** | Approves or rejects the payout |
-| Compliance Officer | Back Office → **Compliance** | Manually releases or fails a transaction held at screening |
-| Partner | Partner APIs / Partner Portal → **Transactions** | Supplies the transaction (pull or push) and receives the final status |
+| Branch Maker (branch or sub-agent) | Branch Portal → **Transaction Lookup** | Finds the transaction, verifies the beneficiary's CNIC and captures their details |
+| Branch Checker (branch or sub-agent) | Branch Portal → **Transaction Checker Inbox** | Approves or rejects the payout |
+| Compliance Officer | Back Office → **Compliance** | Manually releases or fails a transaction held by screening |
+| Partner | Partner APIs, or Partner Portal → **Transactions** | Supplies the transaction (pull or push) and receives its final status |
 
 ### Steps
 
-1. **Teller** opens *Transaction Lookup* and searches by Transaction ID / Reference Code.
-2. OpenRemit checks the reference is not already paid and identifies the partner from the reference prefix.
-   - **Pull partner**: OpenRemit fetches and locks the transaction on the partner's system through OpenConnect.
-   - **Push partner**: the transaction was already pushed by the partner and is read from OpenRemit.
-3. The teller checks the beneficiary's physical CNIC, enters the beneficiary details (name, date of birth, CNIC expiry, address) and initiates the payout.
-4. **Checker** reviews it in the *Transaction Checker Inbox* and approves or rejects it. Rejected payouts return to the *Transaction Maker Inbox*.
-5. OpenRemit screens the transaction (SafeWatch), runs a balance inquiry on the partner account, and posts the fund transfer on CBS.
+1. The **Branch Maker** opens *Transaction Lookup* and searches by Transaction ID or Reference Code.
+2. OpenRemit checks the reference has not already been paid and identifies the partner from the reference prefix.
+   - **Pull partner**: OpenRemit fetches the transaction from the partner's system through OpenConnect and locks it there.
+   - **Push partner**: the partner pushed the transaction earlier, so it is read from OpenRemit.
+3. The Branch Maker checks the beneficiary's physical CNIC, enters the beneficiary's details (name, date of birth, CNIC expiry, address) and initiates the payout.
+4. The **Branch Checker** reviews it in the *Transaction Checker Inbox* and approves or rejects it. Rejected payouts return to the *Transaction Maker Inbox*.
+5. OpenRemit screens the transaction, runs a balance inquiry on the Partner Settlement Account (GL), and posts the fund transfer on CBS.
 6. For pull partners, OpenRemit calls the partner's *Confirm Transaction* API. Cash is handed over **only after** confirmation succeeds.
 7. The completed payout appears in *Transaction History*, where the e-PRC and Bank Receipt can be generated.
 
@@ -52,23 +50,39 @@ A beneficiary walks into a branch with a transaction reference. A teller (maker)
 
 | | Branch | Sub-agent |
 |---|---|---|
-| Users | Branch staff validated against Active Directory; roles CSO (maker) and BM / CSM (checker) | Defined in Back Office → SubAgents and assigned a maker or checker role |
-| Account credited | Branch / teller settlement account | The sub-agent's single settlement account held at BankIslami |
-| Reconciliation | Reports from OpenRemit | Offline between sub-agent and bank, using OpenRemit reports |
+| Users | Branch users, validated against the Bank Identity Provider (e.g. Active Directory) | Sub-agent users, created in Back Office → **SubAgents** with a maker or checker role |
+| Account credited | Branch / teller settlement account | The sub-agent's settlement account, held at the Bank |
+| Reconciliation | OpenRemit reports | Offline between the sub-agent and the Bank, using OpenRemit reports |
 
 ### APIs involved
 
 | Interface | API | Used for |
 |---|---|---|
-| Partner (pull) | Fetch & lock / Confirm Transaction / Unlock Transaction | Retrieve and lock the transaction; confirm payout or release it |
-| API Gateway (push) | Post Transactions / Transaction Inquiry | Partner pushes the transaction and later polls its status |
-| Bank ESB | SafeWatch screening | AML/CFT and fraud screening |
-| Bank ESB | Balance Inquiry | Partner settlement-account balance check |
-| Bank ESB | Internal Fund Transfer / Fund Transfer Reversal | Debit partner, credit branch or sub-agent; reverse if partner confirmation fails |
+| Partner system (pull) | Fetch & lock, Confirm Transaction, Unlock Transaction | Retrieve and lock the transaction, then confirm the payout or release it |
+| API Gateway (push) | Post Transactions | Partner pushes the transaction |
+| API Gateway (push) | Transaction Inquiry | Partner polls the transaction's status |
+| Bank Integration Layer (ESB) | Screening | AML/CFT and sanctions screening |
+| Bank Integration Layer (ESB) | Balance Inquiry | Partner Settlement Account (GL) balance check |
+| Bank Integration Layer (ESB) | Internal Fund Transfer, Fund Transfer Reversal | Debit the partner and credit the branch or sub-agent; reverse if partner confirmation fails |
 
-:::note
-The position of screening (before or after the fund transfer) and whether partner notification is used are configured per partner in the scheduler's processing steps. The flow below shows the standard order: screening before posting.
-:::
+## Configuration
+
+Processing is driven by a per-partner scheduler configuration.
+
+| Parameter | Description | Default |
+|---|---|---|
+| Scheduler interval | How often OpenRemit polls a pull partner for transactions | default: every 5 minutes |
+| Fetch count | Transactions fetched per scheduler run | default: 50 |
+| Processing steps | Ordered steps run for each transaction. Title Fetch does not apply to cash payout | default: Screening → Balance Inquiry → Fund Transfer → Partner Notify |
+| Screening position | Run screening before the fund transfer (PRE) or after it (POST) | default: PRE |
+| Screening by transaction type | Screening can be switched off per transaction type; the Bank then carries the liability | default: enabled |
+| Balance inquiry | Pre-transfer balance check on the Partner Settlement Account (GL). Disabling it requires risk approval | default: enabled |
+| Partner notify | Confirm / Unlock calls to the partner. Mandatory for pull partners' cash payouts; push partners can rely on Transaction Inquiry or webhooks instead | default: enabled |
+| Unlock on rejection | Release a rejected cash transaction back to the partner | default: enabled |
+| Retry attempts | Retries per step on timeout or transient failure before the transaction fails | default: 3 |
+| Compliance review window | Time a Compliance Officer has to act on a screening hit before the payout fails | default: TBD |
+
+Changes to the scheduler take effect on its next run. Transactions already in progress finish with the configuration they started with.
 
 ## Sequence Diagram
 
@@ -77,8 +91,8 @@ The position of screening (before or after the fund transfer) and whether partne
 ```mermaid
 sequenceDiagram
     autonumber
-    actor T as Teller/Maker
-    actor C as Checker
+    actor BM as Branch Maker
+    actor BC as Branch Checker
     participant P as Partner
     participant GW as API Gateway
     participant OR as OpenRemit (OR)
@@ -91,7 +105,7 @@ sequenceDiagram
         GW-->>P: Acknowledgement
     end
 
-    T->>OR: Transaction Lookup (reference)
+    BM->>OR: Transaction Lookup (reference)
     OR->>OR: Check not already paid, identify partner by reference prefix
     alt Pull partner
         OR->>OC: Fetch transaction
@@ -102,17 +116,17 @@ sequenceDiagram
     else Push partner
         OR->>OR: Load pushed transaction (PENDING)
     end
-    OR-->>T: Sender, receiver and transaction details
+    OR-->>BM: Sender, receiver and transaction details
 
-    T->>OR: Beneficiary CNIC details, initiate payout
+    BM->>OR: Beneficiary CNIC details, initiate payout
     OR->>OR: Store as INITIATED
-    OR->>C: Transaction Checker Inbox (Pending)
-    alt Checker rejects
-        C->>OR: Reject with reason
-        OR-->>T: Returned to Transaction Maker Inbox
-        Note over T,OR: Flow ends
-    else Checker approves
-        C->>OR: Approve
+    OR->>BC: Transaction Checker Inbox (Pending)
+    alt Branch Checker rejects
+        BC->>OR: Reject with reason
+        OR-->>BM: Returned to Transaction Maker Inbox
+        Note over BM,OR: Flow ends
+    else Branch Checker approves
+        BC->>OR: Approve
         Note over OR: Continue to Part 2
     end
 ```
@@ -122,25 +136,25 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    actor T as Teller/Maker
+    actor BM as Branch Maker
     actor CO as Compliance Officer
     participant OR as OpenRemit (OR)
     participant OC as OpenConnect (OC)
-    participant ESB
-    participant SW as SafeWatch
+    participant ESB as Bank Integration Layer (ESB)
+    participant SS as Screening System
     participant CBS
     participant P as Partner
 
     OR->>OC: Screening request
     OC->>ESB: Screening request
-    ESB->>SW: Screen remitter and beneficiary
-    SW-->>OR: PASS / FAIL (via ESB, OC)
+    ESB->>SS: Screen remitter and beneficiary
+    SS-->>OR: PASS / FAIL (via ESB, OC)
     alt Screening FAIL
         OR->>OR: Park in Back Office Compliance
-        OR-->>T: Screening failure, stop processing
-        alt Released in time
+        OR-->>BM: Screening failure, stop processing
+        alt Released within the review window
             CO->>OR: Manually Release
-        else Failed, or time limit expires
+        else Marked as failed, or review window expires
             CO->>OR: Mark as Failed
             OR->>OC: Unlock Transaction (pull)
             OC->>P: Unlock Transaction
@@ -148,7 +162,7 @@ sequenceDiagram
         end
     end
 
-    OR->>OC: Balance Inquiry (partner settlement account)
+    OR->>OC: Balance Inquiry (Partner Settlement Account)
     OC->>ESB: Balance Inquiry
     ESB->>CBS: Balance Inquiry
     CBS-->>OR: Available balance (via ESB, OC)
@@ -163,27 +177,27 @@ sequenceDiagram
     OC->>ESB: Fund Transfer
     ESB->>CBS: Debit partner, credit branch or sub-agent settlement
     CBS-->>OR: Posting result (via ESB, OC)
-    alt Fund transfer failed, or timed out after retry
+    alt Fund transfer failed, or timed out after retries
         OR->>OR: Mark FAILED
-        OR->>OC: Unlock Transaction
+        OR->>OC: Unlock Transaction (pull)
         OC->>P: Unlock Transaction
-        OR-->>T: Failure message
+        OR-->>BM: Failure message
         Note over OR: Flow ends
     else Fund transfer successful
         OR->>OR: Mark COMPLETED
         opt Pull partner
             OR->>OC: Confirm Transaction
             OC->>P: Confirm Transaction
-            alt Confirmation fails, or times out after retry
+            alt Confirmation fails, or times out after retries
                 OR->>OC: Fund Transfer Reversal (store-and-forward)
-                OC->>ESB: Reverse FT
+                OC->>ESB: Reverse fund transfer
                 ESB->>CBS: Debit branch, credit partner
                 OR->>OR: Mark FAILED
-                OR-->>T: Failure, do not pay cash
+                OR-->>BM: Failure, do not pay cash
                 Note over OR: Flow ends
             end
         end
-        OR-->>T: Success, hand over cash
+        OR-->>BM: Success, hand over cash
     end
 
     opt Push partner
@@ -203,23 +217,22 @@ sequenceDiagram
 | Lookup | Transaction previously failed | Re-fetched from the partner (pull) or reloaded from OpenRemit (push); details shown |
 | Lookup | Transaction already paid | Error shown: transaction already paid |
 | Screening | PASS | Flow continues |
-| Screening | FAIL | Parked in Back Office Compliance; the compliance officer releases it or marks it failed |
-| Screening | Timeout | Marked failed; partner notified or transaction released (pull) |
+| Screening | FAIL | Held in Back Office Compliance; the Compliance Officer releases it or marks it failed |
+| Screening | Timeout | Marked failed; partner notified, or transaction released (pull) |
 | Balance inquiry | Balance covers the amount | Flow continues |
-| Balance inquiry | Balance below the amount, or inquiry failed | Marked failed; partner notified or transaction released |
-| Balance inquiry | Timeout | Retried; if retries are exhausted, marked failed and partner notified or transaction released |
+| Balance inquiry | Balance below the amount, or inquiry failed | Marked failed; partner notified, or transaction released |
+| Balance inquiry | Timeout | Retried up to the configured attempts; then marked failed and the partner notified, or transaction released |
 | Fund transfer | Success | Marked completed; partner notified |
-| Fund transfer | Failed | Marked failed; partner notified or transaction released (pull) |
-| Fund transfer | Timeout | Retried; if still timing out, marked failed with "FT timeout". If CBS did post, the branch reverses it on CBS during reconciliation |
+| Fund transfer | Failed | Marked failed; partner notified, or transaction released (pull) |
+| Fund transfer | Timeout | Retried; if still timing out, marked failed with reason "FT timeout" and the partner notified, or transaction released |
 | Partner confirmation (pull) | Success | Completed; cash is handed over |
-| Partner confirmation (pull) | Failed | Marked failed; FT reversed via store-and-forward (debit branch GL, credit partner) |
-| Partner confirmation (pull) | Timeout | Retried; if retries are exhausted, FT reversed via store-and-forward and marked failed with "Notify partner timeout". The bank informs the partner daily of such cases |
+| Partner confirmation (pull) | Failed | Marked failed; the fund transfer is reversed through store-and-forward (debit branch, credit partner) |
+| Partner confirmation (pull) | Timeout | Retried; if retries run out, the fund transfer is reversed through store-and-forward and the transaction marked failed with reason "Notify partner timeout" |
 
 :::caution[TBD]
-The specification leaves these values open:
-- The number of balance-inquiry retries before a transaction fails.
-- The time a compliance officer has to release a screened-out COC transaction before it fails automatically.
-- Whether sub-agent users sign in to the Branch Portal the same way as branch users. Branch users are validated against Active Directory; sub-agent users are managed in the Back Office.
+The source specification leaves these points open:
+- The default compliance review window for a cash payout held by screening.
+- Whether sub-agent users sign in to the Branch Portal the same way as branch users. Branch users are validated against the Bank Identity Provider; sub-agent users are managed in the Back Office.
 :::
 
 ## Related

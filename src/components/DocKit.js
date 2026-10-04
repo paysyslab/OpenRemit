@@ -62,7 +62,27 @@ export const Hero =({ title, accent, subtitle }) => (
   </div>
 );
 
-export const SectionHeading = ({ children }) => (
+/* Capability tags shown at the top of every feature page. */
+const CAPABILITIES = {
+  Standard: { bg: '#e8f2fa', fg: '#1E6FA8', title: 'Always on' },
+  Configurable: { bg: '#fff3dc', fg: '#9a5b00', title: 'Can be enabled, disabled or tuned per deployment' },
+  'Requires Bank Integration': { bg: '#e6f6ee', fg: '#167a4a', title: 'Depends on a bank-side API' },
+};
+
+export const Capabilities = ({ tags }) => (
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, margin: '-8px 0 24px' }}>
+    {tags.map((t) => {
+      const c = CAPABILITIES[t] || CAPABILITIES.Standard;
+      return (
+        <span key={t} title={c.title} style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', color: c.fg, background: c.bg, border: `1px solid ${c.fg}33`, padding: '4px 12px', borderRadius: 20, whiteSpace: 'nowrap' }}>
+          {t}
+        </span>
+      );
+    })}
+  </div>
+);
+
+export const SectionHeading =({ children }) => (
   <div style={s.sectionHeading}>{children}<div style={s.line} /></div>
 );
 
