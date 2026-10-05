@@ -32,35 +32,35 @@ export const DeveloperWorkflow = () => {
   useEffect(() => { const t = setTimeout(() => setHv(true), 100); return () => clearTimeout(t); }, []);
 
   const s = useMemo(() => {
-    const border = '1.5px solid #e2e8f0';
+    const border = '1.5px solid var(--or-border)';
     return {
-      root: { fontFamily: "'Plus Jakarta Sans','Segoe UI',sans-serif", color: '#1a2540', paddingBottom: 64 },
+      root: { fontFamily: "'Plus Jakarta Sans','Segoe UI',sans-serif", color: 'var(--or-text)', paddingBottom: 64 },
       header: { background: 'linear-gradient(130deg, #0c3f66 0%, #1E6FA8 60%, #1a5e90 100%)', borderRadius: 16, padding: '32px 32px 28px', marginBottom: 28, position: 'relative', overflow: 'hidden' },
       glow1: { position: 'absolute', top: -50, right: -50, width: 200, height: 200, background: 'rgba(245,166,35,0.10)', borderRadius: '50%', pointerEvents: 'none' },
       glow2: { position: 'absolute', bottom: -70, right: 100, width: 150, height: 150, background: 'rgba(255,255,255,0.05)', borderRadius: '50%', pointerEvents: 'none' },
       h1: { fontSize: 'clamp(1.6rem, 4vw, 2.2rem)', fontWeight: 800, color: '#fff', lineHeight: 1.15, letterSpacing: '-0.02em', margin: '0 0 10px' },
       em: { fontStyle: 'normal', color: '#F5A623' },
       sub: { fontSize: 14, color: 'rgba(255,255,255,0.60)', lineHeight: 1.65, maxWidth: 620, margin: 0 },
-      sectionHeading: { display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8896b0', margin: '44px 0 20px' },
-      line: { flex: 1, height: 1, background: '#e2e8f0' },
-      card: { background: '#fff', border, borderRadius: 14, padding: '24px 28px', marginBottom: 20 },
-      endpointCard: { background: '#fff', border, borderRadius: 14, padding: '22px 26px', marginBottom: 16 },
+      sectionHeading: { display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--or-text-faint)', margin: '44px 0 20px' },
+      line: { flex: 1, height: 1, background: 'var(--or-border)' },
+      card: { background: 'var(--or-surface)', border, borderRadius: 14, padding: '24px 28px', marginBottom: 20 },
+      endpointCard: { background: 'var(--or-surface)', border, borderRadius: 14, padding: '22px 26px', marginBottom: 16 },
       endpointHeader: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 },
-      methodBadge: { fontSize: 11, fontWeight: 800, letterSpacing: '0.1em', color: '#1E6FA8', background: '#e8f2fa', padding: '4px 10px', borderRadius: 6 },
-      endpointPath: { fontSize: 13, fontWeight: 600, color: '#5a6a88', fontFamily: 'monospace' },
-      label: { fontSize: 12, fontWeight: 700, color: '#8896b0', marginBottom: 8, letterSpacing: '0.05em', textTransform: 'uppercase' },
-      codeBlock: { background: '#0c1e35', color: '#e8f2fa', padding: '18px 20px', borderRadius: 10, fontSize: 12.5, fontFamily: 'monospace', lineHeight: 1.7, overflowX: 'auto', margin: '0 0 16px', border: '1.5px solid #1a3550' },
-      inlineCode: { background: '#e8f2fa', color: '#1E6FA8', padding: '2px 7px', borderRadius: 5, fontSize: 12.5, fontWeight: 600, fontFamily: 'monospace' },
-      responseLabel: { fontSize: 13, fontWeight: 700, color: '#1a2540', marginBottom: 10, marginTop: 16 },
-      successBadge: { display: 'inline-block', fontSize: 11, fontWeight: 700, color: '#10b981', background: '#d1fae5', padding: '3px 10px', borderRadius: 20, marginLeft: 8 },
-      failBadge: { display: 'inline-block', fontSize: 11, fontWeight: 700, color: '#ef4444', background: '#fee2e2', padding: '3px 10px', borderRadius: 20, marginLeft: 8 },
+      methodBadge: { fontSize: 11, fontWeight: 800, letterSpacing: '0.1em', color: 'var(--or-blue)', background: 'var(--or-blue-soft)', padding: '4px 10px', borderRadius: 6 },
+      endpointPath: { fontSize: 13, fontWeight: 600, color: 'var(--or-text)', fontFamily: 'monospace', background: 'var(--or-surface-2)', border: '1px solid var(--or-border)', padding: '3px 10px', borderRadius: 6, wordBreak: 'break-all' },
+      label: { fontSize: 12, fontWeight: 700, color: 'var(--or-text-faint)', marginBottom: 8, letterSpacing: '0.05em', textTransform: 'uppercase' },
+      codeBlock: { background: 'var(--or-code-bg)', color: 'var(--or-code-text)', padding: '18px 20px', borderRadius: 10, fontSize: 12.5, fontFamily: 'monospace', lineHeight: 1.7, overflowX: 'auto', margin: '0 0 16px', border: '1.5px solid var(--or-code-border)' },
+      inlineCode: { background: 'var(--or-blue-soft)', color: 'var(--or-blue)', padding: '2px 7px', borderRadius: 5, fontSize: 12.5, fontWeight: 600, fontFamily: 'monospace' },
+      responseLabel: { fontSize: 13, fontWeight: 700, color: 'var(--or-text)', marginBottom: 10, marginTop: 16 },
+      successBadge: { display: 'inline-block', fontSize: 11, fontWeight: 700, color: 'var(--or-success)', background: 'var(--or-success-soft)', padding: '3px 10px', borderRadius: 20, marginLeft: 8 },
+      failBadge: { display: 'inline-block', fontSize: 11, fontWeight: 700, color: 'var(--or-danger)', background: 'var(--or-danger-soft)', padding: '3px 10px', borderRadius: 20, marginLeft: 8 },
     };
   }, []);
 
   const Tag = ({ children, gold = false }) => (
-    <div style={{ display:'inline-flex', alignItems:'center', gap:7, background: gold?'rgba(245,166,35,0.12)':'#e8f2fa', border: gold?'1px solid rgba(245,166,35,0.25)':'none', borderRadius:30, padding:'5px 14px', marginBottom:16 }}>
-      <span style={{ width:6, height:6, borderRadius:'50%', background: gold?'#F5A623':'#1E6FA8', display:'inline-block' }} />
-      <span style={{ fontSize:11, fontWeight:700, letterSpacing:'0.13em', textTransform:'uppercase', color: gold?'#F5A623':'#1E6FA8' }}>{children}</span>
+    <div style={{ display:'inline-flex', alignItems:'center', gap:7, background: gold?'var(--or-gold-soft)':'var(--or-blue-soft)', border: gold?'1px solid rgba(245,166,35,0.25)':'none', borderRadius:30, padding:'5px 14px', marginBottom:16 }}>
+      <span style={{ width:6, height:6, borderRadius:'50%', background: gold?'var(--or-gold)':'#1E6FA8', display:'inline-block' }} />
+      <span style={{ fontSize:11, fontWeight:700, letterSpacing:'0.13em', textTransform:'uppercase', color: gold?'var(--or-gold-text)':'var(--or-blue)' }}>{children}</span>
     </div>
   );
 
@@ -315,8 +315,8 @@ export const DeveloperWorkflow = () => {
 
               {/* Note */}
               {ep.note && (
-                <div style={{ fontSize: 13.5, lineHeight: 1.7, color: '#6b7a99', marginTop: 12, padding: '12px 16px', background: '#f8fafc', borderRadius: 8, borderLeft: '3px solid #1E6FA8' }}>
-                  <strong style={{ color: '#1a2540', fontWeight: 600 }}>Note: </strong>{ep.note}
+                <div style={{ fontSize: 13.5, lineHeight: 1.7, color: 'var(--or-text-muted)', marginTop: 12, padding: '12px 16px', background: 'var(--or-surface-2)', borderRadius: 8, borderLeft: '3px solid #1E6FA8' }}>
+                  <strong style={{ color: 'var(--or-text)', fontWeight: 600 }}>Note: </strong>{ep.note}
                 </div>
               )}
 

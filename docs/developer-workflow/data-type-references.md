@@ -32,34 +32,34 @@ export const DataTypeReferences = () => {
   useEffect(() => { const t = setTimeout(() => setHv(true), 100); return () => clearTimeout(t); }, []);
 
   const s = useMemo(() => {
-    const border = '1.5px solid #e2e8f0';
+    const border = '1.5px solid var(--or-border)';
     return {
-      root: { fontFamily: "'Plus Jakarta Sans','Segoe UI',sans-serif", color: '#1a2540', paddingBottom: 64 },
+      root: { fontFamily: "'Plus Jakarta Sans','Segoe UI',sans-serif", color: 'var(--or-text)', paddingBottom: 64 },
       header: { background: 'linear-gradient(130deg, #0c3f66 0%, #1E6FA8 60%, #1a5e90 100%)', borderRadius: 16, padding: '32px 32px 28px', marginBottom: 28, position: 'relative', overflow: 'hidden' },
       glow1: { position: 'absolute', top: -50, right: -50, width: 200, height: 200, background: 'rgba(245,166,35,0.10)', borderRadius: '50%', pointerEvents: 'none' },
       glow2: { position: 'absolute', bottom: -70, right: 100, width: 150, height: 150, background: 'rgba(255,255,255,0.05)', borderRadius: '50%', pointerEvents: 'none' },
       h1: { fontSize: 'clamp(1.6rem, 4vw, 2.2rem)', fontWeight: 800, color: '#fff', lineHeight: 1.15, letterSpacing: '-0.02em', margin: '0 0 10px' },
       em: { fontStyle: 'normal', color: '#F5A623' },
       sub: { fontSize: 14, color: 'rgba(255,255,255,0.60)', lineHeight: 1.65, maxWidth: 620, margin: 0 },
-      sectionHeading: { display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8896b0', margin: '44px 0 20px' },
-      line: { flex: 1, height: 1, background: '#e2e8f0' },
-      card: { background: '#fff', border, borderRadius: 14, padding: '24px 28px', marginBottom: 20 },
-      p: { fontSize: 14.5, lineHeight: 1.8, color: '#5a6a88', margin: '0 0 12px' },
+      sectionHeading: { display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--or-text-faint)', margin: '44px 0 20px' },
+      line: { flex: 1, height: 1, background: 'var(--or-border)' },
+      card: { background: 'var(--or-surface)', border, borderRadius: 14, padding: '24px 28px', marginBottom: 20 },
+      p: { fontSize: 14.5, lineHeight: 1.8, color: 'var(--or-text-muted)', margin: '0 0 12px' },
       ul: { margin: '0 0 0 20px', padding: 0, listStylePosition: 'outside' },
-      li: { fontSize: 14.5, lineHeight: 1.8, color: '#5a6a88', marginBottom: 8 },
+      li: { fontSize: 14.5, lineHeight: 1.8, color: 'var(--or-text-muted)', marginBottom: 8 },
       tableWrap: { margin: '8px 0', overflowX: 'auto' },
-      table: { width: '100%', borderCollapse: 'collapse', background: '#fff', border, borderRadius: 10, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' },
-      th: { background: '#f8fafc', color: '#1a2540', fontSize: 13, fontWeight: 700, textAlign: 'left', padding: '14px 20px', borderBottom: '1.5px solid #e2e8f0' },
-      td: { fontSize: 13.5, color: '#5a6a88', padding: '13px 20px', borderBottom: '1px solid #f0f4f8', lineHeight: 1.7 },
-      code: { background: '#e8f2fa', color: '#1E6FA8', padding: '2px 8px', borderRadius: 5, fontSize: 12.5, fontWeight: 600, fontFamily: 'monospace' },
-      codeBlock: { background: '#0c1e35', color: '#e8f2fa', padding: '20px 24px', borderRadius: 12, fontSize: 13, fontFamily: 'monospace', lineHeight: 1.8, overflowX: 'auto', margin: '0 0 20px', border: '1.5px solid #1a3550' },
+      table: { width: '100%', borderCollapse: 'collapse', background: 'var(--or-surface)', border, borderRadius: 10, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' },
+      th: { background: 'var(--or-surface-2)', color: 'var(--or-text)', fontSize: 13, fontWeight: 700, textAlign: 'left', padding: '14px 20px', borderBottom: '1.5px solid var(--or-border)' },
+      td: { fontSize: 13.5, color: 'var(--or-text-muted)', padding: '13px 20px', borderBottom: '1px solid var(--or-border)', lineHeight: 1.7 },
+      code: { background: 'var(--or-blue-soft)', color: 'var(--or-blue)', padding: '2px 8px', borderRadius: 5, fontSize: 12.5, fontWeight: 600, fontFamily: 'monospace' },
+      codeBlock: { background: 'var(--or-code-bg)', color: 'var(--or-code-text)', padding: '20px 24px', borderRadius: 12, fontSize: 13, fontFamily: 'monospace', lineHeight: 1.8, overflowX: 'auto', margin: '0 0 20px', border: '1.5px solid var(--or-code-border)' },
     };
   }, []);
 
   const Tag = ({ children, gold = false }) => (
-    <div style={{ display:'inline-flex', alignItems:'center', gap:7, background: gold?'rgba(245,166,35,0.12)':'#e8f2fa', border: gold?'1px solid rgba(245,166,35,0.25)':'none', borderRadius:30, padding:'5px 14px', marginBottom:16 }}>
-      <span style={{ width:6, height:6, borderRadius:'50%', background: gold?'#F5A623':'#1E6FA8', display:'inline-block' }} />
-      <span style={{ fontSize:11, fontWeight:700, letterSpacing:'0.13em', textTransform:'uppercase', color: gold?'#F5A623':'#1E6FA8' }}>{children}</span>
+    <div style={{ display:'inline-flex', alignItems:'center', gap:7, background: gold?'var(--or-gold-soft)':'var(--or-blue-soft)', border: gold?'1px solid rgba(245,166,35,0.25)':'none', borderRadius:30, padding:'5px 14px', marginBottom:16 }}>
+      <span style={{ width:6, height:6, borderRadius:'50%', background: gold?'var(--or-gold)':'#1E6FA8', display:'inline-block' }} />
+      <span style={{ fontSize:11, fontWeight:700, letterSpacing:'0.13em', textTransform:'uppercase', color: gold?'var(--or-gold-text)':'var(--or-blue)' }}>{children}</span>
     </div>
   );
 
@@ -218,7 +218,7 @@ export const DataTypeReferences = () => {
           {renderTable(['Field', 'Validation Type', 'Result', 'Message'], validationOutput, (r) => [
             <code style={s.code}>{r.field}</code>,
             r.validationType,
-            <span style={{ fontWeight: 600, color: r.result === 'Pass' ? '#10b981' : '#ef4444' }}>{r.result}</span>,
+            <span style={{ fontWeight: 600, color: r.result === 'Pass' ? 'var(--or-success)' : 'var(--or-danger)' }}>{r.result}</span>,
             r.message,
           ])}
         </Reveal>

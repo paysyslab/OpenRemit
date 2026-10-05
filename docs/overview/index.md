@@ -5,7 +5,7 @@ hide_table_of_contents: true
 ---
 
 import React, { useEffect, useRef, useState } from 'react';
-import useBaseUrl from '@docusaurus/useBaseUrl';
+import { DocImage } from '@site/src/components/DocKit';
 import Link from '@docusaurus/Link';
 import s from '@site/src/components/overview/overview.module.css';
 
@@ -13,15 +13,15 @@ export const OpenRemitOverview = () => {
 
   /* ── image paths ── */
   const IMG = {
-    hero:       useBaseUrl('/img/overview/overview-hero.png'),
-    features:   useBaseUrl('/img/overview/features.png'),
-    file:       useBaseUrl('/img/overview/file.png'),
-    globe:      useBaseUrl('/img/overview/globe.png'),
-    highLevel:  useBaseUrl('/img/overview/highLevel.png'),
-    partners:   useBaseUrl('/img/overview/multiplePartners.png'),
-    pushPull:   useBaseUrl('/img/overview/pushPull.png'),
-    singlePlat: useBaseUrl('/img/overview/singlePlatform.png'),
-    subagent:   useBaseUrl('/img/overview/subagent.png'),
+    hero:       '/img/overview/overview-hero.png',
+    features:   '/img/overview/features.png',
+    file:       '/img/overview/file.png',
+    globe:      '/img/overview/globe.png',
+    highLevel:  '/img/overview/highLevel.png',
+    partners:   '/img/overview/multiplePartners.png',
+    pushPull:   '/img/overview/pushPull.png',
+    singlePlat: '/img/overview/singlePlatform.png',
+    subagent:   '/img/overview/subagent.png',
   };
 
   /* ── reduced motion ── */
@@ -64,38 +64,6 @@ export const OpenRemitOverview = () => {
   );
 
   const SectionH2 = ({ children }) => <h2 className={s.h2}>{children}</h2>;
-
-  const Dots = () => (
-    <div className={s.frameDots} aria-hidden="true">
-      {['#fc5f57', '#fdbc2c', '#33c748'].map(c => <span key={c} style={{ background: c }} />)}
-    </div>
-  );
-
-  /* image in macOS-style frame */
-  const Frame = ({ src, alt, title }) => (
-    <div className={s.frame}>
-      <div className={s.frameBar}>
-        <Dots />
-        <span className={s.frameTitle}>{title}</span>
-      </div>
-      <div className={s.frameBody}>
-        <img src={src} alt={alt} loading="lazy" />
-      </div>
-    </div>
-  );
-
-  /* dark frame variant, kept for dark-background images */
-  const DarkFrame = ({ src, alt, title }) => (
-    <div className={s.darkFrame}>
-      <div className={s.frameBar}>
-        <Dots />
-        <span className={s.frameTitle}>{title}</span>
-      </div>
-      <div className={s.frameBody}>
-        <img src={src} alt={alt} loading="lazy" />
-      </div>
-    </div>
-  );
 
   const Icon = ({ children, size = 22 }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -170,9 +138,9 @@ export const OpenRemitOverview = () => {
           ))}
         </div>
         <div className={s.railLegend} aria-hidden="true">
-          <span><i style={{ background: '#1e6fa8' }} />in flight</span>
-          <span><i style={{ background: '#f5a623' }} />rail failed</span>
-          <span><i style={{ background: '#1a9d63' }} />paid</span>
+          <span><i style={{ background: 'var(--or-blue)' }} />in flight</span>
+          <span><i style={{ background: 'var(--or-gold)' }} />rail failed</span>
+          <span><i style={{ background: 'var(--or-success)' }} />paid</span>
         </div>
       </div>
     );
@@ -235,7 +203,7 @@ export const OpenRemitOverview = () => {
             </div>
           </div>
           <div className={`${s.media} ${s.reveal} ${hv ? s.revealOn : ''}`} style={{ transitionDelay: '200ms' }}>
-            <img className={s.heroImg} src={IMG.hero} alt="Illustration of the OpenRemit dashboard in front of a world map, with families receiving money sent from abroad" />
+            <DocImage kind="illustration" eager zoom={false} src={IMG.hero} style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.35)' }} alt="Illustration of the OpenRemit dashboard in front of a world map, with families receiving money sent from abroad" />
           </div>
         </div>
       </div>
@@ -253,7 +221,7 @@ export const OpenRemitOverview = () => {
               { title: 'Delivers and closes the loop.', text: "Funds are credited within the bank, sent to another bank over your country's domestic payment rails, or paid as cash over the counter. Then the partner is told the outcome and the regulatory certificate is ready." },
             ].map((c, i) => (
               <div key={c.title} className={s.card}>
-                <div className={s.cardDot} style={{ background: i === 2 ? '#F5A623' : '#1E6FA8' }} />
+                <div className={s.cardDot} style={{ background: i === 2 ? 'var(--or-gold)' : 'var(--or-blue)' }} />
                 <div className={s.cardTitle}>{c.title}</div>
                 <div className={s.cardText}>{c.text}</div>
               </div>
@@ -262,7 +230,7 @@ export const OpenRemitOverview = () => {
           <p className={s.lead}>
             Behind the scenes, OpenConnect, Paysys' middleware, handles every conversation with your core banking system, screening system and local payment switches. That leaves OpenRemit free to focus on one thing: getting each remittance home correctly.
           </p>
-          <Frame src={IMG.features} title="OpenRemit at a glance" alt="Diagram of OpenRemit at the centre of its capabilities: inward remittances, FT, IBFT and cash transactions, AML/CFT screening and payment gateway connectivity" />
+          <DocImage kind="illustration" src={IMG.features} title="OpenRemit at a glance" alt="Diagram of OpenRemit at the centre of its capabilities: inward remittances, FT, IBFT and cash transactions, AML/CFT screening and payment gateway connectivity" />
         </Reveal>
       </div>
 
@@ -289,7 +257,7 @@ export const OpenRemitOverview = () => {
         {/* a. multi-partner */}
         <Reveal className={s.row}>
           <div className={s.media}>
-            <Frame src={IMG.partners} title="Multi-Partner" alt="Illustration of four people each holding up a puzzle piece that joins into one row, representing many partners connected to one platform" />
+            <DocImage kind="illustration" src={IMG.partners} title="Multi-Partner" alt="Illustration of four people each holding up a puzzle piece that joins into one row, representing many partners connected to one platform" />
           </div>
           <div>
             <Tag>Multi-Partner</Tag>
@@ -306,14 +274,14 @@ export const OpenRemitOverview = () => {
             <p className={s.body}>Not every beneficiary lives near one of your branches. Sub-agents, whether other banks or exchange companies, can pay out cash on your behalf through the same Branch Portal. They get their own users, their own settlement account and the same maker-checker controls. Reconciliation comes straight from OpenRemit's reports.</p>
           </div>
           <div className={s.media}>
-            <Frame src={IMG.subagent} title="Sub-agent Network" alt="Illustration of a family collecting a cash remittance from a sub-agent teller at a counter" />
+            <DocImage kind="illustration" src={IMG.subagent} title="Sub-agent Network" alt="Illustration of a family collecting a cash remittance from a sub-agent teller at a counter" />
           </div>
         </Reveal>
 
         {/* c. compliance */}
         <Reveal className={s.row}>
           <div className={s.media}>
-            <Frame src={IMG.singlePlat} title="Compliance" alt="Illustration of a magnifying glass over a transaction list, highlighting AML and sanctions checks" />
+            <DocImage kind="illustration" src={IMG.singlePlat} title="Compliance" alt="Illustration of a magnifying glass over a transaction list, highlighting AML and sanctions checks" />
           </div>
           <div>
             <Tag>Compliance</Tag>
@@ -356,7 +324,7 @@ export const OpenRemitOverview = () => {
           <p className={s.lead}>
             Partners talk to a single API Gateway. OpenRemit owns the remittance logic: partners, rules, screening decisions and transaction state. OpenConnect handles integration with your bank's middleware, core banking, screening system and domestic payment switches. On top sit three portals: Back Office for operations and compliance, Branch Portal for cash payout, and Partner Portal for partners to track and manage their own transactions.
           </p>
-          <Frame src={IMG.highLevel} title="High-level architecture" alt="Architecture diagram: partner systems and Partner Portals connect through a centralized API gateway and unified layer to OpenConnect, which integrates with core banking, payment switches, screening and SMS, with monitoring, logging and reporting alongside" />
+          <DocImage kind="diagram" src={IMG.highLevel} title="High-level architecture" alt="Architecture diagram: partner systems and Partner Portals connect through a centralized API gateway and unified layer to OpenConnect, which integrates with core banking, payment switches, screening and SMS, with monitoring, logging and reporting alongside" />
         </Reveal>
       </div>
 
@@ -393,7 +361,7 @@ export const OpenRemitOverview = () => {
 
           <div className={s.split}>
             <div className={s.media}>
-              <Frame src={IMG.pushPull} title="Push and Pull" alt="Illustration contrasting pull and push: one person pulls a box with a rope while another pushes a block" />
+              <DocImage kind="illustration" src={IMG.pushPull} title="Push and Pull" alt="Illustration contrasting pull and push: one person pulls a box with a rope while another pushes a block" />
             </div>
             <div className={s.mechList}>
               {[
@@ -424,7 +392,7 @@ export const OpenRemitOverview = () => {
               </div>
             </div>
             <div className={s.media}>
-              <Frame src={IMG.file} title="File upload" alt="Illustration of one uploaded file being split into many individual transactions" />
+              <DocImage kind="illustration" src={IMG.file} title="File upload" alt="Illustration of one uploaded file being split into many individual transactions" />
             </div>
           </div>
         </Reveal>
@@ -440,7 +408,7 @@ export const OpenRemitOverview = () => {
             <p className={s.body}>Remittances reach your bank from partners in many sending countries, in many currencies. OpenRemit brings them into one queue, applies the same checks to each, and pays them out locally, whether to an account at your bank, another bank, or cash at the counter. Adding a new corridor means adding a partner, not rebuilding the system.</p>
           </div>
           <div className={s.media}>
-            <Frame src={IMG.globe} title="Global Reach" alt="Illustration of a globe circled by arrows and money location pins, representing remittances arriving from many countries" />
+            <DocImage kind="illustration" src={IMG.globe} title="Global Reach" alt="Illustration of a globe circled by arrows and money location pins, representing remittances arriving from many countries" />
           </div>
         </Reveal>
       </div>

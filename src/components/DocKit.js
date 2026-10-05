@@ -1,56 +1,53 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import ThemedImage from '@theme/ThemedImage';
 
-/* Shared styling primitives, matching the look already established in
-   docs/back-office/*.md and docs/branch-portal/*.md (navy #0c3f66 -> #1E6FA8,
-   amber #F5A623 accent, Plus Jakarta Sans). Importing these from one place
-   instead of re-declaring them in every file keeps every page visually
-   identical while avoiding ~200 lines of duplicated CSS-in-JS per page. */
+/* Shared styling primitives for the docs pages. Colours come from the theme
+   tokens in src/css/custom.css (--or-*), so every component follows the
+   Docusaurus light / dark theme. The navy header banner stays navy in both
+   themes. Plus Jakarta Sans is loaded once via headTags in docusaurus.config.js. */
 
-const FONT_LINK = 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap';
+/* Kept for backwards compatibility: the font is now loaded globally. */
+export const DocFonts = () => null;
 
-export const DocFonts = () => <link href={FONT_LINK} rel="stylesheet" />;
+const NAVY_GRADIENT = 'linear-gradient(130deg, #0c3f66 0%, #1E6FA8 60%, #1a5e90 100%)';
 
 const s = {
-  root: { fontFamily: "'Plus Jakarta Sans', 'Segoe UI', sans-serif", color: '#1a2540', paddingBottom: 24 },
-  header: { background: 'linear-gradient(130deg, #0c3f66 0%, #1E6FA8 60%, #1a5e90 100%)', borderRadius: 16, padding: '32px 32px 28px', marginBottom: 28, position: 'relative', overflow: 'hidden' },
+  root: { fontFamily: "'Plus Jakarta Sans', 'Segoe UI', sans-serif", color: 'var(--or-text)', paddingBottom: 24 },
+  header: { background: NAVY_GRADIENT, borderRadius: 16, padding: '32px 32px 28px', marginBottom: 28, position: 'relative', overflow: 'hidden' },
   glow1: { position: 'absolute', top: -50, right: -50, width: 200, height: 200, background: 'rgba(245,166,35,0.10)', borderRadius: '50%', pointerEvents: 'none' },
   glow2: { position: 'absolute', bottom: -70, right: 100, width: 150, height: 150, background: 'rgba(255,255,255,0.05)', borderRadius: '50%', pointerEvents: 'none' },
   h1: { fontSize: 'clamp(1.6rem, 4vw, 2.2rem)', fontWeight: 800, color: '#fff', lineHeight: 1.15, letterSpacing: '-0.02em', margin: '0 0 10px' },
   em: { fontStyle: 'normal', color: '#F5A623' },
-  sub: { fontSize: 14, color: 'rgba(255,255,255,0.60)', lineHeight: 1.65, maxWidth: 640, margin: 0 },
-  sectionHeading: { display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#8896b0', margin: '44px 0 20px' },
-  line: { flex: 1, height: 1, background: '#e2e8f0' },
-  card: { background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: 14, padding: '24px 28px', marginBottom: 18 },
-  cardAmber: { background: '#FFF8EC', border: '1.5px solid #F5A623', borderRadius: 14, padding: '20px 24px', marginBottom: 18 },
-  cardTitle: { fontSize: 16, fontWeight: 700, color: '#1a2540', marginBottom: 14 },
+  /* 0.88 white keeps >= 4.5:1 across the whole navy gradient */
+  sub: { fontSize: 14, color: 'rgba(255,255,255,0.88)', lineHeight: 1.65, maxWidth: 640, margin: 0 },
+  sectionHeading: { display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--or-text-faint)', margin: '44px 0 20px' },
+  line: { flex: 1, height: 1, background: 'var(--or-border)' },
+  card: { background: 'var(--or-surface)', border: '1.5px solid var(--or-border)', borderRadius: 14, padding: '24px 28px', marginBottom: 18 },
+  cardAmber: { background: 'var(--or-gold-soft)', border: '1.5px solid var(--or-gold)', borderRadius: 14, padding: '20px 24px', marginBottom: 18 },
+  cardTitle: { fontSize: 16, fontWeight: 700, color: 'var(--or-text)', marginBottom: 14 },
   list: { margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 },
-  item: { display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 14.5, lineHeight: 1.75, color: '#3a4a62' },
-  bullet: { flexShrink: 0, marginTop: 8, width: 7, height: 7, borderRadius: '50%', background: '#1E6FA8', display: 'block' },
+  item: { display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 14.5, lineHeight: 1.75, color: 'var(--or-text)' },
+  bullet: { flexShrink: 0, marginTop: 8, width: 7, height: 7, borderRadius: '50%', background: 'var(--or-blue)', display: 'block' },
   subList: { margin: '8px 0 0 17px', padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 7 },
-  subItem: { display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13.5, lineHeight: 1.7, color: '#5a6a88' },
-  subBullet: { flexShrink: 0, marginTop: 7, width: 5, height: 5, borderRadius: '50%', background: '#F5A623', display: 'block' },
-  stepNum: { flexShrink: 0, marginTop: 3, width: 22, height: 22, borderRadius: '50%', background: '#e8f2fa', color: '#1E6FA8', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  subItem: { display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13.5, lineHeight: 1.7, color: 'var(--or-text-muted)' },
+  subBullet: { flexShrink: 0, marginTop: 7, width: 5, height: 5, borderRadius: '50%', background: 'var(--or-gold)', display: 'block' },
+  stepNum: { flexShrink: 0, marginTop: 3, width: 22, height: 22, borderRadius: '50%', background: 'var(--or-blue-soft)', color: 'var(--or-blue)', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' },
   imgGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 },
-  tableWrap: { border: '1.5px solid #e2e8f0', borderRadius: 14, overflowX: 'auto', marginBottom: 18 },
-  table: { width: '100%', borderCollapse: 'collapse', fontSize: 13.5 },
-  th: { background: '#0c3f66', color: '#fff', textAlign: 'left', padding: '10px 16px', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em' },
-  td: { padding: '10px 16px', borderTop: '1px solid #e2e8f0', color: '#3a4a62', verticalAlign: 'top' },
+  tableWrap: { border: '1.5px solid var(--or-border)', borderRadius: 14, overflowX: 'auto', marginBottom: 18, background: 'var(--or-surface)' },
+  table: { width: '100%', borderCollapse: 'collapse', fontSize: 13.5, display: 'table', margin: 0 },
+  th: { background: '#0c3f66', color: '#fff', textAlign: 'left', padding: '10px 16px', fontWeight: 700, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.04em', border: 'none' },
+  td: { padding: '10px 16px', borderTop: '1px solid var(--or-border)', borderLeft: 'none', borderRight: 'none', borderBottom: 'none', color: 'var(--or-text)', background: 'var(--or-surface)', verticalAlign: 'top' },
   rolesGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16, marginBottom: 18 },
-  roleCard: { background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: 14, padding: '22px 24px 26px' },
+  roleCard: { background: 'var(--or-surface)', border: '1.5px solid var(--or-border)', borderRadius: 14, padding: '22px 24px 26px' },
   roleIconWrap: { width: 44, height: 44, borderRadius: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14 },
-  roleTitle: { fontSize: 15, fontWeight: 700, color: '#1a2540', marginBottom: 8 },
-  roleDesc: { fontSize: 13.5, lineHeight: 1.75, color: '#6b7a99' },
+  roleTitle: { fontSize: 15, fontWeight: 700, color: 'var(--or-text)', marginBottom: 8 },
+  roleDesc: { fontSize: 13.5, lineHeight: 1.75, color: 'var(--or-text-muted)' },
 };
 
-export const DocPage = ({ children }) => (
-  <>
-    <DocFonts />
-    <div style={s.root}>{children}</div>
-  </>
-);
+export const DocPage = ({ children }) => <div style={s.root}>{children}</div>;
 
-export const Hero =({ title, accent, subtitle }) => (
+export const Hero = ({ title, accent, subtitle }) => (
   <div style={s.header}>
     <div style={s.glow1} />
     <div style={s.glow2} />
@@ -64,9 +61,9 @@ export const Hero =({ title, accent, subtitle }) => (
 
 /* Capability tags shown at the top of every feature page. */
 const CAPABILITIES = {
-  Standard: { bg: '#e8f2fa', fg: '#1E6FA8', title: 'Always on' },
-  Configurable: { bg: '#fff3dc', fg: '#9a5b00', title: 'Can be enabled, disabled or tuned per deployment' },
-  'Requires Bank Integration': { bg: '#e6f6ee', fg: '#167a4a', title: 'Depends on a bank-side API' },
+  Standard: { bg: 'var(--or-blue-soft)', fg: 'var(--or-blue)', title: 'Always on' },
+  Configurable: { bg: 'var(--or-gold-soft)', fg: 'var(--or-gold-text)', title: 'Can be enabled, disabled or tuned per deployment' },
+  'Requires Bank Integration': { bg: 'var(--or-success-soft)', fg: 'var(--or-success)', title: 'Depends on a bank-side API' },
 };
 
 export const Capabilities = ({ tags }) => (
@@ -74,7 +71,7 @@ export const Capabilities = ({ tags }) => (
     {tags.map((t) => {
       const c = CAPABILITIES[t] || CAPABILITIES.Standard;
       return (
-        <span key={t} title={c.title} style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', color: c.fg, background: c.bg, border: `1px solid ${c.fg}33`, padding: '4px 12px', borderRadius: 20, whiteSpace: 'nowrap' }}>
+        <span key={t} title={c.title} style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.04em', color: c.fg, background: c.bg, border: '1px solid currentColor', padding: '4px 12px', borderRadius: 20, whiteSpace: 'nowrap' }}>
           {t}
         </span>
       );
@@ -82,7 +79,7 @@ export const Capabilities = ({ tags }) => (
   </div>
 );
 
-export const SectionHeading =({ children }) => (
+export const SectionHeading = ({ children }) => (
   <div style={s.sectionHeading}>{children}<div style={s.line} /></div>
 );
 
@@ -117,7 +114,7 @@ export const Steps = ({ items }) => (
 
 export const ImgGrid = ({ children }) => <div style={s.imgGrid}>{children}</div>;
 
-export const DocTable =({ columns, rows }) => (
+export const DocTable = ({ columns, rows }) => (
   <div style={s.tableWrap}>
     <table style={s.table}>
       <thead>
@@ -125,7 +122,7 @@ export const DocTable =({ columns, rows }) => (
       </thead>
       <tbody>
         {rows.map((row, ri) => (
-          <tr key={ri}>
+          <tr key={ri} style={{ background: 'transparent', border: 'none' }}>
             {row.map((cell, ci) => <td key={ci} style={s.td}>{cell}</td>)}
           </tr>
         ))}
@@ -134,10 +131,7 @@ export const DocTable =({ columns, rows }) => (
   </div>
 );
 
-/* Small icon set, matching the stroke style already used inline in
-   docs/branch-portal/logging-in-and-changing-password.md (24x24,
-   currentColor stroke, strokeWidth 2). Add more paths here as needed
-   rather than inlining raw <svg> per page. */
+/* Small icon set (24x24, currentColor stroke, strokeWidth 2). */
 export const Icon = {
   home: <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />,
   user: <><circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" /></>,
@@ -153,10 +147,10 @@ export const Icon = {
 };
 
 const ROLE_PALETTES = [
-  { bg: '#e8f2fa', accent: '#1E6FA8' },
-  { bg: '#fff8ec', accent: '#F5A623' },
-  { bg: '#eefaf3', accent: '#1a9d63' },
-  { bg: '#fdeeee', accent: '#c94b4b' },
+  { bg: 'var(--or-blue-soft)', accent: 'var(--or-blue)' },
+  { bg: 'var(--or-gold-soft)', accent: 'var(--or-gold-text)' },
+  { bg: 'var(--or-success-soft)', accent: 'var(--or-success)' },
+  { bg: 'var(--or-danger-soft)', accent: 'var(--or-danger)' },
 ];
 
 export const RoleGrid = ({ children }) => <div style={s.rolesGrid}>{children}</div>;
@@ -176,64 +170,120 @@ export const RoleCard = ({ icon, title, children, palette = 0 }) => {
   );
 };
 
-export const ImgCard = ({ src, alt, label }) => {
-  const [zoomed, setZoomed] = useState(false);
-  const resolvedSrc = useBaseUrl(src);
+/* ── Shared image wrapper ───────────────────────────────────────────────
+   kind="screenshot"   portal screenshots: tokenized frame with macOS topbar,
+                       optional "Fig." label footer, no filter.
+   kind="illustration" white-background art: sits on a soft plate
+                       (--or-img-plate) with --or-img-filter, so in dark mode
+                       it reads as a framed print rather than a hole.
+   kind="diagram"      like illustration; pass darkSrc to swap the image per
+                       theme via @theme/ThemedImage.
+   title               shows a macOS-style topbar on any kind.
+   zoom                click to open a full-screen preview (default true).
+   eager               skip lazy loading (use for above-the-fold images). */
 
-  const styles = useMemo(() => ({
-    card: { background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: 14, overflow: 'hidden', cursor: 'zoom-in', display: 'flex', flexDirection: 'column', margin: '20px 0' },
-    topbar: { background: '#f8fafc', borderBottom: '1px solid #e2e8f0', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 10 },
-    dots: { display: 'flex', gap: 5 },
-    dot: (bg) => ({ width: 9, height: 9, borderRadius: '50%', background: bg, display: 'block' }),
-    topbarTitle: { fontSize: 11, fontWeight: 600, color: '#8896b0', flex: 1, textAlign: 'center', marginRight: 44, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' },
-    imgWrap: { padding: 12, flex: 1 },
-    img: { width: '100%', height: 'auto', borderRadius: 8, border: '1px solid #e2e8f0', display: 'block', background: '#f8fafc' },
-    footer: { padding: '9px 14px 11px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #e2e8f0', gap: 10 },
-    pill: { fontSize: 10.5, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#1E6FA8', background: '#e8f2fa', padding: '2px 10px', borderRadius: 20, whiteSpace: 'nowrap' },
-    footerTitle: { fontSize: 11, color: '#8896b0', flex: 1, textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' },
-    zoomHint: { fontSize: 11, color: '#b0bac9', display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' },
-    overlay: { position: 'fixed', inset: 0, background: 'rgba(8,18,36,0.88)', backdropFilter: 'blur(14px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, cursor: 'zoom-out' },
-    modal: { position: 'relative', maxWidth: '94vw', maxHeight: '90vh' },
-    closeBtn: { position: 'absolute', top: -13, right: -13, width: 34, height: 34, background: '#1E6FA8', border: '2px solid #fff', borderRadius: '50%', color: '#fff', fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(0,0,0,0.3)' },
-    modalImg: { maxWidth: '100%', maxHeight: '88vh', borderRadius: 12, display: 'block', boxShadow: '0 32px 80px rgba(0,0,0,0.6)' },
-    caption: { textAlign: 'center', marginTop: 12, fontSize: 13, color: 'rgba(255,255,255,0.42)' },
-  }), []);
+const DOT_COLOURS = ['#fc5f57', '#fdbc2c', '#33c748'];
+
+const im = {
+  frame: { background: 'var(--or-surface-2)', border: '1px solid var(--or-border)', borderRadius: 14, overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: 'var(--or-shadow)' },
+  topbar: { background: 'var(--or-surface)', borderBottom: '1px solid var(--or-border)', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 10 },
+  dots: { display: 'flex', gap: 5 },
+  dot: (bg) => ({ width: 9, height: 9, borderRadius: '50%', background: bg, display: 'block' }),
+  topbarTitle: { fontSize: 11, fontWeight: 600, color: 'var(--or-text-faint)', flex: 1, textAlign: 'center', marginRight: 44, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' },
+  shotWell: { padding: 12, flex: 1 },
+  shotImg: { width: '100%', height: 'auto', borderRadius: 8, border: '1px solid var(--or-border)', display: 'block' },
+  plate: { background: 'var(--or-img-plate)', padding: 14, borderRadius: 14 },
+  plateImg: { width: '100%', height: 'auto', display: 'block', borderRadius: 8, filter: 'var(--or-img-filter)' },
+  footer: { padding: '9px 14px 11px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--or-border)', gap: 10, background: 'var(--or-surface)' },
+  pill: { fontSize: 10.5, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--or-blue)', background: 'var(--or-blue-soft)', padding: '2px 10px', borderRadius: 20, whiteSpace: 'nowrap' },
+  footerTitle: { fontSize: 11, color: 'var(--or-text-faint)', flex: 1, textAlign: 'center', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' },
+  zoomHint: { fontSize: 11, color: 'var(--or-text-faint)', display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' },
+  overlay: { position: 'fixed', inset: 0, background: 'rgba(8,18,36,0.88)', backdropFilter: 'blur(14px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, cursor: 'zoom-out' },
+  modal: { position: 'relative', maxWidth: '94vw', maxHeight: '90vh' },
+  closeBtn: { position: 'absolute', top: -13, right: -13, width: 34, height: 34, background: '#1E6FA8', border: '2px solid #fff', borderRadius: '50%', color: '#fff', fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(0,0,0,0.3)' },
+  modalImg: { maxWidth: '100%', maxHeight: '88vh', borderRadius: 12, display: 'block', boxShadow: '0 32px 80px rgba(0,0,0,0.6)' },
+  caption: { textAlign: 'center', marginTop: 12, fontSize: 13, color: 'rgba(255,255,255,0.75)' },
+};
+
+const Topbar = ({ title }) => (
+  <div style={im.topbar}>
+    <div style={im.dots} aria-hidden="true">
+      {DOT_COLOURS.map((c) => <span key={c} style={im.dot(c)} />)}
+    </div>
+    <div style={im.topbarTitle} title={title}>{title}</div>
+  </div>
+);
+
+export const DocImage = ({ src, darkSrc, alt, kind = 'screenshot', title, label, zoom = true, eager = false, style }) => {
+  const [zoomed, setZoomed] = useState(false);
+  const light = useBaseUrl(src);
+  const dark = useBaseUrl(darkSrc || src);
+  const isShot = kind === 'screenshot';
+  const themed = kind === 'diagram' && darkSrc;
+
+  const renderImg = (imgStyle, lazy = true) =>
+    themed ? (
+      <ThemedImage sources={{ light, dark }} alt={alt} loading={lazy && !eager ? 'lazy' : undefined} style={imgStyle} />
+    ) : (
+      <img src={light} alt={alt} loading={lazy && !eager ? 'lazy' : undefined} style={imgStyle}
+        onError={(e) => { e.currentTarget.style.opacity = 0.35; }} />
+    );
+
+  const open = zoom ? () => setZoomed(true) : undefined;
+  const clickable = zoom ? { cursor: 'zoom-in' } : {};
+
+  let body;
+  if (isShot) {
+    body = (
+      <div onClick={open} title={zoom ? 'Click to zoom' : undefined} style={{ ...im.frame, margin: '20px 0', ...clickable, ...style }}>
+        <Topbar title={title || alt} />
+        <div style={im.shotWell}>{renderImg(im.shotImg)}</div>
+        {label ? (
+          <div style={im.footer}>
+            <span style={im.pill}>{label}</span>
+            <span style={im.footerTitle} title={alt}>{title || alt}</span>
+            {zoom ? (
+              <span style={im.zoomHint}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                  <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+                  <line x1="11" y1="8" x2="11" y2="14" /><line x1="8" y1="11" x2="14" y2="11" />
+                </svg>
+                Zoom
+              </span>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
+    );
+  } else {
+    const plate = <div style={im.plate}>{renderImg(im.plateImg)}</div>;
+    body = title ? (
+      <div onClick={open} style={{ ...im.frame, background: 'var(--or-surface)', borderRadius: 18, ...clickable, ...style }}>
+        <Topbar title={title} />
+        <div style={{ padding: 14 }}>{plate}</div>
+      </div>
+    ) : (
+      <div onClick={open} style={{ ...im.plate, boxShadow: 'var(--or-shadow)', ...clickable, ...style }}>
+        {renderImg(im.plateImg)}
+      </div>
+    );
+  }
 
   return (
     <>
-      <div onClick={() => setZoomed(true)} title="Click to zoom" style={styles.card}>
-        <div style={styles.topbar}>
-          <div style={styles.dots}>
-            <span style={styles.dot('#fc5f57')} />
-            <span style={styles.dot('#fdbc2c')} />
-            <span style={styles.dot('#33c748')} />
-          </div>
-          <div style={styles.topbarTitle} title={alt}>{alt}</div>
-        </div>
-        <div style={styles.imgWrap}>
-          <img src={resolvedSrc} alt={alt} loading="lazy" style={styles.img} onError={(e) => { e.currentTarget.style.opacity = 0.35; }} />
-        </div>
-        <div style={styles.footer}>
-          <span style={styles.pill}>{label}</span>
-          <span style={styles.footerTitle} title={alt}>{alt}</span>
-          <span style={styles.zoomHint}>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-              <line x1="11" y1="8" x2="11" y2="14" /><line x1="8" y1="11" x2="14" y2="11" />
-            </svg>
-            Zoom
-          </span>
-        </div>
-      </div>
+      {body}
       {zoomed && (
-        <div style={styles.overlay} onClick={() => setZoomed(false)}>
-          <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <button style={styles.closeBtn} onClick={() => setZoomed(false)} aria-label="Close">✕</button>
-            <img src={resolvedSrc} alt={alt} style={styles.modalImg} />
-            <div style={styles.caption}>{alt}</div>
+        <div style={im.overlay} onClick={() => setZoomed(false)}>
+          <div style={im.modal} onClick={(e) => e.stopPropagation()}>
+            <button style={im.closeBtn} onClick={() => setZoomed(false)} aria-label="Close">✕</button>
+            {renderImg(im.modalImg, false)}
+            <div style={im.caption}>{title || alt}</div>
           </div>
         </div>
       )}
     </>
   );
 };
+
+/* Portal screenshot card (kept for existing pages). */
+export const ImgCard = ({ src, alt, label }) => <DocImage kind="screenshot" src={src} alt={alt} label={label} />;

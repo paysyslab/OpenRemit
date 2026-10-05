@@ -25,11 +25,11 @@
 .mainContent {
   padding: 1rem 4rem;
   text-align: center;
-  background-color: #ffffff; 
+  background-color: var(--or-page);
 }
 
 .heroSection {
-  background-color: white; 
+  background-color: var(--or-surface);
   padding: 3rem 2rem;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
@@ -39,7 +39,7 @@
 
 .heroTitle {
   font-size: 3rem;
-  color: #1b679b;
+  color: var(--or-blue);
   font-weight: 700;
   text-align: center;
   margin-bottom: 0.5rem;
@@ -48,7 +48,7 @@
 
 .heroSubtitle {
   font-size: 1.7rem;
-  color: #fcbd17;
+  color: var(--or-gold-text);
   font-weight: 500;
   text-align: center;
   margin-bottom: 1.5rem;
@@ -59,7 +59,7 @@
   max-width: 1800px;
   margin: 0 auto;
   font-weight: 400;
-  color: #333333;
+  color: var(--or-text);
   text-align: center;
   .heroDescription {
   font-size: 1.1rem;

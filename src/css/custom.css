@@ -6,26 +6,95 @@
 
 /* You can override the default Infima variables here. GLOBAL CSS */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  /* brand */
+  --or-blue: #1E6FA8;
+  --or-blue-soft: #e8f2fa;
+  --or-gold: #F5A623;                 /* decorative accents only; use --or-gold-text for text */
+  --or-gold-soft: rgba(245,166,35,0.12);
+  --or-gold-text: #9a5b00;
+
+  /* status */
+  --or-success: #047857;
+  --or-success-soft: rgba(16,185,129,0.14);
+  --or-danger: #b91c1c;
+  --or-danger-soft: rgba(239,68,68,0.12);
+
+  /* surfaces */
+  --or-page: #ffffff;
+  --or-section-alt: #fafbfd;
+  --or-surface: #ffffff;              /* cards */
+  --or-surface-2: #f8fafc;            /* card headers, frame topbars */
+  --or-border: #e2e8f0;
+
+  /* text */
+  --or-heading: #0c1e35;
+  --or-text: #1a2540;
+  --or-text-muted: #5a6a88;
+  --or-text-faint: #66738f;           /* was #8896b0 (2.9:1); now >= 4.5:1 on every surface */
+
+  /* code */
+  --or-code-bg: #0c1a2e;
+  --or-code-border: transparent;
+  --or-code-text: #e8f2fa;
+
+  /* images */
+  --or-img-plate: #ffffff;
+  --or-img-filter: none;
+
+  /* shadows */
+  --or-shadow: 0 6px 28px rgba(30,111,168,0.08);
+
+  /* Docusaurus primary -> brand blue */
+  --ifm-color-primary: #1E6FA8;
+  --ifm-color-primary-dark: #1b6497;
+  --ifm-color-primary-darker: #1a5e8f;
+  --ifm-color-primary-darkest: #154d76;
+  --ifm-color-primary-light: #2179b9;
+  --ifm-color-primary-lighter: #237fc1;
+  --ifm-color-primary-lightest: #2b8fd6;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
+  --or-blue: #63b3ea;                 /* was #4DA3E0 (4.3:1 on blue-soft); now >= 4.6:1 */
+  --or-blue-soft: rgba(77,163,224,0.14);
+  --or-gold: #F5B342;
+  --or-gold-soft: rgba(245,179,66,0.14);
+  --or-gold-text: #F5B342;
+
+  --or-success: #34d399;
+  --or-success-soft: rgba(52,211,153,0.14);
+  --or-danger: #fb8a8a;
+  --or-danger-soft: rgba(248,113,113,0.14);
+
+  --or-page: #1b1b1d;                 /* Docusaurus dark default */
+  --or-section-alt: #1f2229;
+  --or-surface: #222833;
+  --or-surface-2: #283040;
+  --or-border: #323b4a;
+
+  --or-heading: #f1f5fa;
+  --or-text: #e2e8f0;
+  --or-text-muted: #a3b0c4;
+  --or-text-faint: #8e9ab0;           /* was #7c889c (3.7:1 on surface-2); now >= 4.6:1 */
+
+  --or-code-bg: #0f1724;
+  --or-code-border: #2b3546;
+  --or-code-text: #e8f2fa;
+
+  --or-img-plate: #eef2f7;            /* soft plate behind white-background illustrations */
+  --or-img-filter: brightness(0.92) contrast(1.02);
+
+  --or-shadow: 0 6px 28px rgba(0,0,0,0.35);
+
+  --ifm-color-primary: #4DA3E0;
+  --ifm-color-primary-dark: #3497dc;
+  --ifm-color-primary-darker: #2a90d8;
+  --ifm-color-primary-darkest: #2177b5;
+  --ifm-color-primary-light: #66afe4;
+  --ifm-color-primary-lighter: #72b6e6;
+  --ifm-color-primary-lightest: #97c9ed;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 

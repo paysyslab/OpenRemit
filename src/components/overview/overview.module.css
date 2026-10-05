@@ -2,47 +2,11 @@
    Docusaurus light / dark theme. The hero and footer stay navy in both. */
 
 .root {
-  --or-blue: #1e6fa8;
-  --or-gold: #f5a623;
-  --or-gold-text: #9a5b00;
-  --or-heading: #0c1e35;
-  --or-text: #1a2540;
-  --or-muted: #5a6a88;
-  --or-bg: #ffffff;
-  --or-bg-alt: #fafbfd;
-  --or-surface: #ffffff;
-  --or-border: #e2e8f0;
-  --or-frame-bar: #f8fafc;
-  --or-frame-title: #5a6a88;
-  --or-tag-bg: #e8f2fa;
-  --or-tag-text: #1e6fa8;
-  --or-gold-tag-bg: #fff3dc;
-  --or-shadow: 0 6px 28px rgba(30, 111, 168, 0.08);
-  --or-success: #1a9d63;
 
   font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
   color: var(--or-text);
-  background: var(--or-bg);
+  background: var(--or-page);
   overflow-x: hidden;
-}
-
-:global([data-theme='dark']) .root {
-  --or-blue: #5aa9e6;
-  --or-gold-text: #f5a623;
-  --or-heading: #eef3fa;
-  --or-text: #dbe4f0;
-  --or-muted: #a9b8cc;
-  --or-bg: #0f1724;
-  --or-bg-alt: #131e2f;
-  --or-surface: #182539;
-  --or-border: #2a3a54;
-  --or-frame-bar: #1d2c44;
-  --or-frame-title: #a9b8cc;
-  --or-tag-bg: rgba(90, 169, 230, 0.16);
-  --or-tag-text: #8cc4f0;
-  --or-gold-tag-bg: rgba(245, 166, 35, 0.14);
-  --or-shadow: 0 6px 28px rgba(0, 0, 0, 0.35);
-  --or-success: #3ccf8e;
 }
 
 /* ── layout ───────────────────────────────────────────── */
@@ -52,7 +16,7 @@
 }
 .sectionAlt {
   composes: section;
-  background: var(--or-bg-alt);
+  background: var(--or-section-alt);
 }
 .inner {
   max-width: 1100px;
@@ -108,7 +72,7 @@
 .body {
   font-size: 14.5px;
   line-height: 1.8;
-  color: var(--or-muted);
+  color: var(--or-text-muted);
   margin: 0;
 }
 .lead {
@@ -123,7 +87,7 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  background: var(--or-tag-bg);
+  background: var(--or-blue-soft);
   border-radius: 30px;
   padding: 5px 14px;
   margin-bottom: 16px;
@@ -132,17 +96,17 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--or-tag-text);
+  background: var(--or-blue);
 }
 .tagText {
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.13em;
   text-transform: uppercase;
-  color: var(--or-tag-text);
+  color: var(--or-blue);
 }
 .tagGold {
-  background: var(--or-gold-tag-bg);
+  background: var(--or-gold-soft);
   border: 1px solid rgba(245, 166, 35, 0.3);
 }
 .tagGold .tagDot {
@@ -161,68 +125,6 @@
 }
 .tagOnDark .tagText {
   color: #f5a623;
-}
-
-/* ── frames ───────────────────────────────────────────── */
-
-.frame {
-  background: var(--or-surface);
-  border: 1.5px solid var(--or-border);
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow: var(--or-shadow);
-}
-.frameBar {
-  background: var(--or-frame-bar);
-  border-bottom: 1px solid var(--or-border);
-  padding: 9px 15px;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-.frameDots {
-  display: flex;
-  gap: 5px;
-}
-.frameDots span {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  display: block;
-}
-.frameTitle {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--or-frame-title);
-  flex: 1;
-  text-align: center;
-  margin-right: 46px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-/* Illustrations have white backgrounds, so the image well stays light. */
-.frameBody {
-  padding: 14px;
-  background: #ffffff;
-}
-.frameBody img {
-  width: 100%;
-  border-radius: 10px;
-  display: block;
-  object-fit: contain;
-}
-.darkFrame {
-  composes: frame;
-  background: #111;
-  border-color: #222;
-}
-.darkFrame .frameBar {
-  background: #1a1a1a;
-  border-color: #333;
-}
-.darkFrame .frameBody {
-  background: #111;
 }
 
 /* ── cards ────────────────────────────────────────────── */
@@ -253,7 +155,7 @@
 .cardText {
   font-size: 13.5px;
   line-height: 1.75;
-  color: var(--or-muted);
+  color: var(--or-text-muted);
 }
 
 /* ── reveal ───────────────────────────────────────────── */
@@ -429,7 +331,7 @@
 .stepText {
   font-size: 13.5px;
   line-height: 1.7;
-  color: var(--or-muted);
+  color: var(--or-text-muted);
 }
 
 @media (max-width: 860px) {
@@ -488,7 +390,7 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--or-muted);
+  color: var(--or-text-muted);
 }
 .railToggle {
   font: inherit;
@@ -503,7 +405,7 @@
 }
 .railToggle[aria-pressed='true'] {
   background: var(--or-blue);
-  color: #fff;
+  color: var(--or-page);
 }
 .railToggle:focus-visible {
   outline: 3px solid var(--or-gold);
@@ -529,7 +431,7 @@
 }
 .railNodeManual {
   border-style: dashed;
-  border-color: var(--or-muted);
+  border-color: var(--or-text-muted);
 }
 .railNodeName {
   font-size: 14px;
@@ -542,12 +444,12 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--or-muted);
+  color: var(--or-text-muted);
   margin-top: 4px;
 }
 .railArrow {
   flex: 0 0 auto;
-  color: var(--or-muted);
+  color: var(--or-text-muted);
   z-index: 1;
 }
 .railLegend {
@@ -556,7 +458,7 @@
   flex-wrap: wrap;
   margin-top: 22px;
   font-size: 12px;
-  color: var(--or-muted);
+  color: var(--or-text-muted);
 }
 .railLegend span {
   display: inline-flex;
@@ -581,19 +483,19 @@
   margin-left: -7px;
   border-radius: 50%;
   background: var(--or-blue);
-  box-shadow: 0 0 0 4px rgba(30, 111, 168, 0.18);
+  box-shadow: 0 0 0 4px var(--or-blue-soft);
   z-index: 2;
   animation: railDotH 7s ease-in-out infinite;
 }
 @keyframes railDotH {
-  0% { left: 4%; background: #1e6fa8; opacity: 0; }
+  0% { left: 4%; background: var(--or-blue); opacity: 0; }
   6% { opacity: 1; }
-  24% { left: 16.5%; background: #1e6fa8; }
-  32% { left: 16.5%; background: #f5a623; }
-  58% { left: 50%; background: #f5a623; }
-  66% { left: 50%; background: #1a9d63; }
-  90% { left: 50%; background: #1a9d63; opacity: 1; }
-  100% { left: 50%; background: #1a9d63; opacity: 0; }
+  24% { left: 16.5%; background: var(--or-blue); }
+  32% { left: 16.5%; background: var(--or-gold); }
+  58% { left: 50%; background: var(--or-gold); }
+  66% { left: 50%; background: var(--or-success); }
+  90% { left: 50%; background: var(--or-success); opacity: 1; }
+  100% { left: 50%; background: var(--or-success); opacity: 0; }
 }
 
 @media (max-width: 560px) {
@@ -626,7 +528,7 @@
   gap: 10px;
   padding: 16px 20px;
   border-bottom: 1px solid var(--or-border);
-  background: var(--or-frame-bar);
+  background: var(--or-surface-2);
 }
 .statusTitle {
   font-size: 14px;
@@ -637,14 +539,10 @@
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.08em;
-  color: #b42318;
-  background: rgba(180, 35, 24, 0.1);
+  color: var(--or-danger);
+  background: var(--or-danger-soft);
   border-radius: 20px;
   padding: 3px 10px;
-}
-:global([data-theme='dark']) .statusPill {
-  color: #ff8b80;
-  background: rgba(255, 139, 128, 0.14);
 }
 .statusBody {
   padding: 18px 20px 20px;
@@ -661,7 +559,7 @@
   border-bottom: 0;
 }
 .statusKey {
-  color: var(--or-muted);
+  color: var(--or-text-muted);
 }
 .statusVal {
   color: var(--or-text);
@@ -680,7 +578,7 @@
   padding: 6px 12px;
   border: 1.5px solid var(--or-border);
   color: var(--or-text);
-  background: var(--or-bg-alt);
+  background: var(--or-section-alt);
 }
 .statusActionPrimary {
   composes: statusAction;
@@ -689,7 +587,7 @@
 }
 .statusNote {
   font-size: 12px;
-  color: var(--or-muted);
+  color: var(--or-text-muted);
   margin-top: 12px;
 }
 
@@ -724,7 +622,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--or-tag-bg);
+  background: var(--or-blue-soft);
   color: var(--or-blue);
   margin-bottom: 16px;
 }
@@ -762,7 +660,7 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: var(--or-tag-bg);
+  background: var(--or-blue-soft);
   color: var(--or-blue);
   display: flex;
   align-items: center;
@@ -772,7 +670,7 @@
 }
 .mechNumGold {
   composes: mechNum;
-  background: var(--or-gold-tag-bg);
+  background: var(--or-gold-soft);
   color: var(--or-gold-text);
 }
 .mechTitle {
@@ -784,7 +682,7 @@
 .mechLine {
   font-size: 13.5px;
   line-height: 1.7;
-  color: var(--or-muted);
+  color: var(--or-text-muted);
   margin: 0 0 6px;
 }
 .mechLine strong {
@@ -799,7 +697,7 @@
   align-items: center;
   gap: 14px;
   margin: 52px 0 40px;
-  color: var(--or-muted);
+  color: var(--or-text-muted);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.18em;
