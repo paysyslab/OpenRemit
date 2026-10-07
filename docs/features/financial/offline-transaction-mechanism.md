@@ -59,8 +59,8 @@ When CBS or the Bank Integration Layer is down or slow, OpenRemit can switch a p
 |---|---|---|
 | Activation trigger | CBS / Bank Integration Layer failure codes that switch on Offline Mode automatically | default: socket timeout error |
 | Manual activation | Operations team can activate Offline Mode | default: enabled |
-| Probe frequency | Probe CBS after every N offline transactions | default: every 10th transaction |
-| Offline cap | Shadow-balance threshold at which offline processing stops | default: 2,000,000 (local currency) |
+| Probe frequency | Probe CBS after every N offline transactions | default: configurable (N) |
+| Offline cap | Shadow-balance threshold at which offline processing stops | default: configurable |
 
 ## Sequence Diagram
 

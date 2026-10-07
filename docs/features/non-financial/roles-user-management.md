@@ -47,9 +47,10 @@ Every creation, update, deactivation and bulk upload is raised by a **maker** an
 | Population | Created in | Key fields | Notes |
 |---|---|---|---|
 | Back Office | User Management → User | User ID, name, national ID, mobile, email, employee number, department, designation, role, status | A default super-admin role can only create admin users |
-| Branch | Branch Users | Full name, username, email, mobile, settlement account, user type (maker / checker), branch code, designation | Validated against the Bank Identity Provider; bulk upload with a sample file |
+| Branch | Branch Users | Full name, username (lowercase letters, numbers and dots), email, mobile (with country code), user type (Admin, Maker, Checker), branch code, settlement account, designation | Actions: View, Edit, Sync from Bank, Activate / Deactivate, Reset Password, Password Reset History, Audit Log. Bulk upload with a sample file; upload history kept for a month |
 | Partner | Partners → Add New Partner User | Name, father name, ID number, email, phone, username, partner, user type | Maker / checker per partner |
-| Sub-agent | Sub Agents → User Management | Name, father name, ID number, email, phone, username, branch code, settlement account, sub-agent, user type | Bulk upload requires selecting the sub-agent first |
+| Sub-agent (entity) | Sub Agents → Sub Agents Management | Sub-agent name, description, head office address, contact person, contact phone, contact email, settlement account (with Fetch Title) | Approved in the Sub Agent Checker Inbox |
+| Sub-agent user | Sub Agents → User Management | Name, father name, ID number, email, phone, username, branch code, settlement account, sub-agent, user type | Bulk upload requires selecting the sub-agent first |
 
 ### Steps
 

@@ -55,13 +55,18 @@ module.exports = {
             },
             {
               type: 'doc',
-              id: 'features/financial/move-to-high-value-rail',
-              label: 'Move to High-Value Rail',
+              id: 'features/financial/move-to-rtgs',
+              label: 'Move to RTGS',
             },
             {
               type: 'doc',
               id: 'features/financial/retry-repush',
               label: 'Retry / Re-push',
+            },
+            {
+              type: 'doc',
+              id: 'features/financial/eod-auto-repush',
+              label: 'EOD Auto Repush',
             },
             {
               type: 'doc',
@@ -72,11 +77,6 @@ module.exports = {
               type: 'doc',
               id: 'features/financial/reversal-file-upload',
               label: 'Reversal File Upload',
-            },
-            {
-              type: 'doc',
-              id: 'features/financial/branch-otc-reversal',
-              label: 'Branch OTC Full Reversal',
             },
             {
               type: 'doc',
@@ -180,6 +180,16 @@ module.exports = {
               type: 'doc',
               id: 'features/non-financial/audit-logs-reports',
               label: 'Audit Logs & Reports',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/reconciliation-tally',
+              label: 'Reconciliation Tally',
+            },
+            {
+              type: 'doc',
+              id: 'features/non-financial/holiday-calendar',
+              label: 'Holiday Calendar',
             },
           ],
         },
@@ -306,6 +316,21 @@ module.exports = {
           type: 'doc',
           id: 'partner-portal/failed-transactions',
           label: 'Failed Transactions',
+        },
+        {
+          type: 'doc',
+          id: 'partner-portal/instant-status-inquiry',
+          label: 'Instant Status Inquiry',
+        },
+        {
+          type: 'doc',
+          id: 'partner-portal/amendment',
+          label: 'Amendment',
+        },
+        {
+          type: 'doc',
+          id: 'partner-portal/cancellation',
+          label: 'Cancellation',
         },
         {
           type: 'doc',

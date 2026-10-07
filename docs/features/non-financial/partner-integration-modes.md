@@ -6,17 +6,18 @@ description: How partners send transactions (pull, push or file) and how each pa
 
 import { Hero, Capabilities } from '@site/src/components/DocKit';
 
-<Hero title="Partner" accent="Integration Modes" subtitle="Partners connect by pull, push or file. Each partner gets its own scheduler, with its own interval, volume and processing steps." />
+<Hero title="Partner" accent="Integration Modes" subtitle="Partners connect by pull, push, file or SWIFT. Each partner gets its own scheduler, with its own interval, volume and processing steps." />
 
 <Capabilities tags={['Standard', 'Configurable']} />
 
 ## Overview
 
-OpenRemit receives remittances from partners (MTOs) in three ways:
+OpenRemit receives remittances from partners (MTOs, exchange companies and other remittance originators) in four ways. They are not mutually exclusive: a partner can use more than one, and each is enabled per partner.
 
 - **Pull**: OpenRemit fetches outstanding transactions from the partner's API.
 - **Push**: the partner posts transactions to OpenRemit's APIs through the API Gateway.
-- **File**: OpenRemit collects a transaction file from the partner's location.
+- **File**: the partner's maker uploads a transaction file in the Partner Portal.
+- **SWIFT**: transactions from correspondent banks arrive as SWIFT MT/MX messages or files uploaded in the Back Office.
 
 Each partner has its own scheduler instance, driven by a configuration record that sets how often to run, how many transactions to fetch, which transaction types to handle and which processing steps to run.
 
@@ -42,7 +43,9 @@ Each partner has its own scheduler instance, driven by a configuration record th
 
 When adding a partner, the Back Office Maker sets:
 
-- Partner Name and **Integration Mode** (pull, push, or hybrid push / pull).
+- Partner Name and **Integration Mode** (push, pull, or hybrid push / pull).
+- **Partner Code** and **Partner Regex**.
+- **Unlock Threshold Time**, and the **Confirmation** and **Unlock** toggles for pull cash payouts.
 - **Transactions Allowed** (OTC, FT, IBFT), and for each type its Sender Screening, Receiver Screening and Title Match options.
 - Country, Address, Point of Contact, Email and Contact Number.
 - **Partner Settlement Account (GL)** and its Account Title, with a Fetch Title button.
@@ -53,7 +56,8 @@ When adding a partner, the Back Office Maker sets:
 |---|---|
 | Pull | OpenRemit calls the partner's API using filters such as page number, fetch count, date or status. Each transaction is processed individually. Cash payouts are fetched and locked at branch lookup, then confirmed or unlocked |
 | Push | The partner calls OpenRemit's APIs. Pushed transactions follow the same screening and routing as pulled ones |
-| File | OpenRemit collects a file from the partner's location on schedule or on demand, validates it, splits it into cash payout, LFT and IBFT, processes it through the standard flows, and returns a feedback file (Success / Failure / Flagged) to the partner's location |
+| File | The partner's maker uploads a file using the template in the Partner Portal. OpenRemit validates the structure and every row (Valid, Invalid or Duplicate). The partner's checker approves the file fully or partly, or rejects it. Approved rows go through screening, balance validation and routing; invalid rows can be downloaded with their errors, corrected and re-uploaded. See [Partner Bulk File Upload](../financial/partner-bulk-file-upload.md) |
+| SWIFT | For correspondent-bank business, SWIFT MT/MX messages or files are uploaded in the Back Office, validated and converted to the internal format. Amounts are converted using the configured rate sheets, screened for compliance and AML, and routed for settlement through CBS and the relevant channels, through the same transaction engine as partner business |
 
 ### APIs involved
 
@@ -131,10 +135,13 @@ sequenceDiagram
         OR->>OR: Validate, reject duplicates, store
         GW-->>P: Acknowledgement
     else File
-        OR->>P: Collect file from partner location
-        OR->>OR: Validate schema and fields, deduplicate, split by type
-        OR->>OR: Process through standard flows
-        OR->>P: Place feedback file at partner location
+        P->>OR: Upload transaction file (Partner Portal, maker)
+        OR->>OR: Validate structure and rows, flag invalid and duplicates
+        P->>OR: Checker approves fully or partly, or rejects
+        OR->>OR: Process approved rows through standard flows
+    else SWIFT
+        OR->>OR: Back Office uploads SWIFT MT/MX messages or files
+        OR->>OR: Validate, convert format and currency (rate sheet), screen, route
     end
 ```
 
@@ -146,7 +153,7 @@ sequenceDiagram
 | Scheduler | Fails for the configured number of runs in a row | Operations team alerted |
 | Configuration | Changed mid-run | Applies from the next run; in-flight transactions are unaffected |
 | Intake | Duplicate reference / PIN from any channel | Rejected |
-| File | Schema or mandatory-field failure | Row or file rejected; reported in the feedback file |
+| File | Structure or row validation failure | Row marked Invalid; downloadable with its error for correction |
 | Push | Validation failure | Error returned to the partner |
 
 :::caution[TBD]

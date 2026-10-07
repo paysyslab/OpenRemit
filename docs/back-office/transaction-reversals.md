@@ -51,14 +51,16 @@ export const TransactionReversals = () => {
   );
 
   const columns = [
-    { label: 'Original Txn Date', note: 'YYYY-MM-DD' },
-    { label: 'Txn Rail',          note: 'Rail the transaction was paid on (e.g. 1LINK, RAAST, RTGS in Pakistan)' },
-    { label: 'Partner',           note: 'MTO name' },
-    { label: 'Txn Amount',        note: 'numeric' },
+    { label: 'Original Txn Date', note: 'required, YYYY-MM-DD' },
+    { label: 'Txn Rail',          note: 'required: 1LINK, RAAST or RTGS' },
+    { label: 'Txn Amount',        note: 'required, numeric' },
+    { label: 'Txn Reference',     note: 'required: STAN for 1LINK, MessageId for RAAST, unique ID for RTGS' },
+    { label: 'Partner Reference', note: 'required' },
+    { label: 'Reason',            note: 'required, 3 to 200 characters' },
+    { label: 'Partner Name',      note: 'optional' },
     { label: 'CBS Reference',     note: 'optional' },
-    { label: 'Txn Reference',     note: 'Unique rail reference (e.g. STAN for 1LINK, MessageId for RAAST, uniqueId for RTGS in Pakistan)' },
-    { label: 'Receiver IBAN',     note: 'IBAN (e.g. PK + 22 characters in Pakistan)' },
-    { label: 'Receiver Name',     note: null },
+    { label: 'Receiver IBAN',     note: 'optional' },
+    { label: 'Receiver Name',     note: 'optional' },
   ];
 
   return (
@@ -82,13 +84,16 @@ export const TransactionReversals = () => {
           <ul style={s.list}>
             <Li>Upload a file containing transaction details to reverse already posted transactions.</Li>
             <Li>The system validates the data, matches it against existing transactions, and processes reversals.</Li>
+            <Li>The reversal type is configured per rail (status reversal or financial posting). On reversal the status reverts from Success to Returned, and the transaction can no longer be repushed or moved to RTGS.</Li>
+            <Li>The upload summary shows each record's outcome: Reversed, Invalid, Not Found or Already Reversed, with a message for any record that was not reversed.</Li>
+            <Li>Transaction Reversal List keeps every upload: Upload ID, File Name, Uploaded By (user or system), Upload Date & Time, Total, Valid and Invalid records.</Li>
           </ul>
         </div>
 
-        {/* Required File Columns */}
-        <div style={s.sectionHeading}>Required File Columns <div style={s.line} /></div>
+        {/* File Columns */}
+        <div style={s.sectionHeading}>File Columns <div style={s.line} /></div>
         <div style={s.card}>
-          <div style={s.cardTitle}>Required File Columns</div>
+          <div style={s.cardTitle}>File Columns</div>
           <ul style={s.list}>
             <li style={s.item}>
               <span style={s.bullet} />

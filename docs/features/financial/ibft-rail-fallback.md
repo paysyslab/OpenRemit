@@ -1,29 +1,34 @@
 ---
 hide_title: true
 title: Interbank Transfer (IBFT) with Rail Fallback
-description: Credit of a partner remittance to an account at another bank, over a primary domestic rail with automatic fallback to a secondary rail and an optional manual high-value rail.
+description: Credit of a partner remittance to an account at another bank, over a client-selected primary rail, an optional secondary rail and RTGS as the third rail.
 ---
 
 import { Hero, Capabilities } from '@site/src/components/DocKit';
 
-<Hero title="Interbank Transfer with" accent="Rail Fallback" subtitle="A partner remittance is credited to an account at another bank. OpenRemit tries the primary domestic rail first, falls back to a secondary rail automatically, and offers a high-value rail as a manual last resort." />
+<Hero title="Interbank Transfer with" accent="Rail Fallback" subtitle="A partner remittance is credited to an account at another bank. The client chooses the primary rail, an optional secondary rail takes over automatically, and RTGS is always available as the third rail." />
 
 <Capabilities tags={['Standard', 'Configurable', 'Requires Bank Integration']} />
 
 ## Overview
 
-An Interbank Fund Transfer (IBFT / P2P) credits a beneficiary account at another bank in the same country. After screening and a partner balance check, OpenRemit routes the payment over the **primary rail**. If the primary rail fails, it reverses the partner debit and retries automatically on the **secondary rail**. If the secondary rail also fails, a Back Office user can move the transaction to the **high-value rail** manually. The rails and their order are configured per deployment.
+An Interbank Fund Transfer (IBFT / P2P) credits a beneficiary account at another bank. After screening, Title Fetch and a partner balance check, OpenRemit sends the payment over the **primary rail** the client has selected. If the primary rail fails or times out, OpenRemit moves the transaction automatically to the **secondary rail**, if one is configured. **RTGS** is always the third rail.
 
-:::info[Pakistan example]
-Primary rail **1LINK**, secondary rail **RAAST**, high-value rail **RTGS**.
-:::
+| Rail position | Supported rails | Configuration |
+|---|---|---|
+| Primary | 1LINK or RAAST | Selected by the client |
+| Secondary | The other of the two, or none | Optional; a deployment can run with no secondary rail |
+| Third | RTGS | Always third, with a configurable number of retries |
+
+Retry attempts are configurable independently for each rail.
 
 ## Significance
 
 - **Higher success rate**: an automatic second rail means a single scheme outage does not stop remittances.
-- **No double payment**: every failed rail attempt is confirmed by an inquiry and, where needed, reversed before the next rail is tried.
+- **Fits each bank's setup**: the bank picks the rail order that matches its scheme memberships, or runs a single automated rail.
+- **No double payment**: a rail attempt is confirmed by an inquiry and, where needed, reversed before the transaction moves on.
 - **AML/CFT compliance**: every transaction is screened before any rail is used.
-- **Full traceability**: each rail attempt, inquiry, reversal and manual action is logged with timestamps and API responses, for reconciliation and regulatory reporting.
+- **Full traceability**: each rail attempt, inquiry, reversal, re-push and RTGS move is logged for reconciliation and regulatory reporting.
 
 ## Usage
 
@@ -31,24 +36,31 @@ Primary rail **1LINK**, secondary rail **RAAST**, high-value rail **RTGS**.
 
 | Role | Portal and menu | What they do |
 |---|---|---|
-| Partner | Partner APIs / Partner Portal → **Transactions** | Sends the transaction (pull or push) and tracks its status |
+| Partner | Partner APIs / Partner Portal → **Transactions** | Sends the transaction (pull, push or file) and tracks its status |
 | Compliance Officer | Back Office → **Compliance Review** | Releases or rejects transactions held by screening |
-| Back Office Maker | Back Office → **Failed Transactions** | Retries a step, cancels, or moves the transaction to the high-value rail |
+| Back Office Maker | Back Office → **Failed Transactions** | Re-pushes a failed step, cancels, or moves the transaction to RTGS |
 | Back Office Checker | Back Office → Checker inbox | Approves cancellation requests |
 
 ### Steps
 
-1. **Receive and classify**: the transaction arrives by pull or push and is classified as interbank from the account number, IBAN or bank identifier.
+1. **Receive and classify**: the transaction arrives and is classified as IBFT from the account number, IBAN or bank identifier.
 2. **Screen**: the Screening System checks the transaction. Hits are held in Compliance Review.
-3. **Title Fetch on the primary rail**: the primary rail validates the beneficiary account and returns its title.
+3. **Title Fetch**: the beneficiary account is validated and its title returned.
 4. **Balance Inquiry**: CBS returns the Partner Settlement Account (GL) balance.
-5. **Primary rail**: the partner is debited on CBS and the payment is sent to the primary rail. A transaction inquiry a few seconds later confirms the outcome.
-6. **Secondary rail**: if the primary rail fails, the partner debit is reversed and OpenRemit runs a Title Fetch and credit transfer on the secondary rail. A timeout is resolved by a transaction inquiry returning an accepted or rejected status (ISO 20022 ACSP / RJCT where the rail uses them).
-7. **High-value rail (manual)**: if the secondary rail also fails, the transaction is parked in Failed Transactions, where a Back Office user can move it to the high-value rail. See [Move to High-Value Rail](./move-to-high-value-rail.md).
+5. **Primary rail**: the payment is sent over the client's primary rail.
+   - **1LINK** works on an advice basis, not a synchronous accept / reject. The partner is debited on CBS, the advice is sent through store-and-forward, and a 1LINK transaction inquiry confirms the outcome before the transaction is marked completed or moved on.
+   - **RAAST** returns a result directly. A timeout is resolved by a RAAST transaction inquiry: ACSP (accepted) completes the transaction; RJCT (rejected) triggers a RAAST FT reversal.
+6. **Secondary rail (optional)**: if the primary rail fails or times out and a secondary rail is configured, the transaction is retried on it automatically.
+7. **After the last automated rail**: a transaction that has failed on all configured automated rails can no longer be re-pushed. What happens next is configured by the bank (see Configuration):
+   - parked in **Failed Transactions** for a manual **Move to RTGS**;
+   - **auto-rerouted to RTGS** within RTGS operating hours; or
+   - **cancelled immediately**, with a failure status returned to the partner.
 
-:::note
-Once a transaction has failed on both the primary and the secondary rail, it cannot be re-pushed. Only the high-value rail or cancellation remain.
-:::
+See [Move to RTGS](./move-to-rtgs.md) for what happens once a transaction is on RTGS.
+
+### 1LINK SAF handling
+
+Where 1LINK is a configured rail, a 1LINK transaction can get stuck on a duplicate timeout in the store-and-forward (SAF) queue. A manual settlement path lets a Back Office Maker settle it, and a Back Office Checker must approve the settlement.
 
 ### APIs involved
 
@@ -57,18 +69,20 @@ Once a transaction has failed on both the primary and the secondary rail, it can
 | API Gateway (push) | Post Transactions, Transaction Inquiry | Partner pushes the transaction and polls its status |
 | API Gateway (push) | Title Fetch, Balance Inquiry, Bank List | Partner verifies the account, checks its balance, looks up bank codes |
 | Partner system (pull) | Get outstanding transactions, Confirm Transaction | Fetch pending transactions; confirm completion |
-| OpenConnect → primary rail | Title Fetch, Interbank Transaction, Transaction Inquiry | Primary rail |
-| Bank Integration Layer (ESB) | Screening | AML/CFT and sanctions screening |
-| Bank Integration Layer (ESB) | Balance Inquiry, Internal Fund Transfer, Fund Transfer Reversal | Partner balance, partner debit for the primary rail, reversal before fallback |
-| Bank Integration Layer (ESB) → secondary rail | Title Fetch, Credit Transfer, Transaction Inquiry | Secondary rail |
+| Bank Integration Layer (ESB) | Screening, Balance Inquiry, Internal Fund Transfer, Fund Transfer Reversal | Screening, partner balance, partner debit, reversals |
+| OpenConnect → 1LINK | Title Fetch, IBFT advice (SAF), Transaction Inquiry | 1LINK as primary or secondary rail |
+| Bank Integration Layer (ESB) → RAAST | Title Fetch, P2P credit transfer, Transaction Inquiry, FT Reversal | RAAST as primary or secondary rail |
+| Bank Integration Layer (ESB) | RTGS posting | Third rail |
 
 ## Configuration
 
 | Parameter | Description | Default |
 |---|---|---|
-| Rail order | Primary, secondary and high-value rails for interbank transfers | default: primary → secondary (automatic) → high-value (manual) |
-| Primary-rail inquiry delay | Wait before the primary-rail transaction inquiry | default: a few seconds (TBD) |
-| Retry attempts | Automatic retries per step on timeout or transient failure | default: 3 |
+| Primary rail | 1LINK or RAAST | default: selected per deployment |
+| Secondary rail | The other rail, or none | default: none |
+| Retry attempts per rail | Automatic retries on each rail, configured separately | default: configurable per rail |
+| RTGS retries | Retries on RTGS as the third rail | default: configurable |
+| After all automated rails fail | Manual Move to RTGS; auto-reroute to RTGS within operating hours; or cancel immediately and return a failure to the partner | default: manual Move to RTGS |
 | Processing steps | Ordered steps run for each transaction | default: Screening → Title Fetch → Balance Inquiry → Fund Transfer → Partner Notify |
 | Screening position | Screening before (PRE) or after (POST) the fund transfer | default: PRE |
 
@@ -87,9 +101,9 @@ sequenceDiagram
     participant ESB as Bank Integration Layer (ESB)
     participant SS as Screening System
     participant CBS
-    participant PR as Primary Rail
+    participant PR as Primary Rail (1LINK or RAAST)
 
-    P->>OR: Interbank transaction (pull fetch or push via API Gateway)
+    P->>OR: IBFT transaction (pull, push or file)
     OR->>OR: Store as Pending, classify as IBFT
     OR->>OC: Screening
     OC->>ESB: Screening
@@ -111,7 +125,7 @@ sequenceDiagram
     PR-->>OR: Account title or failure (via OC)
     opt Title Fetch failed or timed out
         OR->>OR: Park in Failed Transactions
-        BOM->>OR: Retry, or Cancel
+        BOM->>OR: Re-push, or Cancel
     end
 
     OR->>OC: Balance Inquiry
@@ -120,135 +134,106 @@ sequenceDiagram
     CBS-->>OR: Balance (via ESB, OC)
     opt Insufficient balance or inquiry failed
         OR->>OR: Park in Failed Transactions
-        BOM->>OR: Retry, or Cancel
+        BOM->>OR: Re-push, or Cancel
     end
     Note over OR: Continue to Part 2
 ```
 
-### Part 2: Primary rail, secondary-rail fallback and high-value rail
+### Part 2: Primary rail, optional secondary rail and RTGS
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor BOM as Back Office Maker
+    participant P as Partner
     participant OR as OpenRemit (OR)
     participant OC as OpenConnect (OC)
-    participant ESB as Bank Integration Layer (ESB)
-    participant CBS
-    participant PR as Primary Rail
-    participant SR as Secondary Rail
-    participant HV as High-Value Rail
+    participant PR as Primary Rail (1LINK or RAAST)
+    participant SR as Secondary Rail (optional)
+    participant RT as RTGS
 
-    OR->>OC: Interbank transfer on primary rail
-    OC->>ESB: Internal Fund Transfer (debit partner)
-    ESB->>CBS: Debit Partner Settlement Account (GL)
-    OC->>PR: Interbank Transaction (store-and-forward)
-    PR-->>OC: Response or timeout
-    OC->>PR: Transaction Inquiry (after a few seconds)
+    OR->>OC: Payment on primary rail
+    OC->>PR: Payment (1LINK advice via SAF, or RAAST credit transfer)
+    PR-->>OC: Response, advice or timeout
+    OC->>PR: Transaction inquiry (1LINK always, RAAST on timeout)
     PR-->>OR: Final status (via OC)
-    alt Primary rail success
+    alt Completed (1LINK success or RAAST ACSP)
         OR->>OR: Mark Completed, notify partner
         Note over OR: Flow ends
-    else Failed, or not found
-        OR->>OC: Fund Transfer Reversal
-        OC->>ESB: Reverse partner debit
-        ESB->>CBS: Credit Partner Settlement Account (GL)
+    else RAAST RJCT
+        OR->>OC: RAAST FT reversal
         alt Reversal failed
             OR->>OR: Park in Failed Transactions (reversal retry only)
             Note over OR: Flow ends
         end
     end
 
-    Note over OR,SR: Automatic fallback to the secondary rail
-    OR->>OC: Secondary-rail Title Fetch
-    OC->>ESB: Title Fetch
-    ESB->>SR: Validate account
-    SR-->>OR: Title or failure (via ESB, OC)
-    alt Title Fetch failed
-        OR->>OR: Park in Failed Transactions (high-value rail option)
-    else Title confirmed
-        OR->>OC: Credit transfer
-        OC->>ESB: Credit transfer
-        ESB->>SR: Credit transfer
-        SR-->>OR: Result (via ESB, OC)
-        alt Success, or inquiry returns accepted
+    alt Secondary rail configured
+        Note over OR,SR: Automatic move to the secondary rail
+        OR->>OC: Title Fetch and payment on secondary rail
+        OC->>SR: Title Fetch, payment, inquiry
+        SR-->>OR: Final status (via OC)
+        alt Completed
             OR->>OR: Mark Completed, notify partner
-        else Failed, not found, or rejected
-            opt Rejected
-                OR->>ESB: Secondary-rail reversal (via OC)
-            end
-            OR->>OR: Park in Failed Transactions (high-value rail option)
+            Note over OR: Flow ends
         end
     end
 
-    opt Manual high-value rail
-        BOM->>OR: Move to high-value rail
-        OR->>OC: High-value posting
-        OC->>ESB: High-value posting
-        ESB->>CBS: Debit partner, credit high-value settlement account
-        ESB->>HV: Post payment
-        HV-->>OR: Result (via ESB, OC)
-        OR->>OR: Mark Moved to high-value rail
+    Note over OR: Failed on all configured automated rails, re-push no longer allowed
+    alt Configured: cancel immediately
+        OR->>OR: Mark Cancelled
+        OR-->>P: Failure status
+    else Configured: auto-reroute to RTGS (within operating hours)
+        OR->>OC: RTGS posting (with configured retries)
+        OC->>RT: Post payment
+        RT-->>OR: Result (via OC)
+    else Default: manual Move to RTGS
+        OR->>OR: Park in Failed Transactions (RTGS option)
+        BOM->>OR: Move to RTGS
+        OR->>OC: RTGS posting
+        OC->>RT: Post payment
+        RT-->>OR: Result (via OC)
     end
 ```
 
-Pakistan example: Primary Rail = 1LINK, Secondary Rail = RAAST, High-Value Rail = RTGS.
-
 ## Outcomes & Edge Cases
 
-Rows are listed in rail order: primary, then secondary, then high-value.
+"Next configured rail" means the secondary rail if one is configured; otherwise the last-rail handling in step 7 applies.
 
 | Stage | Condition | Outcome |
 |---|---|---|
 | Screening | Pass | Flow continues on the primary rail |
 | Screening | Hit | Held in Compliance Review; released (flow continues) or rejected (Cancelled) |
 | Screening | Timeout | Retried; if retries run out, held in Compliance Review |
+| Title Fetch | Success | Flow continues to balance inquiry |
+| Title Fetch | Failed, or timeout after retries | Parked in Failed Transactions for re-push or cancellation (auto-cancelled where the partner has opted into [Title Fetch auto-cancellation](./cancellation.md)) |
 | Balance inquiry | Balance covers the amount | Flow continues |
-| Balance inquiry | Balance below the amount, or inquiry failed | Parked in Failed Transactions for retry or cancellation |
-| Balance inquiry | Timeout | Retried; if retries run out, parked in Failed Transactions |
-| Title Fetch (primary) | Success | Flow continues to balance inquiry |
-| Title Fetch (primary) | Failed | Parked in Failed Transactions for retry or cancellation |
-| Title Fetch (primary) | Timeout | Retried; if retries run out, parked in Failed Transactions |
-| Partner debit (primary) | Success | Payment sent to the primary rail |
-| Partner debit (primary) | Failed | Parked; retry with the same parameters (duplicate-checked) or cancel after checking CBS |
-| Partner debit (primary) | Timeout | Retried; then parked for retry or cancellation after checking CBS |
-| Payment (primary) | Success | Primary-rail transaction inquiry |
-| Payment (primary) | Failed | Partner debit reversed, then automatic fallback to the secondary rail |
-| Payment (primary) | Timeout | Primary-rail transaction inquiry |
-| Inquiry (primary) | Found, successful | Completed; partner notified |
-| Inquiry (primary) | Found, failed | Partner debit reversed, then fallback to the secondary rail |
-| Inquiry (primary) | Not found | Partner debit reversed, then fallback to the secondary rail |
-| Inquiry (primary) | Error response | Parked in Failed Transactions; inquiry retried manually |
-| Inquiry (primary) | Timeout | Retried; then parked for a manual inquiry retry |
-| Reversal (primary) | Success | Fallback to the secondary rail |
-| Reversal (primary) | Failed | Parked in Failed Transactions; only the reversal can be retried (no fallback) |
-| Reversal (primary) | Timeout | Retried; then parked for a manual reversal retry |
-| Title Fetch (secondary) | Success | Secondary-rail payment |
-| Title Fetch (secondary) | Failed | Parked in Failed Transactions; retry, cancel or move to the high-value rail |
-| Title Fetch (secondary) | Timeout | Retried; then parked with the same options |
-| Payment (secondary) | Success | Completed |
-| Payment (secondary) | Failed | Parked for a manual move to the high-value rail |
-| Payment (secondary) | Timeout | Secondary-rail transaction inquiry |
-| Inquiry (secondary) | Accepted (e.g. ACSP) | Completed |
-| Inquiry (secondary) | Rejected (e.g. RJCT) | Secondary-rail reversal |
-| Inquiry (secondary) | Not found | Parked for a manual move to the high-value rail |
-| Inquiry (secondary) | Error response | Parked; inquiry retried manually |
-| Inquiry (secondary) | Timeout | Retried; then parked for a manual inquiry retry |
-| Reversal (secondary) | Success | Parked for a manual move to the high-value rail |
-| Reversal (secondary) | Failed | Parked; only the reversal can be retried (manual settlement) |
-| Reversal (secondary) | Timeout | Retried; then parked for a manual reversal retry |
-| High-value rail | Any outcome | See [Move to High-Value Rail](./move-to-high-value-rail.md) |
-
-:::caution[TBD]
-The source specification does not state the exact delay before the primary-rail transaction inquiry ("a few seconds").
-:::
+| Balance inquiry | Balance below the amount, failed, or timeout after retries | Parked in Failed Transactions for re-push or cancellation |
+| Partner debit (1LINK) | Success | 1LINK advice sent through store-and-forward |
+| Partner debit (1LINK) | Failed, or timeout after retries | Parked; re-push with the same parameters (duplicate-checked) or cancel after checking CBS |
+| Payment (1LINK) | Advice sent | 1LINK transaction inquiry |
+| Payment (1LINK) | Failed or timeout | Next configured rail |
+| Inquiry (1LINK) | Found, successful | Completed; partner notified |
+| Inquiry (1LINK) | Found failed, or not found | Next configured rail |
+| Inquiry (1LINK) | Error response, or timeout after retries | Parked in Failed Transactions; inquiry retried manually |
+| Payment (RAAST) | Success | Completed |
+| Payment (RAAST) | Failed | Next configured rail |
+| Payment (RAAST) | Timeout | RAAST transaction inquiry |
+| Inquiry (RAAST) | ACSP (accepted) | Completed |
+| Inquiry (RAAST) | RJCT (rejected) | RAAST FT reversal |
+| Inquiry (RAAST) | Not found | Next configured rail |
+| Inquiry (RAAST) | Error response, or timeout after retries | Parked; inquiry retried manually |
+| Reversal (RAAST) | Success | Next configured rail |
+| Reversal (RAAST) | Failed | Parked; only the reversal can be retried, with no further fallback (to avoid a double correction) |
+| Last automated rail | Failed | Re-push no longer allowed; manual Move to RTGS, auto-reroute to RTGS, or immediate cancellation, as configured |
+| RTGS | Any outcome | See [Move to RTGS](./move-to-rtgs.md) |
 
 ## Related
 
 - [Back Office: Failed Transactions](../../back-office/failed-transactions.md)
 - [Back Office: Transactions](../../back-office/transactions.md)
 - [Partner Portal: Transactions](../../partner-portal/transactions.md)
-- [Partner Portal: IMD List](../../partner-portal/imd-list.md)
-- [Move to High-Value Rail](./move-to-high-value-rail.md)
-- [Automatic FT Reversal](./automatic-ft-reversal.md)
+- [Move to RTGS](./move-to-rtgs.md)
 - [Retry / Re-push](./retry-repush.md)
+- [EOD Auto Repush with Debit Verification](./eod-auto-repush.md)
+- [Automatic FT Reversal](./automatic-ft-reversal.md)

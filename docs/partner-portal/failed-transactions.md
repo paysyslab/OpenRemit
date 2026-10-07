@@ -10,6 +10,7 @@ import { DocPage, Hero, SectionHeading, Card, List, Li, Sub, ImgCard } from '@si
 <SectionHeading>Failed Transaction List</SectionHeading>
 <Card title="Tabs and columns">
 <List>
+  <Li>Two actions are available on a failed transaction: <strong>Amend</strong> and <strong>Cancel</strong>. Both go through maker-checker approval.</Li>
   <Li>Three tabs with counts: <strong>ALL</strong>, <strong>CANCEL</strong> and <strong>AMEND</strong>.</Li>
   <Li>Each row shows Transaction ID, MTO, Type (e.g. IBFT, with the rail used), Amount (local currency), Current Stage, Status (e.g. FAILED, REVERSED), Transaction Status, Lifecycle and <strong>Reason</strong>, the specific cause of failure.</Li>
 </List>
@@ -39,13 +40,16 @@ import { DocPage, Hero, SectionHeading, Card, List, Li, Sub, ImgCard } from '@si
 <List>
   <Li>Click <strong>Cancel Transaction</strong>. A warning explains that the request is sent to the checker and, if approved, the transaction is marked <strong>CANCELLED</strong>.</Li>
   <Li>Enter a <strong>Cancellation Reason</strong> and click <strong>Submit for Approval</strong>.</Li>
+  <Li>To cancel several transactions at once, select them in the list and use <strong>Bulk Cancel</strong>.</Li>
+  <Li>A transaction can be cancelled only while nothing has been posted for it.</Li>
 </List>
 </Card>
 <ImgCard src="/img/PP/cancel-transaction.png" alt="Cancel Transaction — Reason and Submit for Approval" label="Fig. 4" />
 <Card amber title="Who approves">
 <List>
-  <Li><strong>Cancellation</strong> is approved by the partner checker in the <a href="./checker-inbox">Transactions Checker Inbox</a>.</Li>
-  <Li><strong>Amendment</strong> requires the Back Office (admin) checker.</Li>
+  <Li><strong>Cancellation</strong> and <strong>COC Amendment</strong> (beneficiary name on a cash payout) are approved by the <strong>Partner Checker</strong> in the <a href="./checker-inbox">Transactions Checker Inbox</a>.</Li>
+  <Li><strong>Account Credit Amendment</strong> (Amend Title / Amend Account) is approved by the <strong>Back Office Checker</strong>.</Li>
+  <Li>You can also raise these from the <a href="./amendment">Amendment</a> and <a href="./cancellation">Cancellation</a> screens.</Li>
 </List>
 </Card>
 <SectionHeading>Transactions Maker Inbox</SectionHeading>

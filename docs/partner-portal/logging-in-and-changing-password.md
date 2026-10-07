@@ -39,7 +39,7 @@ import { DocPage, Hero, SectionHeading, Card, List, Li, Steps, ImgCard, ImgGrid 
 <Card title="Main Menu">
 <List>
   <Li>After login, users with maker rights land on the <a href="./dashboard">Dashboard</a>.</Li>
-  <Li>The left-side menu gives access to <a href="./transactions">Transactions</a>, <a href="./failed-transactions">Failed Transactions</a>, Transactions Maker Inbox, <a href="./file-upload">File Upload</a>, <a href="./imd-list">IMD List</a>, <a href="./partner-balance">Partner Balance</a> and <a href="./audit-logs">Audit Logs</a>.</Li>
+  <Li>The left-side menu gives access to <a href="./transactions">Transactions</a>, <a href="./failed-transactions">Failed Transactions</a>, <a href="./instant-status-inquiry">Instant Status Inquiry</a>, <a href="./amendment">Amendment</a>, <a href="./cancellation">Cancellation</a>, Transactions Maker Inbox, <a href="./file-upload">File Upload</a>, <a href="./imd-list">IMD List</a>, <a href="./partner-balance">Partner Balance</a> and <a href="./audit-logs">Audit Logs</a>.</Li>
   <Li>Users with checker rights see the <a href="./checker-inbox">Transactions Checker Inbox</a>.</Li>
 </List>
 </Card>

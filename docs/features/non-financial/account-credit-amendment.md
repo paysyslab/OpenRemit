@@ -107,6 +107,8 @@ sequenceDiagram
 
 ## Related
 
+- [Partner Portal: Amendment](../../partner-portal/amendment.md)
+
 - [Partner Portal: Failed Transactions](../../partner-portal/failed-transactions.md)
 - [Back Office: Failed Transactions](../../back-office/failed-transactions.md)
 - [Local Funds Transfer (LFT)](../financial/local-funds-transfer.md)

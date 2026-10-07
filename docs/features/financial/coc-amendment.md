@@ -98,6 +98,8 @@ sequenceDiagram
 
 ## Related
 
+- [Partner Portal: Amendment](../../partner-portal/amendment.md)
+
 - [Partner Portal: Checker Inbox](../../partner-portal/checker-inbox.md)
 - [Partner Portal: Failed Transactions](../../partner-portal/failed-transactions.md)
 - [COC / OTC Cash Payout](./coc-otc-cash-payout.md)

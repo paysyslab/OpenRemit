@@ -36,7 +36,7 @@ OpenRemit records an audit entry for every user action and every significant sys
 
 | Area | Captured details |
 |---|---|
-| Audit entry | Module / screen, activity, performed by (user or SYSTEM), method, previous value, new value, timestamp, comment |
+| Audit entry | Module / screen, activity, performed by (user or SYSTEM), method, IP address, previous value, new value, timestamp, comment |
 | Transaction timeline | Every stage with timestamp and status, API request / response codes from OpenConnect, the Bank Integration Layer and the domestic rails, fallbacks and reversals |
 | Failure reasons | Latest failure code mapped to a readable label, e.g. *Duplicate Transaction* or *Balance Inquiry Failed* |
 | Scheduler runs | Partner, run time, transactions fetched, per-step outcomes, errors |

@@ -110,8 +110,8 @@ export const OpenRemitOverview = () => {
   /* ── rail fallback visual ── */
   const RailFallback = () => {
     const [pk, setPk] = useState(false);
-    const names = pk ? ['1LINK', 'RAAST', 'RTGS'] : ['Primary Rail', 'Secondary Rail', 'High-Value Rail'];
-    const notes = ['first try', 'automatic fallback', 'manual'];
+    const names = pk ? ['1LINK', 'RAAST', 'RTGS'] : ['Primary Rail', 'Secondary Rail', 'RTGS'];
+    const notes = pk ? ['primary', 'secondary', 'third'] : ['1LINK or RAAST', 'optional fallback', 'always third'];
     const Arrow = () => (
       <span className={s.railArrow}>
         <Icon size={20}><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></Icon>
@@ -159,7 +159,7 @@ export const OpenRemitOverview = () => {
         <div className={s.statusRow}><span className={s.statusKey}>Reason</span><span className={s.statusVal}>Beneficiary account not found</span></div>
         <div className={s.statusActions}>
           <span className={s.statusActionPrimary}>Retry step</span>
-          <span className={s.statusAction}>Move to high-value rail</span>
+          <span className={s.statusAction}>Move to RTGS</span>
           <span className={s.statusAction}>Fix account</span>
           <span className={s.statusAction}>Cancel</span>
         </div>

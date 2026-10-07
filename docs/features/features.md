@@ -42,6 +42,17 @@ Each feature page follows the same structure:
 6. **Outcomes & Edge Cases**: how the system behaves in each scenario.
 7. **Related**: links to the portal user guides.
 
+## Bank-provided API dependencies
+
+Some features depend on APIs the bank must provide. Where a bank cannot provide the required API, the dependent feature cannot be offered in that deployment. These features carry the **Requires Bank Integration** tag.
+
+| Bank-provided API | Dependent features |
+|---|---|
+| Transaction Inquiry / Account Debit Verification API | [EOD Auto Repush with Debit Verification](./financial/eod-auto-repush.md); [Reconciliation Tally](./non-financial/reconciliation-tally.md) |
+| SMS Gateway API | Final Status Alert; Sub-Agent Disbursement SMS; SMS events in Alert Configuration (see [Alerts](./non-financial/alerts.md)) |
+| Email Service API | Funding Near Consumption alerts; [Automated RFI](./non-financial/automated-rfi.md) emails; email events in Alert Configuration |
+| Customer Information API | Beneficiary contact lookup for the Final Status Alert |
+
 ## Systems and roles in the diagrams
 
 | Participant | Role |
@@ -53,7 +64,7 @@ Each feature page follows the same structure:
 | Bank Integration Layer (ESB) | The Bank's middleware, connecting to CBS, domestic payment rails and the Screening System |
 | CBS | The Bank's core banking system |
 | Screening System | AML/CFT and sanctions screening |
-| Primary / Secondary / High-Value Rail | Domestic interbank payment rails, in fallback order (Pakistan example: 1LINK, RAAST, RTGS) |
+| Primary / Secondary Rail, RTGS | Interbank rails. The client selects 1LINK or RAAST as the primary rail; the other is an optional secondary rail; RTGS is always third |
 | Branch Maker / Branch Checker | Branch or sub-agent users who capture and approve cash payouts |
 | Back Office Maker / Back Office Checker | Bank operations users who act on transactions and approve changes |
 | Compliance Officer | Reviews transactions held by screening |

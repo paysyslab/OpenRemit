@@ -28,7 +28,7 @@ Users of the Back Office, Branch Portal and Partner Portal sign in with a userna
 | Role | Portal | Sign-in fields |
 |---|---|---|
 | Back Office users | Back Office | Username, password, OTP |
-| Branch Maker / Branch Checker | Branch Portal | User ID, password, branch code, OTP |
+| Branch and sub-agent users (Branch Maker / Branch Checker) | Branch Portal (one portal for both) | User ID, password, branch code, OTP |
 | Partner users | Partner Portal | Username, password, OTP |
 
 ### Steps
@@ -51,8 +51,8 @@ Users of the Back Office, Branch Portal and Partner Portal sign in with a userna
 |---|---|---|
 | OTP | Code sent to the registered email | default: 6 digits |
 | Trust this device | Skip the OTP on a trusted device | default: available |
-| Password length | Minimum and maximum characters | default: 8 to 20 (Back Office) / 8 to 15 (Partner Portal) |
-| Password complexity | At least one uppercase, one lowercase, one number and one special character | default: enforced |
+| Password length | Minimum and maximum characters | default: 8 to 20 characters |
+| Password complexity | At least one letter, one number, one capital, one small letter and one special character; allowed characters 0-9, a-z, A-Z and !@#$%^&* | default: enforced |
 | Password history | New password must differ from recent passwords | default: enforced |
 | Lockout | Invalid attempts before the account locks | default: 3 |
 

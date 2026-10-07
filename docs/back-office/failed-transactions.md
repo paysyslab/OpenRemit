@@ -42,8 +42,8 @@ export const FailedTransactions = () => {
             <line x1="1" y1="10" x2="23" y2="10" />
           </svg>
         ),
-        title: 'Move to High-Value Rail',
-        desc: 'Escalate transactions that failed on every automatic rail to the high-value rail (e.g. RTGS in Pakistan).',
+        title: 'Move to RTGS',
+        desc: 'Move failed transactions to RTGS, the third rail, individually or in bulk.',
         accent: 'var(--or-gold-text)',
         iconBg: 'var(--or-gold-soft)',
       },
@@ -91,7 +91,7 @@ export const FailedTransactions = () => {
           <h1 style={s.h1}>
             Failed <em style={s.em}>Transactions</em>
           </h1>
-          <p style={s.sub}>Monitor, investigate, and resolve failed transactions. Repush or escalate to the high-value rail based on transaction status.</p>
+          <p style={s.sub}>Monitor, investigate, and resolve failed transactions. Repush or escalate to RTGS based on transaction status.</p>
         </div>
 
         <div style={s.sectionHeading}>
@@ -113,8 +113,24 @@ export const FailedTransactions = () => {
         </div>
 
         <p style={s.note}>
-          If the Transaction Status shows the primary or secondary rail (for example <code style={s.code}>1LINK</code> or <code style={s.code}>RAAST</code> in Pakistan), the transaction can <strong>only be repushed</strong>. Moving to the high-value rail is not available for these statuses.
+          If the Transaction Status is <code style={s.code}>1LINK</code> or <code style={s.code}>RAAST</code>, the transaction can <strong>only be repushed</strong>. Moving to RTGS is not available for these statuses.
         </p>
+
+        <div style={s.sectionHeading}>
+          Bulk and Individual Actions <div style={s.line} />
+        </div>
+
+        <div style={s.card}>
+          <ul style={{ margin: 0, paddingLeft: 18, color: 'var(--or-text)', lineHeight: 1.9, fontSize: 14.5 }}>
+            <li><strong>Bulk Retry</strong>: select several failed transactions and retry them at once. Not available where the failure is screening-related.</li>
+            <li><strong>Bulk Move to RTGS</strong>: select several failed transactions and move them to RTGS at once.</li>
+            <li><strong>Bulk Cancel</strong>: select several failed transactions and cancel them at once (maker-checker).</li>
+            <li><strong>Bulk Manual Settle</strong>: select several failed transactions and mark them as manually settled.</li>
+            <li><strong>Retry</strong>, <strong>Move to RTGS</strong> and <strong>Cancel Transaction</strong> are also available individually from Action → View Details.</li>
+            <li>Filter the list by the action available on each transaction.</li>
+            <li>Where the bank provides a debit verification API, <a href="../features/financial/eod-auto-repush">EOD Auto Repush</a> clears technical failures automatically each day.</li>
+          </ul>
+        </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
           <ImgCard src="/img/BO/Transactions/failed.png" alt="Failed Transactions — Overview" label="Fig. 1" />

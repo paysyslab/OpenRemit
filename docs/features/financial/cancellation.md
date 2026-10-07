@@ -1,25 +1,36 @@
 ---
 hide_title: true
 title: Cancellation
-description: Cancel transactions from the Back Office, Partner Portal or API with checker approval, cancel unpaid push COC transactions, and auto-cancel by turnaround time.
+description: Cancel transactions from the Back Office, Partner Portal or API with checker approval, cancel unpaid push COC transactions, and auto-cancel by Title Fetch response or turnaround time.
 ---
 
 import { Hero, Capabilities } from '@site/src/components/DocKit';
 
-<Hero title="Transaction" accent="Cancellation" subtitle="Stop a transaction before any money moves: on request from the Back Office, Partner Portal or API, for unpaid cash payouts, or automatically when a turnaround time is breached." />
+<Hero title="Transaction" accent="Cancellation" subtitle="Stop a transaction before any money moves: on request from the Back Office, Partner Portal or API, for unpaid cash payouts, or automatically on a Title Fetch failure or a breached turnaround time." />
 
 <Capabilities tags={['Standard', 'Configurable']} />
 
 ## Overview
 
-A transaction can be cancelled only while **no debit or credit has been posted** for it. Cancellation never generates reversal entries. Requests can come from three origins (Back Office, Partner Portal, API) and are approved by the **Back Office Checker**. While a request is pending, the transaction is frozen. Two further mechanisms exist: **COC Cancel**, for unpaid cash payouts from push partners, and **Auto-Cancellation**, driven by per-partner turnaround times (TAT).
+Cancellation is available for both cash (COC) and account (FT / IBFT) transactions. A **posting-check gate** runs first: a transaction can be cancelled only while no debit or credit has been posted for it on the partner / agent account. Once a posting exists, cancellation is not possible, and cancellation never generates reversal entries.
+
+Requests can come from three origins, and the origin decides who approves:
+
+| Origin | Approved by |
+|---|---|
+| Back Office | Back Office Checker |
+| API | Back Office Checker |
+| Partner Portal | Partner Checker |
+
+While a request is pending, the transaction is frozen. Rejected requests are routed back according to their origin. Two automatic mechanisms complement manual cancellation: **Title Fetch auto-cancellation** and **TAT-based auto-cancellation**.
 
 ## Significance
 
-- **Stops unwanted payouts**: transactions that should not be paid can be stopped safely before any posting.
-- **Safe by design**: cancellation is blocked once a posting exists, so the ledger never needs a cancellation reversal.
+- **Stops unwanted payouts**: transactions that should not be paid are stopped safely before any posting.
+- **Safe by design**: the posting-check gate means the ledger never needs a cancellation reversal.
 - **Four-eyes control**: a different checker approves every manual cancellation.
-- **Retention compliance**: unpaid or stuck transactions are cleared automatically according to each partner's retention policy.
+- **Partner self-service**: partners cancel their own transactions, approved by their own checker.
+- **Retention compliance**: unpaid or stuck transactions are cleared automatically according to each partner's policy.
 - **Full audit**: origin, requester, timestamps, checker decision and reason are logged for every cycle.
 
 ## Usage
@@ -28,43 +39,39 @@ A transaction can be cancelled only while **no debit or credit has been posted**
 
 | Role | Portal and menu | What they do |
 |---|---|---|
-| Back Office Maker | Back Office → **Failed Transactions** → Cancel / COC Cancel | Raises cancellation requests |
-| Back Office Checker | Back Office → Checker inbox | Approves or rejects them |
-| Partner (maker) | Partner Portal → **Failed Transactions** → Cancel Transaction | Raises a cancellation request |
-| Partner | API Gateway | Raises a cancellation request against an unpaid reference / PIN |
-| Operations team | Back Office → Auto-cancellation configuration | Sets TATs per partner and stage |
+| Back Office Maker | Back Office → **Failed Transactions** → Cancel, Bulk Cancel, COC Cancel | Raises cancellation requests |
+| Back Office Checker | Back Office → Checker inbox | Approves or rejects Back Office and API requests |
+| Partner (maker) | Partner Portal → **Failed Transactions** → Cancel (individually or in bulk), or the **Cancellation** screen | Raises a cancellation request |
+| Partner (checker) | Partner Portal → **Transactions Checker Inbox** | Approves or rejects Partner Portal requests |
+| Partner | API Gateway → cancellation request | Raises a cancellation against an unpaid reference / PIN |
+| Operations team | Back Office → auto-cancellation configuration | Sets TATs and opts partners into Title Fetch auto-cancellation |
 
 ### Manual cancellation
 
-1. The requester selects an eligible transaction and enters a mandatory reason.
-2. The request goes to the Back Office Checker, and the transaction is **frozen**: no payout, credit posting or amendment can happen on it.
-3. **Approve**: the transaction is marked *Cancelled* and its lifecycle *Completed*.
-4. **Reject**, origin Back Office: the request returns to the Back Office Maker inbox to **Resubmit** or **Discard** (moves to Failed Transactions).
-5. **Reject**, origin Partner Portal or API: terminal. The transaction goes to Failed Transactions, and an API requester receives the rejection.
+1. The requester selects the transaction (or several, for bulk cancel) and enters a mandatory reason.
+2. OpenRemit runs the posting-check gate. If a posting exists, the request is refused.
+3. The request goes to the checker for its origin, and the transaction is **frozen**: no payout, credit posting or amendment can happen until the checker decides.
+4. **Approve**: the transaction is marked *Cancelled* and its lifecycle *Completed*.
+5. **Reject**: the request is routed back by origin:
+   - **Back Office**: to the Back Office Maker inbox, to **Resubmit** or **Discard** (moves to Failed Transactions).
+   - **Partner Portal**: to the Partner Maker Inbox, for correction and resubmission.
+   - **API**: terminal; the transaction stays in Failed Transactions and the partner receives the rejection.
 
-### Eligibility (Failed Transactions → Cancel)
+### COC Cancel (push partners)
 
-The **Cancel Transaction** option is shown only for FT and IBFT transactions, and is hidden when the transaction:
-
-- is already cancelled,
-- is a cash payout (use COC Cancel instead), or
-- has already completed its internal debit or payment stage.
-
-### COC Cancel (push partners only)
-
-- Lists cash payouts from push partners that have **not moved to Fund Transfer** and **not been paid**, e.g. the beneficiary never came to collect.
-- The Back Office Maker raises the request; a **different** Back Office Checker approves or rejects it.
-- **Approve**: *Cancelled*, removed from the list, and blocked from any further payment.
-- **Reject**: not cancelled; the rejection is recorded on the request.
+- Lists cash payouts from push partners that have **not moved to Fund Transfer** and **not been paid**, for example where the beneficiary never came to collect.
+- A Back Office Maker raises the request; a **different** Back Office Checker approves or rejects it.
 - Only one pending request is allowed per transaction. If the transaction is paid or moves to Fund Transfer while the request is pending, it is not cancelled on approval.
 
-### Auto-Cancellation
+### Auto-cancellation
 
 | Rule | Behaviour |
 |---|---|
-| Title Fetch failure | A transaction that fails at Title Fetch is cancelled automatically |
-| Stage TAT | A transaction that stays failed at a stage beyond the partner's TAT for that stage is cancelled automatically |
-| Retention TAT | A scheduler scans unpaid cash payouts (*Available for Payout*) and pending / discrepant / unprocessed direct deposits with no financial impact. Breaches are cancelled and the Operations team is alerted. A warning alert fires before the TAT is reached |
+| Title Fetch auto-cancellation | LFT and IBFT transactions are cancelled automatically when Title Fetch returns one of the configured response codes. Opt-in per partner. |
+| Stage TAT | A transaction that stays failed at a stage beyond the partner's TAT for that stage is cancelled automatically. |
+| Retention TAT | A scheduler scans unpaid cash payouts (*Available for Payout*) and pending direct deposits with no financial impact. Breaches are cancelled and the Operations team is alerted; a warning alert fires before the TAT is reached. |
+
+TATs count working days from the [Holiday Calendar](../non-financial/holiday-calendar.md).
 
 ### APIs involved
 
@@ -76,10 +83,10 @@ The **Cancel Transaction** option is shown only for FT and IBFT transactions, an
 
 | Parameter | Description | Default |
 |---|---|---|
-| Stage TAT (per partner, per stage) | Time a transaction may stay failed at a stage before it is auto-cancelled | default: TBD |
-| Retention TAT (per partner) | Time an unpaid cash payout or direct deposit is kept before auto-cancellation; partners can be updated in bulk | default: TBD |
+| Title Fetch auto-cancellation | Per partner: opt in, and the Title Fetch response codes that trigger it | default: off |
+| Stage TAT (per partner, per stage) | Time a transaction may stay failed at a stage before it is auto-cancelled | default: configurable |
+| Retention TAT (per partner) | Time an unpaid cash payout or pending direct deposit is kept; partners can be updated in bulk | default: configurable |
 | Pre-TAT warning | Alert to the Operations team before the TAT is reached | default: enabled |
-| Auto-cancel on Title Fetch failure | Cancel automatically when Title Fetch fails | default: TBD |
 
 ## Sequence Diagram
 
@@ -88,47 +95,51 @@ sequenceDiagram
     autonumber
     actor BOM as Back Office Maker
     actor BOC as Back Office Checker
-    participant P as Partner
+    actor PM as Partner (Maker)
+    actor PC as Partner (Checker)
     participant GW as API Gateway
     participant OR as OpenRemit (OR)
 
     alt Origin Back Office
-        BOM->>OR: Cancel with reason
+        BOM->>OR: Cancel with reason (single or bulk)
     else Origin Partner Portal
-        P->>OR: Cancel Transaction with reason
+        PM->>OR: Cancel with reason (single or bulk)
     else Origin API
-        P->>GW: Cancellation request (reference / PIN)
+        PM->>GW: Cancellation request (reference / PIN)
         GW->>OR: Forward
     end
-    OR->>OR: Check eligibility (no posting, not cancelled)
-    alt Not eligible
-        OR-->>BOM: Rejected, cancellation not possible
+    OR->>OR: Posting-check gate (no debit or credit posted, not cancelled)
+    alt Posting exists, or not eligible
+        OR-->>PM: Refused, cancellation not possible
         Note over OR: Flow ends
     end
     OR->>OR: Freeze transaction
-    OR->>BOC: Pending cancellation request
-    alt Checker approves
-        BOC->>OR: Approve
-        OR->>OR: Mark Cancelled, lifecycle Completed
-    else Checker rejects, origin Back Office
-        BOC->>OR: Reject with reason
-        OR->>BOM: Maker inbox
-        alt Resubmit
-            BOM->>OR: Resubmit
-            OR->>BOC: Back to checker
-        else Discard
-            BOM->>OR: Discard
-            OR->>OR: Move to Failed Transactions
+    alt Back Office or API origin
+        OR->>BOC: Pending cancellation request
+        alt Approve
+            BOC->>OR: Approve
+            OR->>OR: Mark Cancelled, lifecycle Completed
+        else Reject, Back Office origin
+            BOC->>OR: Reject with reason
+            OR->>BOM: Maker inbox (Resubmit or Discard)
+        else Reject, API origin
+            BOC->>OR: Reject with reason
+            OR-->>GW: Rejection response
         end
-    else Checker rejects, origin Partner Portal or API
-        BOC->>OR: Reject with reason
-        OR->>OR: Move to Failed Transactions
-        OR-->>P: Rejection response (API)
+    else Partner Portal origin
+        OR->>PC: Pending in Transactions Checker Inbox
+        alt Accept
+            PC->>OR: Accept with comment
+            OR->>OR: Mark Cancelled, lifecycle Completed
+        else Reject
+            PC->>OR: Reject with comment
+            OR->>PM: Transactions Maker Inbox
+        end
     end
 
-    opt Auto-Cancellation scheduler
-        OR->>OR: Scan against partner TATs
-        OR->>OR: Cancel breached transactions, alert Operations team
+    opt Auto-cancellation
+        OR->>OR: Title Fetch returned a configured code (opted-in partner), or TAT breached
+        OR->>OR: Cancel, alert Operations team where applicable
     end
 ```
 
@@ -136,33 +147,27 @@ sequenceDiagram
 
 | Stage | Condition | Outcome |
 |---|---|---|
-| Eligibility | Eligible FT or IBFT transaction | Cancel option shown; reason required |
-| Eligibility | Already cancelled | Cancel option hidden |
-| Eligibility | Cash payout | Cancel option hidden; COC Cancel applies to push partners |
-| Eligibility | Internal debit or payment already successful | Cancel option hidden; cancellation blocked |
+| Gate | No posting yet, not cancelled | Request accepted for approval |
+| Gate | Debit or credit already posted | Refused; stays in Failed Transactions; no reversal generated |
+| Gate | Already cancelled | Cancel option not available |
 | Request | Submitted without a reason | Validation error |
-| Security | Forced cancellation through API or URL manipulation | Rejected; attempt logged in Audit Logs; transaction unchanged |
+| Security | Forced cancellation through API or URL manipulation | Rejected; attempt logged; transaction unchanged |
 | Pending | Any processing attempted while frozen | Blocked until the checker decides |
-| Approval | Approved | *Cancelled*; lifecycle *Completed*; shown in Transaction Monitoring |
+| Approval | Approved by the checker for its origin | *Cancelled*; lifecycle *Completed* |
+| Rejection | Back Office origin | Back Office Maker inbox: Resubmit or Discard |
+| Rejection | Partner Portal origin | Partner Maker Inbox |
+| Rejection | API origin | Terminal; partner receives the rejection |
 | COC Cancel | Paid or moved to Fund Transfer while pending | Not cancelled on approval |
-| COC Cancel | Second request for the same transaction | Not allowed while one is pending |
-| Auto-cancel | Retention TAT breached | Cancelled; Operations team alerted |
+| Auto-cancel | Configured Title Fetch code, partner opted in | Cancelled automatically |
+| Auto-cancel | TAT breached | Cancelled; Operations team alerted |
 | Audit | Every cycle | Origin, requester, timestamps, checker decision and reason logged |
-
-:::caution[TBD]
-The source documents differ on two points:
-- Whether a Back Office-originated cancellation from Failed Transactions takes effect immediately or waits for checker approval.
-- Whether a Partner Portal-originated cancellation is approved by the partner checker or by the Back Office Checker.
-
-This page follows the maker-checker flow with Back Office Checker approval.
-:::
 
 ## Related
 
 - [Back Office: Failed Transactions](../../back-office/failed-transactions.md)
 - [Partner Portal: Failed Transactions](../../partner-portal/failed-transactions.md)
+- [Partner Portal: Cancellation](../../partner-portal/cancellation.md)
 - [Partner Portal: Checker Inbox](../../partner-portal/checker-inbox.md)
 - [COC Amendment](./coc-amendment.md)
 - [Account Credit Amendment](../non-financial/account-credit-amendment.md)
-- [Alerts](../non-financial/alerts.md)
-- [Audit Logs & Reports](../non-financial/audit-logs-reports.md)
+- [Holiday Calendar](../non-financial/holiday-calendar.md)

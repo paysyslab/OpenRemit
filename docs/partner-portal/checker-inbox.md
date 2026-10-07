@@ -10,7 +10,8 @@ import { DocPage, Hero, SectionHeading, Card, List, Li, ImgCard } from '@site/sr
 <SectionHeading>Pending Requests</SectionHeading>
 <Card title="Inbox">
 <List>
-  <Li>Two tabs: <strong>Transaction Requests</strong> (cancellations) and <strong>Transaction Files</strong> (bulk uploads from <a href="./file-upload">File Upload</a>).</Li>
+  <Li>Two tabs: <strong>Transaction Requests</strong> (cancellations and COC amendments) and <strong>Transaction Files</strong> (bulk uploads from <a href="./file-upload">File Upload</a>).</Li>
+  <Li>The Partner Checker approves Partner Portal <strong>cancellations</strong> and <strong>COC Amendments</strong>. Account Credit Amendments (Amend Title / Amend Account) go to the Back Office Checker instead and do not appear here.</Li>
   <Li>Each request shows Process ID, Transaction ID, Operation (e.g. <em>Partner Transaction Cancel</em>), Created / Modified By, Status, Comments and Request Date.</Li>
 </List>
 </Card>

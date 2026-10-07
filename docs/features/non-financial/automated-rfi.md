@@ -8,11 +8,15 @@ import { Hero, Capabilities } from '@site/src/components/DocKit';
 
 <Hero title="Automated" accent="RFI" subtitle="When Compliance needs more information, OpenRemit emails the right party automatically and escalates unanswered cases after a set number of working days." />
 
-<Capabilities tags={['Configurable']} />
+<Capabilities tags={['Configurable', 'Requires Bank Integration']} />
+
+:::info[Bank dependency]
+RFI and escalation emails need the bank's **Email Service API**. Where it is not available, Automated RFI cannot be offered.
+:::
 
 ## Overview
 
-When Compliance needs additional information to screen a transaction, OpenRemit opens a **Request for Information (RFI)** case and emails the relevant external party:
+When information required to screen a transaction is missing, OpenRemit automatically opens a **Request for Information (RFI)** case and emails the relevant external party:
 
 - the **Partner**, for missing remitter information (contact taken from partner onboarding), or
 - the **local bank**, for missing beneficiary information (contact taken from the local bank master).
@@ -23,7 +27,7 @@ The case opens with its SLA clock at day 0. A daily scheduler escalates any case
 
 - **Faster compliance decisions**: requests go out immediately and to the right party, without manual emails.
 - **SLA enforcement**: overdue cases are escalated automatically to the right internal team.
-- **Holiday-aware**: escalation counts working days using the holiday calendar.
+- **Holiday-aware**: escalation counts working days using the [Holiday Calendar](./holiday-calendar.md).
 - **Reliable**: the escalation scheduler is idempotent, so a case is never escalated twice.
 
 ## Usage
@@ -32,14 +36,21 @@ The case opens with its SLA clock at day 0. A daily scheduler escalates any case
 
 | Role | Portal and menu | What they do |
 |---|---|---|
-| Compliance Officer | Back Office → **Compliance Review** | Triggers the RFI by requesting information |
+| (system) | — | Raises the RFI automatically when required information is missing |
+| Compliance Officer | Back Office → **Compliance Review** | Reviews the transaction once the information arrives |
 | Partner / local bank | Email | Receives the RFI and responds |
 | Business team | Email | Receives escalations for partner cases |
 | Operations team | Email | Receives escalations for local-bank cases |
 
+### APIs involved
+
+| Interface | API | Used for |
+|---|---|---|
+| Bank Email Service | Send email | RFI and escalation emails |
+
 ### Steps
 
-1. Compliance requests information on a transaction. OpenRemit opens an RFI case (status *Open*, day 0) and emails the partner or the local bank.
+1. Required information is missing on a transaction. OpenRemit opens an RFI case (status *Open*, day 0) and emails the partner or the local bank.
 2. Every morning a scheduler scans *Open* and *Awaiting-Response* cases.
 3. A case past the escalation threshold is escalated: partner cases to the Business team, local-bank cases to the Operations team.
 4. When the requested information arrives, OpenRemit closes the case.
@@ -60,11 +71,10 @@ The case opens with its SLA clock at day 0. A daily scheduler escalates any case
 ```mermaid
 sequenceDiagram
     autonumber
-    actor CO as Compliance Officer
     participant OR as OpenRemit (OR)
     participant P as Partner
 
-    CO->>OR: Request information on transaction
+    OR->>OR: Required information missing on transaction
     OR->>OR: Open RFI case (Open, day 0), resolve recipient
     alt Remitter information missing
         OR->>P: RFI email
@@ -107,3 +117,4 @@ sequenceDiagram
 - [Suspicious Activity Controls](./suspicious-activity-controls.md)
 - [Screening & Compliance Review](./screening-compliance-review.md)
 - [Alerts](./alerts.md)
+- [Holiday Calendar](./holiday-calendar.md)

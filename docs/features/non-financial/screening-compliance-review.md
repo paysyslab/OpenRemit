@@ -38,7 +38,7 @@ OpenRemit sends each transaction's remitter and beneficiary to the Screening Sys
 1. Open **Compliance Review**. The list shows Transaction ID, Remitting Institute, Type, Beneficiary Name, national ID, Account, Amount and Agent Code.
 2. Open **Action → View Details** to see the Screening Summary, Parties, Amounts & Purpose and Timeline (showing the failed screening step).
 3. For an FT transaction, click **Fetch Beneficiary Details from CBS** for additional customer information. For IBFT, the Bank arranges the information from the other bank.
-4. Click **Manually Release** to continue processing (e.g. to Title Fetch), or **Mark as Failed** to stop it.
+4. Click **Manually Release** to continue processing (e.g. to Title Fetch), or **Mark as Failed** to stop it. The Compliance Officer's decision is final and immediate; there is no maker-checker step.
 
 ### APIs involved
 

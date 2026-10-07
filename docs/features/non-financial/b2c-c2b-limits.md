@@ -20,8 +20,8 @@ Some regulators cap how much a beneficiary can receive each month under business
 
 Any breach is rejected outright with a machine-readable error code. Person-to-person (P2P) remittances and outward remittances are out of scope.
 
-:::info[Pakistan example]
-SBP rules apply to purpose codes 9186, 9249, 9478 and 9479 (limit USD 25,000 per beneficiary per month) and 9477 (pension, limit PKR 250,000 per beneficiary per month).
+:::info[Regulatory requirement: SBP (Pakistan)]
+Under the State Bank of Pakistan's Schedule J-O-3, the limit for purpose codes 9186, 9249, 9478 and 9479 is USD 25,000 per beneficiary per calendar month, and for purpose code 9477 (pension) PKR 250,000 per beneficiary per calendar month. In other markets, the limits and purpose codes follow the local regulator.
 :::
 
 ## Significance

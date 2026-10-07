@@ -72,7 +72,7 @@ export const Partners = () => {
               <span style={s.bullet} />
               <div>
                 Partner details:
-                <Sub items={['Partner Name', 'Integration Mode (OTC, FT, IBFT)', 'Sender Screening', 'Receiver Screening', 'Title Match']} />
+                <Sub items={['Partner Name', 'Integration Mode (Push, Pull, Hybrid)', 'Transactions Allowed (OTC, FT, IBFT), each with Sender Screening, Receiver Screening and Title Match', 'Partner Code', 'Partner Regex', 'Unlock Threshold Time', 'Confirmation toggle', 'Unlock toggle']} />
               </div>
             </li>
             <li style={s.item}>

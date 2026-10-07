@@ -38,7 +38,7 @@ The Remittance Tracker Inquiry API backs a tracker on the Bank's own channels, s
 | Available for Payout | Cash payout ready for collection |
 | Collected by Beneficiary | Cash collected |
 | Credited in customer account | Account credit completed |
-| Sent to beneficiary bank | Sent over the high-value rail |
+| Sent to beneficiary bank | Sent over RTGS |
 | Cancelled and refunded | Transaction cancelled |
 | Under Compliance Check | Held by screening or compliance review |
 

@@ -11,7 +11,7 @@ import { Hero } from '@site/src/components/DocKit';
 |---|---|
 | [Partner Integration Modes](./partner-integration-modes.md) | Pull, push and file integration, with per-partner scheduler configuration |
 | [Screening & Compliance Review](./screening-compliance-review.md) | AML/CFT screening (PRE / POST) and manual release or failure of hits |
-| [Suspicious Activity Controls](./suspicious-activity-controls.md) | Approve, Reject or Request Info on flagged transactions |
+| [Suspicious Activity Controls](./suspicious-activity-controls.md) | Approve or Reject flagged transactions |
 | [Automated RFI](./automated-rfi.md) | Automatic information requests with working-day escalation |
 | [System Restriction](./system-restriction.md) | Nationality and purpose-of-payment blocking rules |
 | [B2C / C2B Limits & Keyword Block](./b2c-c2b-limits.md) | Regulatory monthly limits and commercial-entity blocking |
@@ -24,3 +24,5 @@ import { Hero } from '@site/src/components/DocKit';
 | [Role & User Management](./roles-user-management.md) | Maker-checker roles and users for every portal |
 | [Authentication](./authentication.md) | Email OTP 2FA, password policy and identity-provider validation |
 | [Audit Logs & Reports](./audit-logs-reports.md) | Audit trail, transaction monitoring and reports |
+| [Reconciliation Tally](./reconciliation-tally.md) | Daily status-only correction against the bank's debit verification |
+| [Holiday Calendar](./holiday-calendar.md) | Non-business days for every working-day timer |

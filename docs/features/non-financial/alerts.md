@@ -12,7 +12,17 @@ import { Hero, Capabilities } from '@site/src/components/DocKit';
 
 ## Overview
 
-OpenRemit sends alerts at key points in a transaction's lifecycle, and one centralised **Alert Configuration** module controls them all. It covers four events: **Personal Messaging**, **Transaction Status**, **Funding Near Consumption** (partner low balance) and **Sub-agent Disbursement**. For each event, authorised users edit the template, recipients, transaction types, trigger stage and channel (Email and SMS, independently). SMS requires the **Bank SMS Gateway**.
+OpenRemit sends alerts at key points in a transaction's lifecycle, and one centralised **Alert Configuration** module controls them all. It covers four events: **Personal Messaging**, **Transaction Status**, **Funding Near Consumption** (partner low balance) and **Sub-agent Disbursement**. For each event, authorised users edit the template, recipients, transaction types, trigger stage and channel (Email and SMS, independently). Alerts are event-based across FT, IBFT and cash payout, with flexible recipients and editable templates.
+
+### Bank API dependencies
+
+Alert channels depend on APIs the bank must provide. Where an API is not available, the alerts that depend on it cannot be offered in that deployment.
+
+| Bank-provided API | Alerts that depend on it |
+|---|---|
+| SMS Gateway API | Final Status Alert; Sub-Agent Disbursement SMS; SMS events in Alert Configuration |
+| Email Service API | Funding Near Consumption; Automated RFI emails; email events in Alert Configuration |
+| Customer Information API | Beneficiary contact lookup for the Final Status Alert |
 
 ## Significance
 
@@ -28,11 +38,19 @@ OpenRemit sends alerts at key points in a transaction's lifecycle, and one centr
 
 | Event | Trigger | Channel / recipient |
 |---|---|---|
-| Transaction status | Cash available for payout; cash collected; credited to account; sent to beneficiary bank (high-value rail only); cancelled and refunded; under compliance check | Email to the beneficiary, if the partner provided an email |
-| Final status (account-based) | Final credit to the beneficiary account, or cancellation | SMS to the account holder; contact details fetched through the Bank Integration Layer at send time |
+| Transaction status | Cash available for payout; cash collected; credited to account; sent to beneficiary bank (RTGS only); cancelled and refunded; under compliance check | Email to the beneficiary, if the partner provided an email |
+| Final Status Alert (account-based) | Final credit to the beneficiary account, or cancellation without credit | SMS to the account holder; contact details fetched through the bank's Customer Information API at send time |
 | Funding near consumption | Partner balance falls below the Low Balance Threshold | Email to the partner; the Partner Portal balance display turns from blue to red |
-| Sub-agent disbursement | A cash payout from a partner with configured sub-agents is available for payout but not yet paid | SMS to the beneficiary naming the Bank's branches and the sub-agent's branches |
+| Sub-Agent Disbursement SMS | A cash payout from a partner with configured sub-agents is available for payout but not yet paid | SMS to the beneficiary (see below) |
 | Personal messaging | As configured | As configured |
+
+### Sub-Agent Disbursement SMS
+
+Where a partner has configured sub-agents for disbursement, OpenRemit sends the beneficiary a customized SMS for cash (COC) transactions that are **Available for Payout**, saying the remittance can be collected from any of the bank's branches or from the configured sub-agent's branches.
+
+- The template is configured in Alert Configuration.
+- Authorized Back Office users can turn it off. When it is off, no Sub-Agent Disbursement SMS is sent, even if a partner configures a new sub-agent.
+- Requires the bank's SMS Gateway API.
 
 ### Who uses it
 
@@ -45,9 +63,9 @@ OpenRemit sends alerts at key points in a transaction's lifecycle, and one centr
 
 | Interface | API | Used for |
 |---|---|---|
-| Bank Integration Layer (ESB) | Customer contact details | Fetch the account holder's mobile number for final-status SMS |
-| Bank SMS Gateway | Send SMS | SMS delivery |
-| Email service | Send email | Email delivery |
+| Bank Customer Information API | Customer contact details | Fetch the account holder's mobile number for the Final Status Alert |
+| Bank SMS Gateway API | Send SMS | SMS delivery |
+| Bank Email Service API | Send email | Email delivery |
 
 ## Configuration
 
@@ -55,11 +73,11 @@ OpenRemit sends alerts at key points in a transaction's lifecycle, and one centr
 |---|---|---|
 | Templates | Message text per event | default: standard templates |
 | Trigger stage | Lifecycle point at which each alert fires | default: as listed above |
-| Channels | Email and SMS toggles per event | default: Email on; SMS on where the Bank SMS Gateway is connected |
+| Channels | Email and SMS toggles per event | default: on where the bank's SMS Gateway / Email Service API is available |
 | Enable / disable | Turn each alert on or off independently | default: enabled |
-| Low Balance Threshold | Partner balance that triggers Funding Near Consumption | default: TBD |
+| Low Balance Threshold | Partner balance that triggers Funding Near Consumption | default: configurable per partner |
 | Sub-agent disbursement SMS | Global switch; when off, no such SMS is sent even if a partner configures a new sub-agent | default: enabled |
-| Retries per event | Send retries per alert event | default: TBD |
+| Retries per event | Send retries per alert event | default: configurable per event |
 
 Changes take effect immediately on save and are audit logged.
 
